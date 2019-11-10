@@ -18,6 +18,5 @@ class ChatServer(WebSocket):
         print(self.address, 'closed')
 
 
-
 server = SimpleWebSocketServer('', 8000, ChatServer)
 server.serveforever()

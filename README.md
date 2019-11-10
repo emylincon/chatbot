@@ -10,5 +10,4 @@
 * Go to Chatbot_Project directory and run python server.py.
 * Above step will open the server. Now right click the index.html page and open with brower. You will be able to see the chat window where you can start the conversation and test.
 
-#this
 `this project was adapted from https://github.com/dineshsambasivam/Chatbot_Project.git`
