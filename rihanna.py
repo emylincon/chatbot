@@ -11,8 +11,8 @@ bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
                   {'import_path': 'chatterbot.logic.BestMatch'},
                   {'import_path': 'chatterbot.logic.LowConfidenceAdapter',
-                   'threshold': 0.20,
-                   'default_response': 'I am sorry, but I do not understand.'
+                   'threshold': 0.50,
+                   'default_response': 'I am sorry. I am not allowed to give an answer to that question.'
                    }
               ],
               trainer='chatterbot.trainers.ListTrainer')
@@ -114,7 +114,7 @@ def get_response(usrText):
         {
             'import_path': 'chatterbot.logic.LowConfidenceAdapter',
             'threshold': 0.70,
-            'default_response': 'I am sorry, but I do not understand.'
+            'default_response': 'I am sorry. I am not allowed to give an answer to that question.'
         }
     ],
     trainer='chatterbot.trainers.ListTrainer')
@@ -124,7 +124,7 @@ def get_response(usrText):
             result = rihanna(usrText)
             reply = str(result)
             return(reply)
-        if usrText.strip() == 'Bye':
+        elif usrText.strip() == 'Bye':
             return('Bye')
             break
         
