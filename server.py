@@ -1,6 +1,7 @@
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 #from chatbot import get_response
 from rihanna import get_response
+from rihanna import rihanna_voice
 
 
 class ChatServer(WebSocket):
@@ -10,6 +11,12 @@ class ChatServer(WebSocket):
         message = self.data
         response = get_response(message)
         self.sendMessage(response)
+        if str(response)[:3] == '- -':
+            rihanna_voice(str(response)[3:])
+        elif str(response)[0] == '-':
+            rihanna_voice(str(response)[1:])
+        else:
+            rihanna_voice(response)
 
     def handleConnected(self):
         print(self.address, 'connected')

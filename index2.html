@@ -78,9 +78,15 @@
         padding: 10px;
     }
     #chat_input {
-        padding: 2px;
+        padding: 5px;
         font-size: 18px;
         width: 100%;
+        box-sizing:border-box;
+        transition:.3s;
+    }
+    .chat_input[type=text]:focus{
+        border-color:dodgerBlue;
+        box-shadow:0 0 8px 0 dodgerBlue;
     }
     .chat_line {
         overflow: hidden;
@@ -122,26 +128,38 @@
     }
     .banner {
         width: 100%;
-        display: block;
-    }
-    .banner > .banner-image {
-        width: 100%;
         height: 250px;
+        display: block;
+        background-image: url(img/banner2.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .banner > .emeka {
+        float: right;
         display: block;
 
     }
+    .banner > .rihanna {
+        float: left;
+        display: block;
+
+    }
+
 </style>
 </head>
 
 <body>
 <div id="chat_container">
     <div class="banner">
-        <img class="banner-image" src="img/banner2_1.png" alt="CHAT BANNER"/>
+        <img class="emeka" src="img/emeka_transparent.png" alt="logo"/>
+        <img class="rihanna" src="img/rihanna.png" alt="logo"/>
     </div>
     <div id="chat_log">
     </div>
     <div id="chat_input_container">
-        <div><input id="chat_input" /></div>
+        <div><input id="chat_input" placeholder="Ask me anything, don't be shy..."/></div>
+
     </div>
 </div>
 

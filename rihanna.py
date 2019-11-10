@@ -65,27 +65,27 @@ def rihanna(message):
     if message.strip()[0:7] == 'what is':
         try:
             reply = wikipedia.summary(message.strip()[7:], sentences=1)
-            rihanna_voice(reply)
+            #rihanna_voice(reply)
             return(reply)
 
         except:
-            rihanna_voice("{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:]))
+            #rihanna_voice("{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:]))
             return('{}? hmm.. I know what it is but I can not tell you'.format(message.strip()[7:]))
 
     
     elif message.strip() == 'weather forecast today':
         reply = weather('london,uk')
-        rihanna_voice(reply)
+        #rihanna_voice(reply)
         return(reply)
 
     elif message.strip()[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
-        rihanna_voice(reply)
+        #rihanna_voice(reply)
         return(reply)
 
 
     elif message.strip()[0:4] == 'play':
-        rihanna_voice('Searching for {}'.format(message.strip()[5:]))
+        #rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
         return ('{} is a lovely song'.format(message.strip()[5:]))
 
@@ -93,12 +93,15 @@ def rihanna(message):
         reply = bot.get_response(message)
 
         if str(reply)[:3] == '- -':
-            rihanna_voice(str(reply)[3:])
+            #rihanna_voice(str(reply)[3:])
+            reply = str(reply)[3:]
         elif str(reply)[0] == '-':
-            rihanna_voice(str(reply)[1:])
+            #rihanna_voice(str(reply)[1:])
+            reply = str(reply)[1:]
         else:
-            rihanna_voice(reply)
-        return (reply)
+            #rihanna_voice(reply)
+            pass
+        return reply
 
 
 def get_response(usrText):
