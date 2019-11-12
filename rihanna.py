@@ -78,6 +78,12 @@ def rihanna(message):
         #rihanna_voice(reply)
         return(reply)
 
+    elif message.strip().lower() == 'what is your name' or 'what is your name?':
+        reply = "My name is Rihanna"
+        #rihanna_voice(reply)
+        return(reply)
+
+
     elif message.strip()[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
         #rihanna_voice(reply)
