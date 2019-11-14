@@ -61,7 +61,15 @@ def weather(place):
 
 
 def rihanna(message):
-    if message.strip()[0:7] == 'what is':
+    if {"trending", "twitter", "topics"} - set(message.strip().lower().split()) == set():
+        reply = rihanna_tweet.twitter_trend()
+        return reply
+
+    elif message.strip().lower() == ('what is your name' or 'what is your name?'):
+        reply = "My name is Rihanna"
+        # rihanna_voice(reply)
+        return reply
+    elif message.strip()[0:7] == 'what is':
         try:
             reply = wikipedia.summary(message.strip()[7:], sentences=1)
             # rihanna_voice(reply)
@@ -98,11 +106,6 @@ def rihanna(message):
         tweet = message.strip()[6:]
         reply = rihanna_tweet.post_tweet(tweet)
         rihanna_tweet.display_twitter()
-        return reply
-
-    elif message.strip().lower() == ('what is your name' or 'what is your name?'):
-        reply = "My name is Rihanna"
-        # rihanna_voice(reply)
         return reply
 
     elif message.strip()[0:16] == 'weather forecast':
