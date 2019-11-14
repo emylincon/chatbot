@@ -12,10 +12,18 @@ class ChatServer(WebSocket):
         message = self.data
         response = str(get_response(message))
         # self.sendMessage(response)
-        h1 = Thread(target=self.sendMessage, args=(response,))
-        h2 = Thread(target=rihanna_voice, args=(response,))
-        h1.start()
-        h2.start()
+        if "\n" in response:
+            display_response = response.replace("\n", "<br>")
+
+            h1 = Thread(target=self.sendMessage, args=(display_response,))
+            h2 = Thread(target=rihanna_voice, args=(response,))
+            h1.start()
+            h2.start()
+        else:
+            h1 = Thread(target=self.sendMessage, args=(response,))
+            h2 = Thread(target=rihanna_voice, args=(response,))
+            h1.start()
+            h2.start()
         '''
         if str(response)[:3] == '- -':
             rihanna_voice(str(response)[3:])
