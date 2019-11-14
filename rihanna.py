@@ -65,16 +65,16 @@ def rihanna(message):
         try:
             reply = wikipedia.summary(message.strip()[7:], sentences=1)
             # rihanna_voice(reply)
-            return (reply)
+            return reply
 
         except:
             # rihanna_voice("{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:]))
-            return ('{}? hmm.. I know what it is but I can not tell you'.format(message.strip()[7:]))
+            return '{}? hmm.. I know what it is but I can not tell you'.format(message.strip()[7:])
 
     elif message.strip() == 'weather forecast today':
         reply = weather('london,uk')
         # rihanna_voice(reply)
-        return (reply)
+        return reply
 
     elif message.strip() == 'show my twitter status':
         reply = rihanna_tweet.twitter_status()
@@ -103,17 +103,17 @@ def rihanna(message):
     elif message.strip().lower() == ('what is your name' or 'what is your name?'):
         reply = "My name is Rihanna"
         # rihanna_voice(reply)
-        return (reply)
+        return reply
 
     elif message.strip()[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
         # rihanna_voice(reply)
-        return (reply)
+        return reply
 
     elif message.strip()[0:4] == 'play':
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
-        return ('{} is a lovely song'.format(message.strip()[5:]))
+        return '{} is a lovely song'.format(message.strip()[5:])
 
     elif message.strip() != 'Bye':
         reply = bot.get_response(message)
@@ -149,7 +149,7 @@ def get_response(usrText):
         if usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
-            return (reply)
+            return reply
         elif usrText.strip() == 'Bye':
-            return ('Bye')
+            return 'Bye'
             break
