@@ -44,6 +44,15 @@ def play_song(song):
     driver.find_element_by_xpath(xpath='//*[@id="dismissable"]').click()
 
 
+def format_string(string):
+    d = '!?/\|:;^&@'
+
+    for c in d:
+        if c in string:
+            string = string.replace(c, '')
+    return string
+
+
 def weather(place):
     try:
         api_address = 'http://api.openweathermap.org/data/2.5/weather?appid=adaf7aa8e77b0dd6f92d6e86091fba1b&q='
@@ -71,7 +80,8 @@ def weather(place):
 
 
 def rihanna(message):
-    if {"trending", "twitter", "topics"} - set(message.strip().lower().split()) == set():
+    message = format_string(message).lower().strip()
+    if {"trending", "twitter", "topics"} - set(message.split()) == set():
         reply = rihanna_tweet.twitter_trend()
         return reply
 
