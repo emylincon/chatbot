@@ -647,8 +647,8 @@ def tfl_tube_status():
 def journey_duration(start, stop):
     main_api = f"https://api.tfl.gov.uk/Journey/JourneyResults/{start}/to/{stop}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
     json_data = requests.get(main_api).json()
-    start_time = json_data["journeys"][0]["startDateTime"].split('T')[:-1]  # "2019-11-16T16:14:00"
-    arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[:-1]  # "2019-11-16T16:45:00"
+    start_time = json_data["journeys"][0]["startDateTime"].split('T')[1][:-1]  # "2019-11-16T16:14:00"
+    arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[1][:-1]  # "2019-11-16T16:45:00"
     duration = json_data["journeys"][0]["duration"]
     return f"If you leave by {start_time}, you will arrive at {stop} by {arrival_time}" \
            f"\nTherefore, It will take {duration}mins"
@@ -656,4 +656,4 @@ def journey_duration(start, stop):
 # get_station_id("victoria station")
 # print(get_timetable("53", "dunton road"))
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
-# print(journey_duration(start="se1 5hp", stop="waterloo underground station"))
+#print(journey_duration(start="se18 3px", stop="se1 5hp"))

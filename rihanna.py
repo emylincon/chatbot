@@ -130,12 +130,14 @@ def rihanna(message):
 
     elif message.strip().lower()[:21] == 'journey duration from':  # e.g journey duration from se1 5hp to se18 3px
         detail = message.strip().lower()[22:].split('to')
-        reply = rihanna_tfl.journey_duration(detail[0], detail[1])
+        #print(detail)
+        reply = rihanna_tfl.journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
     elif message.strip().lower()[:17] == 'live arrivals for':     # e.g live arrivals for 53 at dunton road
         detail = message.strip().lower()[18:].split('at')
-        reply = rihanna_tfl.get_timetable(detail[0], detail[1])
+        #print(detail[0].strip(), detail[1].strip())
+        reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
         return reply
 
     elif message.strip()[0:16] == 'weather forecast':
@@ -189,3 +191,4 @@ def get_response(usrText):
 
 #d = google_search("when is the wilder fight date")
 #print('hello')
+#print(rihanna('journey duration from se18 3px to se1 5hp'))
