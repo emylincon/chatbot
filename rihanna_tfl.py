@@ -386,7 +386,7 @@ def get_naptan_id(station_id):
     nap_ids = []
     for i in json_data["lineGroup"]:
         nap_ids.append(i["naptanIdReference"])
-    #return json_data["lineGroup"][0]["naptanIdReference"]
+    # return json_data["lineGroup"][0]["naptanIdReference"]
     return nap_ids
 
 
@@ -403,7 +403,7 @@ def get_station_id(station):
 
 
 def format_time(time):
-    #"2019-11-16T15:01:37Z"
+    # "2019-11-16T15:01:37Z"
     date = time[0].split('-')
     t_time = time[1][:-1].split(':')
     raw_time = date + t_time
@@ -416,7 +416,7 @@ def format_time(time):
 
 def get_timetable(line, station):
     station_ids = get_station_id(station)
-    #print(station_ids)
+    # print(station_ids)
     reply = f"Time Table for {station}: "
 
     for nap_id in station_ids:
@@ -647,12 +647,11 @@ def tfl_tube_status():
 def journey_duration(start, stop):
     main_api = f"https://api.tfl.gov.uk/Journey/JourneyResults/{start}/to/{stop}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
     json_data = requests.get(main_api).json()
-    start_time = json_data["journeys"][0]["startDateTime"]   # "2019-11-16T16:14:00"
+    start_time = json_data["journeys"][0]["startDateTime"]  # "2019-11-16T16:14:00"
     arrival_time = json_data["journeys"][0]["arrivalDateTime"]  # "2019-11-16T16:45:00"
     return json_data["journeys"][0]["duration"]
 
-
 # get_station_id("victoria station")
-#print(get_timetable("53", "dunton road"))
-#print(format_time("2019-11-16T15:01:37Z".split('T')))
-#print(journey_duration(start="se1 5hp", stop="waterloo underground station"))
+# print(get_timetable("53", "dunton road"))
+# print(format_time("2019-11-16T15:01:37Z".split('T')))
+# print(journey_duration(start="se1 5hp", stop="waterloo underground station"))
