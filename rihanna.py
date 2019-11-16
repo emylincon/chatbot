@@ -5,6 +5,7 @@ import wikipedia
 import pyttsx3
 from selenium import webdriver
 import rihanna_tweet
+import rihanna_tfl
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -121,7 +122,20 @@ def rihanna(message):
         search = message.strip()[7:]
         display = google_search(search)
         reply = "Googling . . ."
+        return reply
 
+    elif message.strip().lower()[:19] == 'tube service report':
+        reply = rihanna_tfl.tfl_tube_status()
+        return reply
+
+    elif message.strip().lower()[:21] == 'journey duration from':  # e.g journey duration from se1 5hp to se18 3px
+        detail = message.strip().lower()[22:].split('to')
+        reply = rihanna_tfl.journey_duration(detail[0], detail[1])
+        return reply
+
+    elif message.strip().lower()[:17] == 'live arrivals for':     # e.g live arrivals for 53 at dunton road
+        detail = message.strip().lower()[18:].split('at')
+        reply = rihanna_tfl.get_timetable(detail[0], detail[1])
         return reply
 
     elif message.strip()[0:16] == 'weather forecast':
