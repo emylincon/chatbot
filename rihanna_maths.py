@@ -1,3 +1,4 @@
+import random as r
 
 
 def add(a,b):
@@ -42,6 +43,13 @@ def format_maths_string(string):
 
 
 def calculate(string):
+    response = ["No, you calculate that!",
+                "I'm sorry, I am not in the mood for maths",
+                "sorry, I forgot my brain at home today",
+                "I'm sorry, I have forgotten how to solve that. :(",
+                "This looks like a trick question",
+                "You are trying to embarrass me with simple arithmetic"
+                ]
     try:
         data = format_maths_string(string)
         _ops = data[1]
@@ -53,9 +61,9 @@ def calculate(string):
             result = maths[i](result,nums[k])
             k += 1
 
-        return string + ' = ' + result
+        return string + ' = ' + str(result)
     except Exception as e:
-        return "I'm sorry I have forgotten how to solve that :("
+        return response[r.randrange(len(response))]
 
 
-#print(calculate("10 + 10 / 10 - 10"))
+#print(calculate("5 * 5 + 25"))
