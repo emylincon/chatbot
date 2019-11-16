@@ -85,11 +85,11 @@ def rihanna(message):
         reply = rihanna_tweet.twitter_trend()
         return reply
 
-    elif message.strip().lower() == ('what is your name' or 'what is your name?'):
+    elif message == 'what is your name':
         reply = "My name is Rihanna"
         # rihanna_voice(reply)
         return reply
-    elif message.strip()[0:7] == 'what is':
+    elif message[0:7] == 'what is':
         try:
             reply = wikipedia.summary(message.strip()[7:], sentences=1)
             # rihanna_voice(reply)
@@ -99,68 +99,68 @@ def rihanna(message):
             # rihanna_voice("{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:]))
             return '{}? hmm.. I know what it is but I can not tell you'.format(message.strip()[7:])
 
-    elif message.strip() == 'weather forecast today':
+    elif message == 'weather forecast today':
         reply = weather('london,uk')
         # rihanna_voice(reply)
         return reply
 
-    elif message.strip() == 'show my twitter status':
+    elif message == 'show my twitter status':
         reply = rihanna_tweet.twitter_status()
         return reply
 
-    elif message.strip()[:23] == 'show twitter status for':
+    elif message[:23] == 'show twitter status for':
         user = message.strip()[24:]
         reply = rihanna_tweet.twitter_status_others(user)
         return reply
 
-    elif message.strip() == 'show my last tweet':
+    elif message == 'show my last tweet':
         reply = rihanna_tweet.last_tweet()
         return reply
 
-    elif message.strip()[:28] == 'show last twitter status for':
+    elif message[:28] == 'show last twitter status for':
         user = message.strip()[29:]
         reply = rihanna_tweet.display_last_tweet(user)
         return reply
 
-    elif message.strip()[:5] == 'tweet':
+    elif message[:5] == 'tweet':
         tweet = message.strip()[6:]
         reply = rihanna_tweet.post_tweet(tweet)
         rihanna_tweet.display_twitter()
         return reply
 
-    elif message.strip().lower()[:6] == 'google':
+    elif message[:6] == 'google':
         search = message.strip()[7:]
         display = google_search(search)
         reply = "Googling . . ."
         return reply
 
-    elif message.strip().lower()[:19] == 'tube service report':
+    elif message[:19] == 'tube service report':
         reply = rihanna_tfl.tfl_tube_status()
         return reply
 
-    elif message.strip().lower()[:21] == 'journey duration from':  # e.g journey duration from se1 5hp to se18 3px
+    elif message[:21] == 'journey duration from':  # e.g journey duration from se1 5hp to se18 3px
         detail = message.strip().lower()[22:].split('to')
         #print(detail)
         reply = rihanna_tfl.journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
-    elif message.strip().lower()[:17] == 'live arrivals for':     # e.g live arrivals for 53 at dunton road
+    elif message[:17] == 'live arrivals for':     # e.g live arrivals for 53 at dunton road
         detail = message.strip().lower()[18:].split('at')
         #print(detail[0].strip(), detail[1].strip())
         reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
         return reply
 
-    elif message.strip()[0:16] == 'weather forecast':
+    elif message[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
         # rihanna_voice(reply)
         return reply
 
-    elif message.strip()[0:4] == 'play':
+    elif message[0:4] == 'play':
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
         return '{} is a lovely song'.format(message.strip()[5:])
 
-    elif message.strip() != 'Bye':
+    elif message != 'Bye':
         reply = bot.get_response(message)
 
         if str(reply)[:3] == '- -':
