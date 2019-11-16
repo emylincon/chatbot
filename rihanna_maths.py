@@ -42,17 +42,20 @@ def format_maths_string(string):
 
 
 def calculate(string):
-    data = format_maths_string(string)
-    _ops = data[1]
-    nums = data[0]
-    result = nums[0]
-    maths = {'*': multiply, '+': add, '-': subtract, '/': divide}
-    k = 1
-    for i in _ops:
-        result = maths[i](result,nums[k])
-        k += 1
+    try:
+        data = format_maths_string(string)
+        _ops = data[1]
+        nums = data[0]
+        result = nums[0]
+        maths = {'*': multiply, '+': add, '-': subtract, '/': divide}
+        k = 1
+        for i in _ops:
+            result = maths[i](result,nums[k])
+            k += 1
 
-    return result
+        return string + ' = ' + result
+    except Exception as e:
+        return "I'm sorry I have forgotten how to solve that :("
 
 
-print(calculate("10 + 10 / 10 - 10"))
+#print(calculate("10 + 10 / 10 - 10"))
