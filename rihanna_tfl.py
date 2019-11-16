@@ -635,7 +635,7 @@ def get_timetable(line, station):
 
 
 def tfl_tube_status():
-    main_api = "https://api.tfl.gov.uk/Line/Mode/tube/Status"
+    main_api = f"https://api.tfl.gov.uk/Line/Mode/tube/Status?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
     json_data = requests.get(main_api).json()
     reply = "TFL Tube Service Report"
     for i in json_data:
@@ -645,9 +645,10 @@ def tfl_tube_status():
 
 
 def journey_duration(start, stop):
-    main_api = f"https://api.tfl.gov.uk/Journey/JourneyResults/{start}/to/{stop}"
+    main_api = f"https://api.tfl.gov.uk/Journey/JourneyResults/{start}/to/{stop}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
     json_data = requests.get(main_api).json()
-
+    start_time = json_data["journeys"][0]["startDateTime"]   # "2019-11-16T16:14:00"
+    arrival_time = json_data["journeys"][0]["arrivalDateTime"]  # "2019-11-16T16:45:00"
     return json_data["journeys"][0]["duration"]
 
 
