@@ -4,7 +4,7 @@ import config
 import datetime as dt
 
 '''
-main_api = "https://api.tfl.gov.uk/Line/victoria/Status"
+main_api = "https://api.tfl.gov.uk/"
 json_data = requests.get(main_api).json()
 
 print(json_data[0]['lineStatuses'][0]['statusSeverityDescription'])
