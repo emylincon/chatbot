@@ -6,6 +6,7 @@ import pyttsx3
 from selenium import webdriver
 import rihanna_tweet
 import rihanna_tfl
+import rihanna_maths as calc
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -126,6 +127,11 @@ def rihanna(message):
         tweet = message.strip()[6:]
         reply = rihanna_tweet.post_tweet(tweet)
         rihanna_tweet.display_twitter()
+        return reply
+
+    elif message[:9] == 'calculate':
+        data = message.strip()[10:]
+        reply = calc.calculate(data)
         return reply
 
     elif message[:6] == 'google':
