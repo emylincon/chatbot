@@ -24,9 +24,18 @@ def rihanna_voice(word_speech):
     engine.runAndWait()
 
 
+def google_search(query):
+    try:
+        driver = webdriver.Chrome(executable_path=r"C:\Program Files\chrome driver\chromedriver.exe")
+        google = "https://www.google.com/search?q="
+        search = google + query
+        driver.get(search)
+        return driver
+    except Exception as e:
+        print('')
+
+
 def play_song(song):
-    # chromedriver = "C:\Program Files\chrome driver"
-    # driver = webdriver.Chrome(chromedriver)
     driver = webdriver.Chrome(executable_path=r"C:\Program Files\chrome driver\chromedriver.exe")
     query = "https://www.youtube.com/results?search_query="
     search = query + song
@@ -108,6 +117,13 @@ def rihanna(message):
         rihanna_tweet.display_twitter()
         return reply
 
+    elif message.strip().lower()[:6] == 'google':
+        search = message.strip()[7:]
+        display = google_search(search)
+        reply = "Googling . . ."
+
+        return reply
+
     elif message.strip()[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
         # rihanna_voice(reply)
@@ -156,3 +172,6 @@ def get_response(usrText):
         elif usrText.strip() == 'Bye':
             return 'Bye'
             break
+
+#d = google_search("when is the wilder fight date")
+#print('hello')
