@@ -17,6 +17,10 @@ def multiply(a, b):
     return a * b
 
 
+def power(a, b):
+    return a ** b
+
+
 def format_maths_string(string):
     numbers = []
     ops = []
@@ -55,7 +59,7 @@ def calculate(string):
         _ops = data[1]
         nums = data[0]
         result = nums[0]
-        maths = {'*': multiply, '+': add, '-': subtract, '/': divide}
+        maths = {'*': multiply, '+': add, '-': subtract, '/': divide, '^': power}
         k = 1
         for i in _ops:
             result = maths[i](result, nums[k])
