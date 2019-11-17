@@ -52,7 +52,9 @@ def calculate(string):
                 "sorry, I forgot my brain at home today",
                 "I'm sorry, I have forgotten how to solve that. :(",
                 "This looks like a trick question",
-                "You are trying to embarrass me with simple arithmetic"
+                "You are trying to embarrass me with simple arithmetic",
+                "Calm down  I am not google",
+                'Why dont you google that. |<a href="http://www.google.com" target="_blank">Google</a>'
                 ]
     try:
         data = format_maths_string(string)

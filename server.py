@@ -19,6 +19,13 @@ class ChatServer(WebSocket):
             h2 = Thread(target=rihanna_voice, args=(response,))
             h1.start()
             h2.start()
+        elif "|" in response:
+            say = response.split('|')[0] + "\n Link provided"
+            reply = response.replace("|", "")
+            h1 = Thread(target=self.sendMessage, args=(reply,))
+            h2 = Thread(target=rihanna_voice, args=(say,))
+            h1.start()
+            h2.start()
         else:
             h1 = Thread(target=self.sendMessage, args=(response,))
             h2 = Thread(target=rihanna_voice, args=(response,))

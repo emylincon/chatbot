@@ -100,6 +100,9 @@ def rihanna(message):
         reply = stop_words()
         return reply
 
+    elif message == 'why':
+        return "Sorry, I cant tell you. Its a secret"
+
     elif message == 'what is your name':
         reply = "My name is Rihanna"
         # rihanna_voice(reply)
