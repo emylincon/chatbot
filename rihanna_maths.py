@@ -1,19 +1,19 @@
 import random as r
 
 
-def add(a,b):
+def add(a, b):
     return a + b
 
 
-def subtract(a,b):
+def subtract(a, b):
     return a - b
 
 
-def divide(a,b):
+def divide(a, b):
     return a / b
 
 
-def multiply(a,b):
+def multiply(a, b):
     return a * b
 
 
@@ -23,7 +23,7 @@ def format_maths_string(string):
     p = -1
     for i in string:
         if (not i.isnumeric()) and (i != '.') and (i != ' '):
-            #print(f"i = {i}")
+            # print(f"i = {i}")
 
             if i in ops:
                 start = p + 1
@@ -31,15 +31,15 @@ def format_maths_string(string):
                 a = string[start:e].strip()
             else:
                 e = string.index(i)
-                a = string[p+1:e].strip()
-            #print(f"a = {a}")
+                a = string[p + 1:e].strip()
+            # print(f"a = {a}")
             b = float(a)
-            #print(f"b = {b}")
+            # print(f"b = {b}")
             numbers.append(b)
             ops.append(i)
             p = e + 0
     numbers.append(float(string.split(ops[-1])[-1]))
-    return numbers,ops
+    return numbers, ops
 
 
 def calculate(string):
@@ -58,12 +58,11 @@ def calculate(string):
         maths = {'*': multiply, '+': add, '-': subtract, '/': divide}
         k = 1
         for i in _ops:
-            result = maths[i](result,nums[k])
+            result = maths[i](result, nums[k])
             k += 1
 
         return string + ' = ' + str(result)
     except Exception as e:
         return response[r.randrange(len(response))]
 
-
-#print(calculate("5 * 5 + 25"))
+# print(calculate("5 * 5 + 25"))
