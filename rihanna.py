@@ -47,7 +47,7 @@ def play_song(song):
 
 
 def format_string(string):
-    d = '!?/\|:;^&@'
+    d = '!?\|:;&@'
 
     for c in d:
         if c in string:
