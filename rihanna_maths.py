@@ -1,5 +1,7 @@
 import random as r
 
+opp_code = ['/', '+', '*', '-', '^']
+
 
 def add(a, b):
     return a + b
@@ -53,7 +55,8 @@ def calculate(string):
                 "I'm sorry, I have forgotten how to solve that. :(",
                 "This looks like a trick question",
                 "You are trying to embarrass me with simple arithmetic",
-                "Calm down  I am not google",
+                "Calm down.  I am not google",
+                "Hey! Do you think I am some Maths Genius or something?",
                 'Why dont you google that. |<a href="http://www.google.com" target="_blank">Google</a>'
                 ]
     try:

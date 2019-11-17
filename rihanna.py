@@ -157,6 +157,10 @@ def rihanna(message):
         reply = "Googling . . ."
         return reply
 
+    elif len([i for i in calc.opp_code if i in message]) > 0:
+        reply = calc.calculate(message)
+        return reply
+
     elif message[:19] == 'tube service report':
         reply = rihanna_tfl.tfl_tube_status()
         return reply
