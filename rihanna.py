@@ -7,6 +7,7 @@ from selenium import webdriver
 import rihanna_tweet
 import rihanna_tfl
 import rihanna_maths as calc
+import config
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -56,7 +57,7 @@ def format_string(string):
 
 def weather(place):
     try:
-        api_address = 'http://api.openweathermap.org/data/2.5/weather?appid=adaf7aa8e77b0dd6f92d6e86091fba1b&q='
+        api_address = f'http://api.openweathermap.org/data/2.5/weather?appid={config.weather_id}='
         word = place.split(' ')
         if len(word) == 1:
             city = word[0]
