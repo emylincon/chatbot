@@ -8,6 +8,7 @@ import rihanna_tweet
 import rihanna_tfl
 import rihanna_maths as calc
 import config
+import random as r
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -19,6 +20,8 @@ bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               ],
               trainer='chatterbot.trainers.ListTrainer')
 bot.set_trainer(ListTrainer)
+
+break_words = ["yes", "no", "okay", "yeah", "ok", "nah", "alright", "i see"]
 
 
 def rihanna_voice(word_speech):
@@ -81,10 +84,20 @@ def weather(place):
     return forecast
 
 
+def stop_words():
+    response = ["okay", "ok", "alright", "great", "Thought as much", "Good"]
+
+    return response[r.randrange(len(response))]
+
+
 def rihanna(message):
     message = format_string(message).lower().strip()
     if {"trending", "twitter", "topics"} - set(message.split()) == set():
         reply = rihanna_tweet.twitter_trend()
+        return reply
+
+    elif message in break_words:
+        reply = stop_words()
         return reply
 
     elif message == 'what is your name':
