@@ -38,7 +38,7 @@ def google_search(query):
         driver.get(search)
         return driver
     except Exception as e:
-        print('')
+        return "Web Driver Failed"
 
 
 def play_song(song):
@@ -50,7 +50,7 @@ def play_song(song):
 
 
 def format_string(string):
-    d = '!?\|:;&@'
+    d = '!?\|:;@'
 
     for c in d:
         if c in string:
@@ -157,10 +157,6 @@ def rihanna(message):
         reply = "Googling . . ."
         return reply
 
-    elif len([i for i in calc.opp_code if i in message]) > 0:
-        reply = calc.calculate(message)
-        return reply
-
     elif message[:19] == 'tube service report':
         reply = rihanna_tfl.tfl_tube_status()
         return reply
@@ -175,6 +171,10 @@ def rihanna(message):
         detail = message.strip().lower()[18:].split('at')
         #print(detail[0].strip(), detail[1].strip())
         reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
+        #_driver = 0
+        #if reply == "Sorry, I can't find the line or station name":
+        #    _driver=google_search(message)
+        #print(_driver)
         return reply
 
     elif message[0:16] == 'weather forecast':
@@ -186,6 +186,10 @@ def rihanna(message):
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
         return '{} is a lovely song'.format(message.strip()[5:])
+
+    elif len([i for i in calc.opp_code if i in message]) > 0:
+        reply = calc.calculate(message)
+        return reply
 
     elif message != 'Bye':
         reply = bot.get_response(message)
