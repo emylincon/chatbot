@@ -1,4 +1,5 @@
 import random as r
+import math
 
 opp_code = ['/', '+', '*', '-', '^']
 
@@ -21,6 +22,10 @@ def multiply(a, b):
 
 def power(a, b):
     return a ** b
+
+
+def factoria(a):
+    return math.factorial(a)
 
 
 def format_maths_string(string):
@@ -64,14 +69,17 @@ def calculate(string):
         _ops = data[1]
         nums = data[0]
         result = nums[0]
-        maths = {'*': multiply, '+': add, '-': subtract, '/': divide, '^': power}
+        maths = {'*': multiply, '+': add, '-': subtract, '/': divide, '^': power, '!': factoria}
         k = 1
-        for i in _ops:
-            result = maths[i](result, nums[k])
-            k += 1
+        if len(nums) == 1:
+            return string + ' = ' + str(maths['!'](data[0][0]))
+        else:
+            for i in _ops:
+                result = maths[i](result, nums[k])
+                k += 1
 
-        return string + ' = ' + str(result)
+            return string + ' = ' + str(result)
     except Exception as e:
         return response[r.randrange(len(response))]
 
-# print(calculate("5 * 5 + 25"))
+#print(calculate("10 + 10 * 50"))
