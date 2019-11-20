@@ -402,7 +402,17 @@ def get_bus_station_id(station):
     return get_naptan_id(s_id)
 
 
-def get_train_station_id(station):
+def get_station_code(station_id, line):
+    query = f"https://api.tfl.gov.uk/Stoppoint/{station_id}"
+    json_data = requests.get(query).json()
+
+    for i in json_data["lineGroup"]:
+        if i["lineIdentifier"][0] == line.lower():
+            return i["stationAtcoCode"]
+    # return json_data["lineGroup"][0]["naptanIdReference"]
+
+
+def get_train_station_id(station, line):
     query = "https://api.tfl.gov.uk/StopPoint/Search/"
     query += station
     json_data = requests.get(query).json()
@@ -411,7 +421,7 @@ def get_train_station_id(station):
     {"$type":"Tfl.Api.Presentation.Entities.SearchResponse, Tfl.Api.Presentation.Entities","query":"Green Park Underground Station","total":1,"matches":[{"$type":"Tfl.Api.Presentation.Entities.MatchedStop, Tfl.Api.Presentation.Entities","icsId":"1000093","topMostParentId":"940GZZLUGPK","modes":["tube","bus"],"zone":"1","id":"940GZZLUGPK","name":"Green Park Underground Station","lat":51.506947,"lon":-0.142787}]}
     """
     s_id = json_data['matches'][0]['id']
-    return s_id
+    return get_station_code(s_id, line)
 
 
 def format_time(time):
@@ -642,12 +652,14 @@ def get_timetable(line, station):
 
             return reply
         else:
-            station_id = get_train_station_id(station)
+            station_id = get_train_station_id(station, line)
             reply = f"Time Table for {station}: "
             query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{station_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
             json_data = requests.get(query).json()
+            #print(json_data)
             outbound_dict_time = {}
             inbound_dict_time = {}
+
             for i in json_data:
                 if i["direction"] == "outbound":
                     outbound_dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
@@ -698,5 +710,6 @@ def journey_duration(start, stop):
 # get_station_id("victoria station")
 #print(get_timetable("53", "dunton road"))
 #print(get_timetable("jubilee", "green park underground station"))
+#print(get_timetable("northern", "bank underground station"))
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
 #print(journey_duration(start="se18 3px", stop="se1 5hp"))
