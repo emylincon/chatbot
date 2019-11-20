@@ -390,7 +390,7 @@ def get_naptan_id(station_id):
     return nap_ids
 
 
-def get_station_id(station):
+def get_bus_station_id(station):
     query = "https://api.tfl.gov.uk/StopPoint/Search/"
     query += station
     json_data = requests.get(query).json()
@@ -400,6 +400,18 @@ def get_station_id(station):
     """
     s_id = json_data['matches'][0]['id']
     return get_naptan_id(s_id)
+
+
+def get_train_station_id(station):
+    query = "https://api.tfl.gov.uk/StopPoint/Search/"
+    query += station
+    json_data = requests.get(query).json()
+    """
+    sample data structure
+    {"$type":"Tfl.Api.Presentation.Entities.SearchResponse, Tfl.Api.Presentation.Entities","query":"Green Park Underground Station","total":1,"matches":[{"$type":"Tfl.Api.Presentation.Entities.MatchedStop, Tfl.Api.Presentation.Entities","icsId":"1000093","topMostParentId":"940GZZLUGPK","modes":["tube","bus"],"zone":"1","id":"940GZZLUGPK","name":"Green Park Underground Station","lat":51.506947,"lon":-0.142787}]}
+    """
+    s_id = json_data['matches'][0]['id']
+    return s_id
 
 
 def format_time(time):
@@ -416,225 +428,249 @@ def format_time(time):
 
 def get_timetable(line, station):
     try:
-        station_ids = get_station_id(station)
-        # print(station_ids)
-        reply = f"Time Table for {station}: "
+        if line.strip()[-1].isnumeric():
+            station_ids = get_bus_station_id(station)
+            #print(station_ids)
+            reply = f"Time Table for {station}: "
 
-        for nap_id in station_ids:
-            query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{nap_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
-            json_data = requests.get(query).json()
-            if json_data == []:
-                continue
-            """
-            sample data structure
-            
-            """
-            js_data = [
-                {
-                    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-                    "id": "2114623668",
-                    "operationType": 1,
-                    "vehicleId": "201",
-                    "naptanId": "940GZZLUGPK",
-                    "stationName": "Green Park Underground Station",
-                    "lineId": "victoria",
-                    "lineName": "Victoria",
-                    "platformName": "Southbound - Platform 4",
-                    "direction": "inbound",
-                    "bearing": "",
-                    "destinationNaptanId": "940GZZLUBXN",
-                    "destinationName": "Brixton Underground Station",
-                    "timestamp": "2019-11-16T00:15:39.8032218Z",
-                    "timeToStation": 505,
-                    "currentLocation": "Between Highbury & Islington and Kings Cross St. P",
-                    "towards": "Brixton",
-                    "expectedArrival": "2019-11-16T00:24:04Z",
-                    "timeToLive": "2019-11-16T00:24:04Z",
-                    "modeName": "tube",
-                    "timing": {
-                        "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
-                        "countdownServerAdjustment": "00:00:00",
-                        "source": "0001-01-01T00:00:00",
-                        "insert": "0001-01-01T00:00:00",
-                        "read": "2019-11-16T00:16:17.922Z",
-                        "sent": "2019-11-16T00:15:39Z",
-                        "received": "0001-01-01T00:00:00"
+            for nap_id in station_ids:
+                query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{nap_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
+                json_data = requests.get(query).json()
+                if not json_data:
+                    continue
+                """
+                sample data structure
+                
+                """
+                js_data = [
+                    {
+                        "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                        "id": "2114623668",
+                        "operationType": 1,
+                        "vehicleId": "201",
+                        "naptanId": "940GZZLUGPK",
+                        "stationName": "Green Park Underground Station",
+                        "lineId": "victoria",
+                        "lineName": "Victoria",
+                        "platformName": "Southbound - Platform 4",
+                        "direction": "inbound",
+                        "bearing": "",
+                        "destinationNaptanId": "940GZZLUBXN",
+                        "destinationName": "Brixton Underground Station",
+                        "timestamp": "2019-11-16T00:15:39.8032218Z",
+                        "timeToStation": 505,
+                        "currentLocation": "Between Highbury & Islington and Kings Cross St. P",
+                        "towards": "Brixton",
+                        "expectedArrival": "2019-11-16T00:24:04Z",
+                        "timeToLive": "2019-11-16T00:24:04Z",
+                        "modeName": "tube",
+                        "timing": {
+                            "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+                            "countdownServerAdjustment": "00:00:00",
+                            "source": "0001-01-01T00:00:00",
+                            "insert": "0001-01-01T00:00:00",
+                            "read": "2019-11-16T00:16:17.922Z",
+                            "sent": "2019-11-16T00:15:39Z",
+                            "received": "0001-01-01T00:00:00"
+                        }
+                    },
+                    {
+                        "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                        "id": "-1016541864",
+                        "operationType": 1,
+                        "vehicleId": "205",
+                        "naptanId": "940GZZLUGPK",
+                        "stationName": "Green Park Underground Station",
+                        "lineId": "victoria",
+                        "lineName": "Victoria",
+                        "platformName": "Northbound - Platform 3",
+                        "direction": "outbound",
+                        "bearing": "",
+                        "destinationNaptanId": "940GZZLUWWL",
+                        "destinationName": "Walthamstow Central Underground Station",
+                        "timestamp": "2019-11-16T00:15:39.8032218Z",
+                        "timeToStation": 115,
+                        "currentLocation": "Between Victoria and Green Park",
+                        "towards": "Walthamstow Central",
+                        "expectedArrival": "2019-11-16T00:17:34Z",
+                        "timeToLive": "2019-11-16T00:17:34Z",
+                        "modeName": "tube",
+                        "timing": {
+                            "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+                            "countdownServerAdjustment": "00:00:00",
+                            "source": "0001-01-01T00:00:00",
+                            "insert": "0001-01-01T00:00:00",
+                            "read": "2019-11-16T00:16:17.922Z",
+                            "sent": "2019-11-16T00:15:39Z",
+                            "received": "0001-01-01T00:00:00"
+                        }
+                    },
+                    {
+                        "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                        "id": "-1596964419",
+                        "operationType": 1,
+                        "vehicleId": "206",
+                        "naptanId": "940GZZLUGPK",
+                        "stationName": "Green Park Underground Station",
+                        "lineId": "victoria",
+                        "lineName": "Victoria",
+                        "platformName": "Northbound - Platform 3",
+                        "direction": "outbound",
+                        "bearing": "",
+                        "destinationNaptanId": "940GZZLUWWL",
+                        "destinationName": "Walthamstow Central Underground Station",
+                        "timestamp": "2019-11-16T00:15:39.8032218Z",
+                        "timeToStation": 505,
+                        "currentLocation": "At Stockwell",
+                        "towards": "Walthamstow Central",
+                        "expectedArrival": "2019-11-16T00:24:04Z",
+                        "timeToLive": "2019-11-16T00:24:04Z",
+                        "modeName": "tube",
+                        "timing": {
+                            "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+                            "countdownServerAdjustment": "00:00:00",
+                            "source": "0001-01-01T00:00:00",
+                            "insert": "0001-01-01T00:00:00",
+                            "read": "2019-11-16T00:16:17.922Z",
+                            "sent": "2019-11-16T00:15:39Z",
+                            "received": "0001-01-01T00:00:00"
+                        }
+                    },
+                    {
+                        "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                        "id": "238539794",
+                        "operationType": 1,
+                        "vehicleId": "207",
+                        "naptanId": "940GZZLUGPK",
+                        "stationName": "Green Park Underground Station",
+                        "lineId": "victoria",
+                        "lineName": "Victoria",
+                        "platformName": "Southbound - Platform 4",
+                        "direction": "inbound",
+                        "bearing": "",
+                        "destinationNaptanId": "940GZZLUBXN",
+                        "destinationName": "Brixton Underground Station",
+                        "timestamp": "2019-11-16T00:15:39.8032218Z",
+                        "timeToStation": 295,
+                        "currentLocation": "At Warren Street",
+                        "towards": "Brixton",
+                        "expectedArrival": "2019-11-16T00:20:34Z",
+                        "timeToLive": "2019-11-16T00:20:34Z",
+                        "modeName": "tube",
+                        "timing": {
+                            "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+                            "countdownServerAdjustment": "00:00:00",
+                            "source": "0001-01-01T00:00:00",
+                            "insert": "0001-01-01T00:00:00",
+                            "read": "2019-11-16T00:16:17.922Z",
+                            "sent": "2019-11-16T00:15:39Z",
+                            "received": "0001-01-01T00:00:00"
+                        }
+                    },
+                    {
+                        "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                        "id": "-613543127",
+                        "operationType": 1,
+                        "vehicleId": "242",
+                        "naptanId": "940GZZLUGPK",
+                        "stationName": "Green Park Underground Station",
+                        "lineId": "victoria",
+                        "lineName": "Victoria",
+                        "platformName": "Southbound - Platform 4",
+                        "direction": "inbound",
+                        "bearing": "",
+                        "destinationNaptanId": "940GZZLUBXN",
+                        "destinationName": "Brixton Underground Station",
+                        "timestamp": "2019-11-16T00:15:39.8032218Z",
+                        "timeToStation": 985,
+                        "currentLocation": "At Seven Sisters Platform 5",
+                        "towards": "Brixton",
+                        "expectedArrival": "2019-11-16T00:32:04Z",
+                        "timeToLive": "2019-11-16T00:32:04Z",
+                        "modeName": "tube",
+                        "timing": {
+                            "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+                            "countdownServerAdjustment": "00:00:00",
+                            "source": "0001-01-01T00:00:00",
+                            "insert": "0001-01-01T00:00:00",
+                            "read": "2019-11-16T00:16:17.922Z",
+                            "sent": "2019-11-16T00:15:39Z",
+                            "received": "0001-01-01T00:00:00"
+                        }
+                    },
+                    {
+                        "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                        "id": "1715108579",
+                        "operationType": 1,
+                        "vehicleId": "274",
+                        "naptanId": "940GZZLUGPK",
+                        "stationName": "Green Park Underground Station",
+                        "lineId": "victoria",
+                        "lineName": "Victoria",
+                        "platformName": "Southbound - Platform 4",
+                        "direction": "inbound",
+                        "bearing": "",
+                        "destinationNaptanId": "940GZZLUBXN",
+                        "destinationName": "Brixton Underground Station",
+                        "timestamp": "2019-11-16T00:15:39.8032218Z",
+                        "timeToStation": 175,
+                        "currentLocation": "At Oxford Circus",
+                        "towards": "Brixton",
+                        "expectedArrival": "2019-11-16T00:18:34Z",
+                        "timeToLive": "2019-11-16T00:18:34Z",
+                        "modeName": "tube",
+                        "timing": {
+                            "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+                            "countdownServerAdjustment": "00:00:00",
+                            "source": "0001-01-01T00:00:00",
+                            "insert": "0001-01-01T00:00:00",
+                            "read": "2019-11-16T00:16:17.922Z",
+                            "sent": "2019-11-16T00:15:39Z",
+                            "received": "0001-01-01T00:00:00"
+                        }
                     }
-                },
-                {
-                    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-                    "id": "-1016541864",
-                    "operationType": 1,
-                    "vehicleId": "205",
-                    "naptanId": "940GZZLUGPK",
-                    "stationName": "Green Park Underground Station",
-                    "lineId": "victoria",
-                    "lineName": "Victoria",
-                    "platformName": "Northbound - Platform 3",
-                    "direction": "outbound",
-                    "bearing": "",
-                    "destinationNaptanId": "940GZZLUWWL",
-                    "destinationName": "Walthamstow Central Underground Station",
-                    "timestamp": "2019-11-16T00:15:39.8032218Z",
-                    "timeToStation": 115,
-                    "currentLocation": "Between Victoria and Green Park",
-                    "towards": "Walthamstow Central",
-                    "expectedArrival": "2019-11-16T00:17:34Z",
-                    "timeToLive": "2019-11-16T00:17:34Z",
-                    "modeName": "tube",
-                    "timing": {
-                        "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
-                        "countdownServerAdjustment": "00:00:00",
-                        "source": "0001-01-01T00:00:00",
-                        "insert": "0001-01-01T00:00:00",
-                        "read": "2019-11-16T00:16:17.922Z",
-                        "sent": "2019-11-16T00:15:39Z",
-                        "received": "0001-01-01T00:00:00"
-                    }
-                },
-                {
-                    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-                    "id": "-1596964419",
-                    "operationType": 1,
-                    "vehicleId": "206",
-                    "naptanId": "940GZZLUGPK",
-                    "stationName": "Green Park Underground Station",
-                    "lineId": "victoria",
-                    "lineName": "Victoria",
-                    "platformName": "Northbound - Platform 3",
-                    "direction": "outbound",
-                    "bearing": "",
-                    "destinationNaptanId": "940GZZLUWWL",
-                    "destinationName": "Walthamstow Central Underground Station",
-                    "timestamp": "2019-11-16T00:15:39.8032218Z",
-                    "timeToStation": 505,
-                    "currentLocation": "At Stockwell",
-                    "towards": "Walthamstow Central",
-                    "expectedArrival": "2019-11-16T00:24:04Z",
-                    "timeToLive": "2019-11-16T00:24:04Z",
-                    "modeName": "tube",
-                    "timing": {
-                        "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
-                        "countdownServerAdjustment": "00:00:00",
-                        "source": "0001-01-01T00:00:00",
-                        "insert": "0001-01-01T00:00:00",
-                        "read": "2019-11-16T00:16:17.922Z",
-                        "sent": "2019-11-16T00:15:39Z",
-                        "received": "0001-01-01T00:00:00"
-                    }
-                },
-                {
-                    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-                    "id": "238539794",
-                    "operationType": 1,
-                    "vehicleId": "207",
-                    "naptanId": "940GZZLUGPK",
-                    "stationName": "Green Park Underground Station",
-                    "lineId": "victoria",
-                    "lineName": "Victoria",
-                    "platformName": "Southbound - Platform 4",
-                    "direction": "inbound",
-                    "bearing": "",
-                    "destinationNaptanId": "940GZZLUBXN",
-                    "destinationName": "Brixton Underground Station",
-                    "timestamp": "2019-11-16T00:15:39.8032218Z",
-                    "timeToStation": 295,
-                    "currentLocation": "At Warren Street",
-                    "towards": "Brixton",
-                    "expectedArrival": "2019-11-16T00:20:34Z",
-                    "timeToLive": "2019-11-16T00:20:34Z",
-                    "modeName": "tube",
-                    "timing": {
-                        "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
-                        "countdownServerAdjustment": "00:00:00",
-                        "source": "0001-01-01T00:00:00",
-                        "insert": "0001-01-01T00:00:00",
-                        "read": "2019-11-16T00:16:17.922Z",
-                        "sent": "2019-11-16T00:15:39Z",
-                        "received": "0001-01-01T00:00:00"
-                    }
-                },
-                {
-                    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-                    "id": "-613543127",
-                    "operationType": 1,
-                    "vehicleId": "242",
-                    "naptanId": "940GZZLUGPK",
-                    "stationName": "Green Park Underground Station",
-                    "lineId": "victoria",
-                    "lineName": "Victoria",
-                    "platformName": "Southbound - Platform 4",
-                    "direction": "inbound",
-                    "bearing": "",
-                    "destinationNaptanId": "940GZZLUBXN",
-                    "destinationName": "Brixton Underground Station",
-                    "timestamp": "2019-11-16T00:15:39.8032218Z",
-                    "timeToStation": 985,
-                    "currentLocation": "At Seven Sisters Platform 5",
-                    "towards": "Brixton",
-                    "expectedArrival": "2019-11-16T00:32:04Z",
-                    "timeToLive": "2019-11-16T00:32:04Z",
-                    "modeName": "tube",
-                    "timing": {
-                        "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
-                        "countdownServerAdjustment": "00:00:00",
-                        "source": "0001-01-01T00:00:00",
-                        "insert": "0001-01-01T00:00:00",
-                        "read": "2019-11-16T00:16:17.922Z",
-                        "sent": "2019-11-16T00:15:39Z",
-                        "received": "0001-01-01T00:00:00"
-                    }
-                },
-                {
-                    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-                    "id": "1715108579",
-                    "operationType": 1,
-                    "vehicleId": "274",
-                    "naptanId": "940GZZLUGPK",
-                    "stationName": "Green Park Underground Station",
-                    "lineId": "victoria",
-                    "lineName": "Victoria",
-                    "platformName": "Southbound - Platform 4",
-                    "direction": "inbound",
-                    "bearing": "",
-                    "destinationNaptanId": "940GZZLUBXN",
-                    "destinationName": "Brixton Underground Station",
-                    "timestamp": "2019-11-16T00:15:39.8032218Z",
-                    "timeToStation": 175,
-                    "currentLocation": "At Oxford Circus",
-                    "towards": "Brixton",
-                    "expectedArrival": "2019-11-16T00:18:34Z",
-                    "timeToLive": "2019-11-16T00:18:34Z",
-                    "modeName": "tube",
-                    "timing": {
-                        "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
-                        "countdownServerAdjustment": "00:00:00",
-                        "source": "0001-01-01T00:00:00",
-                        "insert": "0001-01-01T00:00:00",
-                        "read": "2019-11-16T00:16:17.922Z",
-                        "sent": "2019-11-16T00:15:39Z",
-                        "received": "0001-01-01T00:00:00"
-                    }
-                }
-            ]
-            dict_time = {}
-            for i in json_data:
-                dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
-            min_time = min(dict_time, key=dict_time.get)
-            if json_data[min_time]['modeName'] == 'bus':
+                ]
+                dict_time = {}
+                for i in json_data:
+                    dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
+                min_time = min(dict_time, key=dict_time.get)
+
                 reply += f" \nThe expected arrival Time for {json_data[min_time]['lineName']} " \
                          f"in bus stop {json_data[min_time]['platformName']} on {json_data[min_time]['stationName']} " \
                          f"travelling towards {json_data[min_time]['destinationName']} " \
                          f"is {json_data[min_time]['expectedArrival'].split('T')[1][:-1]}"
-            else:
-                reply += f" \nThe expected arrival Time for {json_data[min_time]['lineName']} " \
-                         f"in platform {json_data[min_time]['platformName']} on {json_data[min_time]['stationName']} " \
-                         f"travelling towards {json_data[min_time]['destinationName']} " \
-                         f"is {json_data[min_time]['expectedArrival'].split('T')[1][:-1]}"
 
-        return reply
+            return reply
+        else:
+            station_id = get_train_station_id(station)
+            reply = f"Time Table for {station}: "
+            query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{station_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
+            json_data = requests.get(query).json()
+            outbound_dict_time = {}
+            inbound_dict_time = {}
+            for i in json_data:
+                if i["direction"] == "outbound":
+                    outbound_dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
+                else:
+                    inbound_dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
+            if outbound_dict_time:
+                out_min_time = min(outbound_dict_time, key=outbound_dict_time.get)
+                reply += f" \nThe expected arrival Time for {json_data[out_min_time]['lineName']} " \
+                         f"in platform {json_data[out_min_time]['platformName']} on {json_data[out_min_time]['stationName']} " \
+                         f"travelling towards {json_data[out_min_time]['destinationName']} " \
+                         f"is {json_data[out_min_time]['expectedArrival'].split('T')[1][:-1]}"
+            if inbound_dict_time:
+                in_min_time = min(inbound_dict_time, key=inbound_dict_time.get)
+                reply += f" \nThe expected arrival Time for {json_data[in_min_time]['lineName']} " \
+                         f"in platform {json_data[in_min_time]['platformName']} on {json_data[in_min_time]['stationName']} " \
+                         f"travelling towards {json_data[in_min_time]['destinationName']} " \
+                         f"is {json_data[in_min_time]['expectedArrival'].split('T')[1][:-1]}"
+
+            return reply
+
     except Exception as e:
         return "Sorry, I can't find the line or station name"
+        #return e
 
 
 def tfl_tube_status():
@@ -660,6 +696,7 @@ def journey_duration(start, stop):
         return "Ask me another question"
 
 # get_station_id("victoria station")
-# print(get_timetable("53", "dunton road"))
+#print(get_timetable("53", "dunton road"))
+#print(get_timetable("jubilee", "green park underground station"))
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
 #print(journey_duration(start="se18 3px", stop="se1 5hp"))
