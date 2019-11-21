@@ -94,7 +94,11 @@ def rihanna(message):
     global default_
     message = format_string(message).lower().strip()
     default_ = message
-    if {"trending", "twitter", "topics"} - set(message.split()) == set():
+    if {"global", "trending", "twitter", "topics"} - set(message.split()) == set():
+        reply = rihanna_tweet.twitter_global_trends()
+        return reply
+
+    elif {"trending", "twitter", "topics"} - set(message.split()) == set():
         reply = rihanna_tweet.twitter_trend()
         return reply
 

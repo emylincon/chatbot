@@ -64,3 +64,29 @@ def twitter_trend():
 
     return reply
 
+
+def twitter_global_trends():
+    try:
+        result = api.GetTrendsCurrent()[:5]
+        reply = "Top Global Trends in Twitter: "
+
+        for trend in result:
+            _trend = ast.literal_eval(str(trend))
+            #print(_trend)
+            name = _trend['name']
+            try:
+                volume = _trend['tweet_volume']
+            except KeyError:
+                volume = "_ number of"
+            url = _trend['url']
+
+            reply += f'\n{name} ({volume} Tweets) | <a href={url} target="_blank">view</a>'
+
+        return reply
+    except Exception as e:
+        return 'Twitter is currently withholding this information | ' \
+               '<a href="https://trends24.in/" target="_blank">view</a>'
+
+
+
+#print(twitter_global_trends())

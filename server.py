@@ -12,7 +12,20 @@ class ChatServer(WebSocket):
         message = self.data
         response = str(get_response(message))
         # self.sendMessage(response)
-        if "\n" in response:
+        if ("\n" and "|") in response:
+            say = ""
+            for i in response.split('\n'):
+                if '|' in i:
+                    say += "\n" + i.split('|')[0]
+                else:
+                    say += i
+            display_response = response.replace("\n", "<br>").replace("|", "")
+
+            h1 = Thread(target=self.sendMessage, args=(display_response,))
+            h2 = Thread(target=rihanna_voice, args=(say,))
+            h1.start()
+            h2.start()
+        elif "\n" in response:
             display_response = response.replace("\n", "<br>")
 
             h1 = Thread(target=self.sendMessage, args=(display_response,))
