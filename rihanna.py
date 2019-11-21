@@ -164,13 +164,14 @@ def rihanna(message):
         return reply
 
     elif message[:21] == 'journey duration from':  # e.g journey duration from se1 5hp to se18 3px
-        detail = message.strip().lower()[22:].split('to')
+        detail = message.strip().lower()[22:].split(' to')
         #print(detail)
         reply = rihanna_tfl.journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
     elif message[:17] == 'live arrivals for':     # e.g live arrivals for 53 at dunton road
-        detail = message.strip().lower()[18:].split('at')
+        detail = message.strip().lower()[18:].split(' at')
+        #print(detail)
         #print(detail[0].strip(), detail[1].strip())
         reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
         #_driver = 0
@@ -217,7 +218,7 @@ def get_response(usrText):
                       },
                       {
                           'import_path': 'chatterbot.logic.LowConfidenceAdapter',
-                          'threshold': 0.70,
+                          'threshold': 0.50,
                           'default_response': 'I am sorry. I am not allowed to give an answer to that question.'
                       }
                   ],

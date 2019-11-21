@@ -652,6 +652,11 @@ def get_timetable(line, station):
 
             return reply
         else:
+
+            if station.lower().split()[-1] != "station":
+                station += " station"
+
+            #print(station)
             station_id = get_train_station_id(station, line)
             reply = f"Time Table for {station}: "
             query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{station_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
@@ -668,13 +673,13 @@ def get_timetable(line, station):
             if outbound_dict_time:
                 out_min_time = min(outbound_dict_time, key=outbound_dict_time.get)
                 reply += f" \nThe expected arrival Time for {json_data[out_min_time]['lineName']} " \
-                         f"in platform {json_data[out_min_time]['platformName']} on {json_data[out_min_time]['stationName']} " \
+                         f"in {json_data[out_min_time]['platformName']} on {json_data[out_min_time]['stationName']} " \
                          f"travelling towards {json_data[out_min_time]['destinationName']} " \
                          f"is {json_data[out_min_time]['expectedArrival'].split('T')[1][:-1]}"
             if inbound_dict_time:
                 in_min_time = min(inbound_dict_time, key=inbound_dict_time.get)
                 reply += f" \nThe expected arrival Time for {json_data[in_min_time]['lineName']} " \
-                         f"in platform {json_data[in_min_time]['platformName']} on {json_data[in_min_time]['stationName']} " \
+                         f"in {json_data[in_min_time]['platformName']} on {json_data[in_min_time]['stationName']} " \
                          f"travelling towards {json_data[in_min_time]['destinationName']} " \
                          f"is {json_data[in_min_time]['expectedArrival'].split('T')[1][:-1]}"
 
