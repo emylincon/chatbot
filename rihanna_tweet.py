@@ -88,5 +88,14 @@ def twitter_global_trends():
                '<a href="https://trends24.in/" target="_blank">view</a>'
 
 
+def twitter_search(query):
+    result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
+    reply = "Top 5 Search Results :"
+    for status in result:
+        obj = status.split('=')
+        tweet = obj[-1]
+        user = obj[2].split(',')[0]
+        reply += f"\n@{user} Tweeted: {tweet}"
+    return reply
 
 #print(twitter_global_trends())

@@ -152,6 +152,11 @@ def rihanna(message):
         rihanna_tweet.display_twitter()
         return reply
 
+    elif message[:14] == 'search twitter':
+        search = message[15:].strip()
+        reply = rihanna_tweet.twitter_search(search)
+        return reply
+
     elif message[:9] == 'calculate':
         data = message.strip()[10:]
         reply = calc.calculate(data)
