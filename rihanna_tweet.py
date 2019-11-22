@@ -3,6 +3,7 @@ from selenium import webdriver
 import time
 import ast
 import config
+import re
 
 
 api = twitter.Api(consumer_key=config.consumer_key,
@@ -94,8 +95,16 @@ def twitter_search(query):
     for status in result:
         obj = status.split('=')
         tweet = obj[-1]
+        links = re.findall(r'(https?://\S+)', tweet)
+        #print('l:', links)
+        if links:
+            for i in links:
+                link = f'|<a href={i} target="_blank">link</a>'
+                #print(i, link)
+                tweet = tweet.replace(i, link)
         user = obj[2].split(',')[0]
         reply += f"\n@{user} Tweeted: {tweet}"
     return reply
 
 #print(twitter_global_trends())
+#print(twitter_search("drake"))
