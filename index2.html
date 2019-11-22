@@ -52,6 +52,9 @@
     });
 </script>
 <style>
+    :root {
+      --mainColor: #00bbff;
+    }
     * {
         box-sizing: border-box;
         -moz-box-sizing: border-box;
@@ -144,6 +147,30 @@
         float: left;
         display: block;
 
+    }
+    a {
+      background:
+         linear-gradient(
+           to right,
+           var(--mainColor) 0%,
+           var(--mainColor) 5px,
+           transparent 5px
+         );
+        background-repeat: repeat-x;
+        background-size: 100%;
+      color: #000;
+      padding-left: 10px;
+      text-decoration: none;
+    }
+
+    a:hover {
+      background:
+         linear-gradient(
+           to right,
+           var(--mainColor) 0%,
+           var(--mainColor) 5px,
+           transparent
+         );
     }
 
 </style>
