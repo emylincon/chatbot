@@ -23,6 +23,9 @@ def multiply(a, b):
 def power(a, b):
     return a ** b
 
+def squareroot(a):
+    return math.sqrt(a)
+
 
 def factoria(a):
     return math.factorial(a)

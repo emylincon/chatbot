@@ -1,7 +1,8 @@
 import requests
 import config
 
-def NewsFromBBC():
+
+def bbc():
     # BBC news api
     main_url = f" https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey={config.news_key}"
 
@@ -10,22 +11,15 @@ def NewsFromBBC():
 
     # getting all articles in a string article
     article = open_bbc_page["articles"]
-    print(article)
+    #print(article)
+    reply = "Top 5 BBC News :"
 
-    # empty list which will
-    # contain all trending news
-    results = []
+    nos = 1
+    for ar in article[:5]:
+        news = ar["title"]
+        url = ar["url"]
 
-    for ar in article:
-        results.append(ar["title"])
+        reply += f'\n{nos}. {news} |<a href={url} target="_blank">Read</a>'
+        nos += 1
 
-    for i in range(len(results)):
-        # printing all trending news
-        print(i + 1, results[i])
-
-    # Driver Code
-
-
-if __name__ == '__main__':
-    # function call
-    NewsFromBBC()
+    return reply
