@@ -8,6 +8,7 @@ import rihanna_tweet
 import rihanna_tfl
 import rihanna_maths as calc
 import rihanna_spell
+import rihanna_news
 import config
 import random as r
 
@@ -122,6 +123,10 @@ def rihanna(message):
         except:
             # rihanna_voice("{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:]))
             return '{}? hmm.. I know what it is but I can not tell you'.format(message.strip()[7:])
+
+    elif {"bbc", "news"} - set(message.split()) == set():
+        reply = rihanna_news.bbc()
+        return reply
 
     elif message == 'weather forecast today':
         reply = weather('london,uk')
