@@ -7,6 +7,7 @@ from selenium import webdriver
 import rihanna_tweet
 import rihanna_tfl
 import rihanna_maths as calc
+import rihanna_spell
 import config
 import random as r
 
@@ -91,9 +92,8 @@ def stop_words():
 
 
 def rihanna(message):
-    global default_
-    message = format_string(message).lower().strip()
-    default_ = message
+    message = rihanna_spell.auto_correct(format_string(message).lower().strip())
+
     if {"global", "trending", "twitter", "topics"} - set(message.split()) == set():
         reply = rihanna_tweet.twitter_global_trends()
         return reply
