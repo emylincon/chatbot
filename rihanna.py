@@ -9,6 +9,7 @@ import rihanna_tfl
 import rihanna_maths as calc
 import rihanna_spell
 import rihanna_news
+import rihanna_time
 import config
 import random as r
 
@@ -24,6 +25,8 @@ bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
 bot.set_trainer(ListTrainer)
 
 break_words = ["yes", "no", "okay", "yeah", "ok", "nah", "alright", "i see"]
+_date = ("what is the date", "what is todays date", "todays date", "current date", "date")
+_time = ("what is the time", "time", "what is the current time", "current time")
 
 
 def rihanna_voice(word_speech):
@@ -52,7 +55,7 @@ def play_song(song):
 
 
 def format_string(string):
-    d = '!?\|:;@'
+    d = "!?\|:;@'"
 
     for c in d:
         if c in string:
@@ -114,6 +117,15 @@ def rihanna(message):
         reply = "My name is Rihanna"
         # rihanna_voice(reply)
         return reply
+
+    elif message in _date:
+        reply = rihanna_time.rihanna_date()
+        return reply
+
+    elif message in _time:
+        reply = rihanna_time.rihanna_time()
+        return reply
+
     elif message[0:7] == 'what is':
         try:
             reply = wikipedia.summary(message.strip()[7:], sentences=1)
