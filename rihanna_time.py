@@ -4,7 +4,7 @@ import time
 
 def rihanna_time():
     _time = str(datetime.datetime.now()).split()[1].split('.')[0]
-    return _time
+    return f'The Time is {_time}'
 
 
 def rihanna_date():
