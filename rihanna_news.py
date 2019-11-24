@@ -11,7 +11,6 @@ def bbc():
 
     # getting all articles in a string article
     article = open_bbc_page["articles"]
-    #print(article)
     reply = "Top 5 BBC News :"
 
     nos = 1
