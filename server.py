@@ -11,8 +11,53 @@ class ChatServer(WebSocket):
         # echo message back to client
         message = self.data
         response = str(get_response(message))
-        # self.sendMessage(response)
-        if ("\n" and "|") in response:
+        # self.sendMessage(response)  f"{text};{result}"
+        if ";" in response:                               # handling speak button clicked and the response
+            result = response.split(';')
+            response = result[1]
+            reply = result[0] + ';'
+            '''
+            h1 = Thread(target=self.sendMessage, args=(reply,))
+            h2 = Thread(target=rihanna_voice, args=(say,))
+            h1.start()
+            h2.start()
+            '''
+            if ("\n" and "|") in response:                        # handling both newline and link provided
+                say = ""
+                for i in response.split('\n'):
+                    if '|' in i:
+                        say += "\n" + i.split('|')[0]
+                    else:
+                        say += i
+                display_response = response.replace("\n", "<br>").replace("|", "")
+                answer = reply + display_response
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(say,))
+                h1.start()
+                h2.start()
+            elif "\n" in response:
+                display_response = response.replace("\n", "<br>")      # handling new line
+                answer = reply + display_response
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(response,))
+                h1.start()
+                h2.start()
+            elif "|" in response:                                 # handling links provided in reply
+                say = response.split('|')[0] + "\n Link provided"
+                _reply_ = response.replace("|", "")
+                answer = reply + _reply_
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(say,))
+                h1.start()
+                h2.start()
+
+            else:
+                answer = reply + response
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(response,))
+                h1.start()
+                h2.start()
+        elif ("\n" and "|") in response:  # handling both newline and link provided
             say = ""
             for i in response.split('\n'):
                 if '|' in i:
@@ -26,19 +71,20 @@ class ChatServer(WebSocket):
             h1.start()
             h2.start()
         elif "\n" in response:
-            display_response = response.replace("\n", "<br>")
+            display_response = response.replace("\n", "<br>")  # handling new line
 
             h1 = Thread(target=self.sendMessage, args=(display_response,))
             h2 = Thread(target=rihanna_voice, args=(response,))
             h1.start()
             h2.start()
-        elif "|" in response:
+        elif "|" in response:  # handling links provided in reply
             say = response.split('|')[0] + "\n Link provided"
             reply = response.replace("|", "")
             h1 = Thread(target=self.sendMessage, args=(reply,))
             h2 = Thread(target=rihanna_voice, args=(say,))
             h1.start()
             h2.start()
+
         else:
             h1 = Thread(target=self.sendMessage, args=(response,))
             h2 = Thread(target=rihanna_voice, args=(response,))
