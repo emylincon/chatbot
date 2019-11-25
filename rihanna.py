@@ -254,7 +254,7 @@ def get_response(usrText):
     while True:
         if usrText.strip() == 'click':
             text = rihanna_speak.speech_recog()
-            print(f'speech: {text.strip()}')
+            #print(f'speech: {text.strip()}')
             if text == 'sorry could not recognize your voice':
                 reply = str(text)
                 return reply
