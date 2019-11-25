@@ -10,6 +10,7 @@ import rihanna_maths as calc
 import rihanna_spell
 import rihanna_news
 import rihanna_time
+import rihanna_speak
 import config
 import random as r
 
@@ -251,7 +252,14 @@ def get_response(usrText):
                   trainer='chatterbot.trainers.ListTrainer')
     bot.set_trainer(ListTrainer)
     while True:
-        if usrText.strip() != 'Bye':
+        if usrText.strip() == 'click':
+            text = rihanna_speak.speech_recog()
+            print(f'speech: {text.strip()}')
+            result = rihanna(text.strip())
+            result = f"{text};{result}"
+            reply = str(result)
+            return reply
+        elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
             return reply
