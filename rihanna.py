@@ -255,10 +255,14 @@ def get_response(usrText):
         if usrText.strip() == 'click':
             text = rihanna_speak.speech_recog()
             print(f'speech: {text.strip()}')
-            result = rihanna(text.strip())
-            result = f"{text};{result}"
-            reply = str(result)
-            return reply
+            if text == 'sorry could not recognize your voice':
+                reply = str(text)
+                return reply
+            else:
+                result = rihanna(text.strip())
+                result = f"{text};{result}"
+                reply = str(result)
+                return reply
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
