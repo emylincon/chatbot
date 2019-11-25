@@ -15,6 +15,10 @@ def speech_recog():
             return 'sorry could not recognize your voice'
 
 
-#https://www.youtube.com/watch?v=x8U71SarzKE
-#https://github.com/soumilshah1995/Html-Css-javascript-with-Python-using-Eel-eel-tutorials
+"""
+for this module to work you need speechreognition and pyaudio
+install speechreognition directly from pip
+for pyaudio first pip install pipwin
+then pipwin install pyaudio
+"""
 #print(speech_recog())
