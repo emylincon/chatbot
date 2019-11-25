@@ -1,10 +1,18 @@
 import speech_recognition as sr
+import pyttsx3
+
+
+def rihanna_voice(word_speech):
+    engine = pyttsx3.init()
+    engine.say(word_speech)
+    engine.runAndWait()
 
 
 def speech_recog():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print('speak now...')
+        #print('\a')
+        rihanna_voice("listening")
         audio = r.listen(source)
         try:
             text = r.recognize_google(audio)
