@@ -15,7 +15,20 @@
     }
     ws.onmessage = function(event)  { 
         var message_received = event.data;
-        chat_add_message(message_received, false);
+
+		if (message_received.indexOf(';') >=0) {
+		   var speak = message_received.split(';')[0];
+		   var msg = message_received.split(';')[1];
+		   //console.log("speak = " + speak);
+		   //console.log("msg = " + msg);
+		   chat_add_message(speak, true);
+		   chat_add_message(msg, false);
+
+		}
+
+		else {
+		   chat_add_message(message_received, false);
+		}
     };
     // Add a message to the chat history
     function chat_add_message(message, isUser) {
@@ -50,6 +63,9 @@
           }
        });
     });
+    function myFunction() {
+      ws.send("click");
+    }
 </script>
 <style>
     * {
@@ -134,6 +150,19 @@
         height: 200px;
 
     }
+    #button {
+      background-color: #92d2f5; /* sky blue */
+      float: right;
+      border: none;
+      color: white;
+      border: none;
+      padding: 10px 30px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      font-size: 15px;
+    }
 </style>
 </head>
 
@@ -147,6 +176,7 @@
     </div>
     <div id="chat_input_container">
         <div><input id="chat_input" placeholder="Ask me anything, don't be shy..."/></div>
+        <button id="button" onclick="myFunction()">Speak</button>
     </div>
 </div>
 
