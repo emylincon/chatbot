@@ -154,8 +154,8 @@
 
     }
     #button {
-      background-color: #92d2f5; /* sky blue */
-      float: right;
+      background-color: #338EFF; /* sky blue */
+      /*float: right;*/
       border: none;
       color: white;
       border: none;
@@ -190,6 +190,11 @@
            transparent
          );
     }
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
 </style>
 </head>
 
@@ -202,7 +207,9 @@
     <div id="chat_log">
     </div>
     <div id="chat_input_container">
-        <div><input id="chat_input" placeholder="Ask me anything, don't be shy..."/></div>
+        <div class="autocomplete" style="width:92%">
+            <input id="chat_input" placeholder="Ask me anything, don't be shy..."/>
+        </div>
         <button id="button" onclick="myFunction()">Speak</button>
     </div>
 </div>
