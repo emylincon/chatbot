@@ -1,6 +1,7 @@
 from spellchecker import SpellChecker
 
 spell = SpellChecker()
+spell.word_frequency.load_words(['microsoft', 'apple', 'google'])
 
 
 def auto_correct(sentence):
@@ -16,4 +17,4 @@ def auto_correct(sentence):
 
     return sentence
 
-#print(auto_correct("jubilee line station"))
+#print(auto_correct("google station"))
