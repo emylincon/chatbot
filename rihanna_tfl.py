@@ -382,11 +382,16 @@ b = [
 
 def get_naptan_id(station_id):
     query = f"https://api.tfl.gov.uk/Stoppoint/{station_id}"
+    #print(station_id)
     json_data = requests.get(query).json()
     nap_ids = []
     for i in json_data["lineGroup"]:
-        nap_ids.append(i["naptanIdReference"])
+        try:
+            nap_ids.append(i["naptanIdReference"])
+        except KeyError:
+            continue
     # return json_data["lineGroup"][0]["naptanIdReference"]
+    #print("id: ", nap_ids)
     return nap_ids
 
 
@@ -414,6 +419,8 @@ def get_station_code(station_id, line):
 
 def get_train_station_id(station, line):
     query = "https://api.tfl.gov.uk/StopPoint/Search/"
+    if "and" in station:
+        station = station.replace(" and ", " & ")
     query += station
     json_data = requests.get(query).json()
     """
@@ -650,6 +657,9 @@ def get_timetable(line, station):
                          f"travelling towards {json_data[min_time]['destinationName']} " \
                          f"is {json_data[min_time]['expectedArrival'].split('T')[1][:-1]}"
 
+            if reply == f"Time Table for {station}: ":
+                return f"{line} does not call at {station}"
+
             return reply
         else:
 
@@ -685,9 +695,9 @@ def get_timetable(line, station):
 
             return reply
 
-    except Exception as e:
-        return "Sorry, I can't find the line or station name"
-        #return e
+    except KeyboardInterrupt:
+        #return "Sorry, I can't find the line or station name"
+        return 'stopped'
 
 
 def tfl_tube_status():
@@ -713,8 +723,8 @@ def journey_duration(start, stop):
         return "Ask me another question"
 
 # get_station_id("victoria station")
-#print(get_timetable("53", "dunton road"))
-#print(get_timetable("jubilee", "green park underground station"))
+#print(get_timetable("115", "aldgate underground station"))
+# print(get_timetable("northern", "elephant & castle underground station"))
 #print(get_timetable("northern", "bank underground station"))
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
 #print(journey_duration(start="se18 3px", stop="se1 5hp"))

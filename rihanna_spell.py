@@ -17,4 +17,4 @@ def auto_correct(sentence):
 
     return sentence
 
-#print(auto_correct("google station"))
+#print(auto_correct("aldgate"))

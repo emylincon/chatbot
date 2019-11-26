@@ -11,7 +11,7 @@ def rihanna_voice(word_speech):
 def speech_recog():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        #print('\a')
+        #print('speak')
         rihanna_voice("listening")
         audio = r.listen(source)
         try:
