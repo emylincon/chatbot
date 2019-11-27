@@ -13,6 +13,7 @@ import rihanna_time
 import rihanna_speak
 import config
 import random as r
+import rihanna_email
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -28,7 +29,31 @@ bot.set_trainer(ListTrainer)
 break_words = ["yes", "no", "okay", "yeah", "ok", "nah", "alright", "i see"]
 _date = ("what is the date", "what is todays date", "todays date", "current date", "date")
 _time = ("what is the time", "time", "what is the current time", "current time")
-email = 0
+email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
+email_code = {3:'msg', 1:'address', 2:'subject'}
+run_email = {1:'which email address do you want to send to?', 2:'what is the subject?', 3:'what do you wish to send to '}
+
+
+def email_thread(message):
+    global email
+
+    if email['run'] == 4:
+        msg = message
+        address = email['address']
+        subject = email['subject']
+        email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
+        return rihanna_email.send_email(subject=subject, msg=msg, _send_email=address)
+
+    elif email['run'] == 3:
+        email[email_code[2]] = message
+        return run_email[3] + email['address']
+
+    elif email['run'] == 1:
+        return run_email[1]
+
+    elif email['run'] == 2:
+        email[email_code[1]] = message
+        return run_email[2]
 
 
 def rihanna_voice(word_speech):
@@ -161,9 +186,20 @@ def twitter(message):
 
 
 def rihanna(message):
-    message = rihanna_spell.auto_correct(format_string(message).lower().strip())
+    if email['run'] == 0:
+        message = rihanna_spell.auto_correct(format_string(message).lower().strip())
+    else:
+        message = rihanna_spell.auto_correct(message.lower().strip())
 
-    if ("twitter" in message) or ("tweet" in message):
+    if email['run'] != 0:
+        email['run'] += 1
+        return email_thread(message)
+
+    elif {"send", "email"} - set(message.split()) == set():
+        email['run'] += 1
+        return email_thread(message)
+
+    elif ("twitter" in message) or ("tweet" in message):
         return twitter(message)
 
     elif message in break_words:

@@ -1,6 +1,6 @@
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 #from chatbot import get_response
-from rihanna1 import get_response
+from rihanna import get_response
 from rihanna import rihanna_voice
 from threading import Thread
 
