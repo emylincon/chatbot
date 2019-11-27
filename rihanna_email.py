@@ -1,5 +1,17 @@
 import smtplib
 import config
+import re
+
+regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+
+
+def check(email):
+
+    if re.search(regex, email):
+        return 'valid'
+
+    else:
+        return 'invalid'
 
 
 def send_email(subject, msg, _send_email):

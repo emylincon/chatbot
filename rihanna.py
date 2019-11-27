@@ -52,8 +52,12 @@ def email_thread(message):
         return run_email[1]
 
     elif email['run'] == 2:
-        email[email_code[1]] = message
-        return run_email[2]
+        if rihanna_email.check(message) == 'valid':
+            email[email_code[1]] = message
+            return run_email[2]
+        else:
+            email['run'] -= 1
+            return f"{message} is an invalid email, please give a valid mail"
 
 
 def rihanna_voice(word_speech):
