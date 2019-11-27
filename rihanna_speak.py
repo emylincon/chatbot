@@ -1,5 +1,6 @@
 import speech_recognition as sr
 import pyttsx3
+import config
 
 
 def rihanna_voice(word_speech):
@@ -13,12 +14,14 @@ def speech_recog():
     with sr.Microphone() as source:
         #print('speak')
         rihanna_voice("listening")
+        #r.adjust_for_ambient_noise(source)
         audio = r.listen(source)
         try:
             text = r.recognize_google(audio)
-            #print("{}".format(text))
+            #text = r.recognize_ibm(audio_data=audio, username=config.ibm['username'], password=config.ibm['password'])
+
             return text
-        except:
+        except Exception as e:
             #print('sorry could not recognize your voice')
             return 'sorry could not recognize your voice'
 
