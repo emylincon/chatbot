@@ -30,8 +30,8 @@ break_words = ["yes", "no", "okay", "yeah", "ok", "nah", "alright", "i see"]
 _date = ("what is the date", "what is todays date", "todays date", "current date", "date")
 _time = ("what is the time", "time", "what is the current time", "current time")
 email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
-email_code = {3:'msg', 1:'address', 2:'subject'}
-run_email = {1:'which email address do you want to send to?', 2:'what is the subject?', 3:'what do you wish to send to '}
+run_email = {1: 'which email address do you want to send to?', 2: 'what is the subject?',
+             3: 'what do you wish to send to '}
 
 
 def email_thread(message):
@@ -45,7 +45,7 @@ def email_thread(message):
         return rihanna_email.send_email(subject=subject, msg=msg, _send_email=address)
 
     elif email['run'] == 3:
-        email[email_code[2]] = message
+        email['subject'] = message
         return run_email[3] + email['address']
 
     elif email['run'] == 1:
@@ -53,7 +53,7 @@ def email_thread(message):
 
     elif email['run'] == 2:
         if rihanna_email.check(message) == 'valid':
-            email[email_code[1]] = message
+            email['address'] = message
             return run_email[2]
         else:
             email['run'] -= 1
@@ -133,11 +133,11 @@ def tfl(message):
 
     elif message[:25] == 'tfl journey duration from':  # e.g journey duration from se1 5hp to se18 3px
         detail = message.strip().lower()[22:].split(' to')
-        #print(detail)
+        # print(detail)
         reply = rihanna_tfl.journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
-    elif message[:21] == 'tfl live arrivals for':     # e.g live arrivals for 53 at dunton road
+    elif message[:21] == 'tfl live arrivals for':  # e.g live arrivals for 53 at dunton road
         detail = message.strip().lower()[18:].split(' at')
         reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
         return reply
@@ -265,9 +265,11 @@ def rihanna(message):
         return reply
 
     elif message[0:4] == 'play':
+        critic = ['that is a lovely song', 'that is a terrible song', "don't like that song",
+                  "that's my jam", "someone turn the music up!", "you have a terrible song taste"]
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
-        return '{} is a lovely song'.format(message.strip()[5:])
+        return critic[r.randrange[len(critic)]]
 
     elif len([i for i in calc.opp_code if i in message]) > 0:
         reply = calc.calculate(message)
@@ -323,6 +325,6 @@ def get_response(usrText):
             return 'Bye'
             break
 
-#d = google_search("when is the wilder fight date")
-#print('hello')
-#print(rihanna('journey duration from se18 3px to se1 5hp'))
+# d = google_search("when is the wilder fight date")
+# print('hello')
+# print(rihanna('journey duration from se18 3px to se1 5hp'))
