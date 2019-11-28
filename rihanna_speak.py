@@ -18,7 +18,7 @@ def speech_recog():
         audio = r.listen(source)
         try:
             text = r.recognize_google(audio)
-            text = r.recognize_ibm(audio_data=audio, username=config.ibm['username'], password=config.ibm['password'])
+            #text = r.recognize_ibm(audio_data=audio, username=config.ibm['username'], password=config.ibm['password'])
 
             return text
         except Exception as e:
