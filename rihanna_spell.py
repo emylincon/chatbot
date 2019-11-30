@@ -17,4 +17,4 @@ def auto_correct(sentence):
 
     return sentence
 
-#print(auto_correct("tfl"))
+#print(auto_correct("sned email"))
