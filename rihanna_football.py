@@ -2,6 +2,7 @@ import requests
 import config
 
 headers = {'X-Auth-Token': config.football_api_token}
+# https://www.football-data.org/documentation/quickstart
 
 
 def match_today():
