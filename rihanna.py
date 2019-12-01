@@ -11,6 +11,7 @@ import rihanna_spell
 import rihanna_news
 import rihanna_time
 import rihanna_speak
+import rihanna_football
 import config
 import random as r
 import rihanna_email
@@ -243,6 +244,10 @@ def rihanna(message):
     elif message == 'weather forecast today':
         reply = weather('london,uk')
         # rihanna_voice(reply)
+        return reply
+
+    elif message == 'football match today':
+        reply = rihanna_football.match_today()
         return reply
 
     elif message[:9] == 'calculate':
