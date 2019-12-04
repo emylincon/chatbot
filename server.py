@@ -22,7 +22,16 @@ class ChatServer(WebSocket):
             h1.start()
             h2.start()
             '''
-            if ("\n" and "|") in response:                        # handling both newline and link provided
+            if '~' in response:
+                say = 'Please Enter a Key'
+                display_response = response.replace("~", "")
+                answer = reply + display_response
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(say,))
+                h1.start()
+                h2.start()
+
+            elif ("\n" and "|") in response:                        # handling both newline and link provided
                 say = ""
                 for i in response.split('\n'):
                     if '|' in i:
@@ -57,6 +66,16 @@ class ChatServer(WebSocket):
                 h2 = Thread(target=rihanna_voice, args=(response,))
                 h1.start()
                 h2.start()
+
+        elif '~' in response:
+            say = 'Please Enter a Key'
+            display_response = response.replace('~', '')
+            #print(display_response)
+            h1 = Thread(target=self.sendMessage, args=(display_response,))
+            h2 = Thread(target=rihanna_voice, args=(say,))
+            h1.start()
+            h2.start()
+
         elif ("\n" and "|") in response:  # handling both newline and link provided
             say = ""
             for i in response.split('\n'):

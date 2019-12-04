@@ -204,6 +204,9 @@ def rihanna(message):
         email['run'] += 1
         return email_thread(message)
 
+    elif rihanna_football.football_key == 1:
+        return rihanna_football.match_today_(message)
+
     elif {"send", "email"} - set(message.split()) == set():
         email['run'] += 1
         return email_thread(message)
@@ -254,7 +257,7 @@ def rihanna(message):
         return reply
 
     elif message == 'football match today':
-        reply = rihanna_football.match_today()
+        reply = rihanna_football.which_league()
         return reply
 
     elif message[:9] == 'calculate':
