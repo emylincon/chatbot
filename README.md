@@ -11,3 +11,4 @@
 * Above step will open the server. Now right click the index.html page and open with brower. You will be able to see the chat window where you can start the conversation and test.
 
 `this project was adapted from https://github.com/dineshsambasivam/Chatbot_Project.git`
+`https://karenapp.io/articles/2019/07/how-to-automate-google-calendar-with-python-using-the-calendar-api/`
