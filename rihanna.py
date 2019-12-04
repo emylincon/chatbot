@@ -12,6 +12,7 @@ import rihanna_news
 import rihanna_time
 import rihanna_speak
 import rihanna_football
+import rihanna_one_char
 import config
 import random as r
 import rihanna_email
@@ -191,11 +192,14 @@ def twitter(message):
 
 
 def rihanna(message):
+
+    # Formatting message input
     if email['run'] == 0:
         message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
         message = rihanna_spell.auto_correct(message.lower().strip())
 
+    # Main Decision Thread
     if email['run'] != 0:
         email['run'] += 1
         return email_thread(message)
@@ -203,6 +207,9 @@ def rihanna(message):
     elif {"send", "email"} - set(message.split()) == set():
         email['run'] += 1
         return email_thread(message)
+
+    elif (len(message) == 1) or message.isdigit():
+        return rihanna_one_char.main(message)
 
     elif ("twitter" in message) or ("tweet" in message):
         return twitter(message)
