@@ -281,10 +281,10 @@ def rihanna(message):
 
     elif message[0:4] == 'play':
         critic = ['that is a lovely song', 'that is a terrible song', "don't like that song",
-                  "that's my jam", "someone turn the music up!", "you have a terrible song taste"]
+                  "that's my jam", "someone turn the music up", "you have a terrible song taste"]
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
-        return critic[r.randrange[len(critic)]]
+        return critic[r.randrange(len(critic))]
 
     elif len([i for i in calc.opp_code if i in message]) > 0:
         reply = calc.calculate(message)
