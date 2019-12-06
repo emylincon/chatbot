@@ -6,10 +6,15 @@ regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
 contact = {'tim': 'lamt3@lsbu.ac.uk',
            'me': 'ugwuanye@lsbu.ac.uk',
+           'emeka': 'emylincon@gmail.com',
            'rishi': 'ghoshs4@lsbu.ac.uk',
            'kasra': 'kasra.kassai@lsbu.ac.uk',
            'godwin': 'idojeg@lsbu.ac.uk',
            'brahim': 'elboudab@lsbu.ac.uk',
+           'tasos': 'tdagiuklas@lsbu.ac.uk',
+           'iqbal': 'm.iqbal@lsbu.ac.uk',
+           'lucia': 'lucia.otoyo@lsbu.ac.uk',
+           'maria': 'lemacm@lsbu.ac.uk',
            }
 
 
