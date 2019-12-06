@@ -15,6 +15,7 @@ contact = {'tim': 'lamt3@lsbu.ac.uk',
            'iqbal': 'm.iqbal@lsbu.ac.uk',
            'lucia': 'lucia.otoyo@lsbu.ac.uk',
            'maria': 'lemacm@lsbu.ac.uk',
+           'jess': 'darleyjess@gmail.com',
            }
 
 
