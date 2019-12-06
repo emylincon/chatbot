@@ -57,6 +57,9 @@ def email_thread(message):
         if rihanna_email.check(message) == 'valid':
             email['address'] = message
             return run_email[2]
+        elif message in rihanna_email.contact:
+            email['address'] = rihanna_email.contact[message]
+            return run_email[2]
         else:
             email['run'] -= 1
             return f"{message} is an invalid email, please give a valid mail"

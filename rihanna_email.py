@@ -4,6 +4,14 @@ import re
 
 regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
+contact = {'tim': 'lamt3@lsbu.ac.uk',
+           'me': 'ugwuanye@lsbu.ac.uk',
+           'rishi': 'ghoshs4@lsbu.ac.uk',
+           'kasra': 'kasra.kassai@lsbu.ac.uk',
+           'godwin': 'idojeg@lsbu.ac.uk',
+           'brahim': 'elboudab@lsbu.ac.uk',
+           }
+
 
 def check(email):
 
