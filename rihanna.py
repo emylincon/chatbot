@@ -137,13 +137,13 @@ def tfl(message):
         return reply
 
     elif message[:25] == 'tfl journey duration from':  # e.g journey duration from se1 5hp to se18 3px
-        detail = message.strip().lower()[22:].split(' to')
-        # print(detail)
+        detail = message.strip().lower()[25:].split(' to')
+        #print(detail[0].strip(), detail[1].strip())
         reply = rihanna_tfl.journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
     elif message[:21] == 'tfl live arrivals for':  # e.g live arrivals for 53 at dunton road
-        detail = message.strip().lower()[18:].split(' at')
+        detail = message.strip().lower()[21:].split(' at')
         reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
         return reply
     else:
@@ -198,7 +198,10 @@ def rihanna(message):
 
     # Formatting message input
     if email['run'] == 0:
-        message = rihanna_spell.auto_correct(format_string(message).lower().strip())
+        if message[:3] == 'tfl':
+            message = format_string(message).lower().strip()
+        else:
+            message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
         message = rihanna_spell.auto_correct(message.lower().strip())
 
