@@ -380,6 +380,25 @@ b = [
 ]
 
 
+def tfl(message):
+    if message[:23] == 'tfl tube service report':
+        reply = tfl_tube_status()
+        return reply
+
+    elif message[:25] == 'tfl journey duration from':  # e.g journey duration from se1 5hp to se18 3px
+        detail = message.strip().lower()[25:].split(' to')
+        #print(detail[0].strip(), detail[1].strip())
+        reply = journey_duration(detail[0].strip(), detail[1].strip())
+        return reply
+
+    elif message[:21] == 'tfl live arrivals for':  # e.g live arrivals for 53 at dunton road
+        detail = message.strip().lower()[21:].split(' at')
+        reply = get_timetable(detail[0].strip(), detail[1].strip())
+        return reply
+    else:
+        return "Yes I know"
+
+
 def get_naptan_id(station_id):
     query = f"https://api.tfl.gov.uk/Stoppoint/{station_id}"
     #print(station_id)

@@ -4,12 +4,57 @@ import time
 import ast
 import config
 import re
+import rihanna
 
 
 api = twitter.Api(consumer_key=config.consumer_key,
                   consumer_secret=config.consumer_secret,
                   access_token_key=config.access_token,
                   access_token_secret=config.access_token_secret)
+
+
+def twitter(message):
+    if {"global", "trending", "twitter", "topics"} - set(message.split()) == set():
+        reply = twitter_global_trends()
+        return reply
+
+    elif {"trending", "twitter", "topics"} - set(message.split()) == set():
+        reply = twitter_trend()
+        return reply
+
+    elif message == 'show my twitter status':
+        reply = twitter_status()
+        return reply
+
+    elif message[:23] == 'show twitter status for':
+        user = message.strip()[24:]
+        reply = twitter_status_others(user)
+        return reply
+
+    elif message == 'show my last tweet':
+        reply = last_tweet()
+        return reply
+
+    elif message[:28] == 'show last twitter status for':
+        user = message.strip()[29:]
+        reply = display_last_tweet(user)
+        return reply
+
+    elif message[:5] == 'tweet':
+        tweet = message.strip()[6:]
+        reply = post_tweet(tweet)
+        display_twitter()
+        return reply
+
+    elif message[:14] == 'search twitter':
+        search = message[15:].strip()
+        reply = twitter_search(search)
+        return reply
+
+    else:
+        display = rihanna.google_search(message)
+        reply = "Googling . . ."
+        return reply
 
 
 def twitter_status_others(user):
