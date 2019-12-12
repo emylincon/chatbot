@@ -1,8 +1,18 @@
+from skpy import SkypeAuthException
 from skpy import Skype
+
+
 import config as con
 import datetime as dt
 
-sk = Skype(con.skype_name, con.skype_password)
+#sk = Skype(con.skype_name, con.skype_password)
+sk = Skype(connect=False)
+sk.conn.setTokenFile(".tokens-app")
+try:
+    sk.conn.readToken()
+except SkypeAuthException:
+    sk.conn.setUserPwd(con.skype_name, con.skype_password)
+    sk.conn.getSkypeToken()
 contacts = sk.contacts
 
 '''
@@ -58,5 +68,5 @@ def send_message(name, message):
 # docs for skype
 # https://github.com/Terrance/SkPy.docs
 # https://pypi.org/project/SkPy/
-print(birthday('jess'))
+#print(birthday('jess'))
 
