@@ -138,6 +138,12 @@ def rihanna(message):
     if email['run'] == 0:
         if message[:3] == 'tfl':
             message = format_string(message).lower().strip()
+        elif message[:12] == 'show picture':
+            return rihanna_skype.show_picture(message[13:].strip())
+        elif message[:len('birthday for')] == 'birthday for':
+            return rihanna_skype.birthday(message[len('birthday for')+1:].strip())
+        elif message[:5] == 'skype':
+            return rihanna_skype._skype(message[6:])
         else:
             message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
@@ -217,9 +223,6 @@ def rihanna(message):
 
     elif message[:3] == 'tfl':
         return rihanna_tfl.tfl(message)
-
-    elif message[:5] == 'skype':
-        return rihanna_skype._skype(message[6:])
 
     elif message[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())

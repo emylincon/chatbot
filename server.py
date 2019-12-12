@@ -67,6 +67,15 @@ class ChatServer(WebSocket):
                 h1.start()
                 h2.start()
 
+        elif response[0] == '<':
+            say = 'picture provided'
+            display_response = response
+            #print(display_response)
+            h1 = Thread(target=self.sendMessage, args=(display_response,))
+            h2 = Thread(target=rihanna_voice, args=(say,))
+            h1.start()
+            h2.start()
+
         elif '~' in response:
             say = 'Please Enter a Key'
             display_response = response.replace('~', '')
