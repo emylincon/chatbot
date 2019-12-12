@@ -13,6 +13,7 @@ import rihanna_time
 import rihanna_speak
 import rihanna_football
 import rihanna_one_char
+import rihanna_skype
 import config
 import random as r
 import rihanna_email
@@ -131,69 +132,6 @@ def stop_words():
     return response[r.randrange(len(response))]
 
 
-def tfl(message):
-    if message[:23] == 'tfl tube service report':
-        reply = rihanna_tfl.tfl_tube_status()
-        return reply
-
-    elif message[:25] == 'tfl journey duration from':  # e.g journey duration from se1 5hp to se18 3px
-        detail = message.strip().lower()[25:].split(' to')
-        #print(detail[0].strip(), detail[1].strip())
-        reply = rihanna_tfl.journey_duration(detail[0].strip(), detail[1].strip())
-        return reply
-
-    elif message[:21] == 'tfl live arrivals for':  # e.g live arrivals for 53 at dunton road
-        detail = message.strip().lower()[21:].split(' at')
-        reply = rihanna_tfl.get_timetable(detail[0].strip(), detail[1].strip())
-        return reply
-    else:
-        return "Yes I know"
-
-
-def twitter(message):
-    if {"global", "trending", "twitter", "topics"} - set(message.split()) == set():
-        reply = rihanna_tweet.twitter_global_trends()
-        return reply
-
-    elif {"trending", "twitter", "topics"} - set(message.split()) == set():
-        reply = rihanna_tweet.twitter_trend()
-        return reply
-
-    elif message == 'show my twitter status':
-        reply = rihanna_tweet.twitter_status()
-        return reply
-
-    elif message[:23] == 'show twitter status for':
-        user = message.strip()[24:]
-        reply = rihanna_tweet.twitter_status_others(user)
-        return reply
-
-    elif message == 'show my last tweet':
-        reply = rihanna_tweet.last_tweet()
-        return reply
-
-    elif message[:28] == 'show last twitter status for':
-        user = message.strip()[29:]
-        reply = rihanna_tweet.display_last_tweet(user)
-        return reply
-
-    elif message[:5] == 'tweet':
-        tweet = message.strip()[6:]
-        reply = rihanna_tweet.post_tweet(tweet)
-        rihanna_tweet.display_twitter()
-        return reply
-
-    elif message[:14] == 'search twitter':
-        search = message[15:].strip()
-        reply = rihanna_tweet.twitter_search(search)
-        return reply
-
-    else:
-        display = google_search(message)
-        reply = "Googling . . ."
-        return reply
-
-
 def rihanna(message):
 
     # Formatting message input
@@ -221,7 +159,7 @@ def rihanna(message):
         return rihanna_one_char.main(message)
 
     elif ("twitter" in message) or ("tweet" in message):
-        return twitter(message)
+        return rihanna_tweet.twitter(message)
 
     elif message in break_words:
         reply = stop_words()
@@ -278,7 +216,10 @@ def rihanna(message):
         return reply
 
     elif message[:3] == 'tfl':
-        return tfl(message)
+        return rihanna_tfl.tfl(message)
+
+    elif message[:5] == 'skype':
+        return rihanna_skype._skype(message[6:])
 
     elif message[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())

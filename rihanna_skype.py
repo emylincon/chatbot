@@ -14,11 +14,19 @@ for i in c_ids:
 '''
 
 
+def _skype(message):
+    if message.strip()[:4] == 'chat':
+        new_msg = message.strip()[5:].split()
+        _name = new_msg[0]
+        _msg = ' '.join(new_msg[1:])
+        return send_message(_name, _msg)
+
+
 def send_message(name, message):
     if name.lower() in con.friends:
         chat = contacts[con.friends[name.lower()]].chat
         sk.chats[chat.id].sendMsg(message)
-        return "Message sent"
+        return f"Message sent to {name}"
     else:
         return f"{name} is not in your friend list"
 
