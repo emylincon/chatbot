@@ -62,10 +62,14 @@ def send_message(name, message):
         sk.chats[chat.id].sendMsg(message)
         return f"Message sent to {name}"
     else:
-        return f"{name} is not in your friend list"
+        try:
+            group_chat(name, message)
+            return f"Message sent to {name}"
+        except KeyError:
+            return f"{name} is not in your friend list"
 
 
-def get_last_message(name, message):
+def get_last_message(name):
     if name.lower() in con.friends:
         chat = contacts[con.friends[name.lower()]].chat
         mg = sk.chats[chat.id].getMsgs()[0].content
@@ -74,7 +78,12 @@ def get_last_message(name, message):
         return f"{name} is not in your friend list"
 
 
+def group_chat(name, message):
+    ski = sk.chats.create(members=(sk.userId, name), admins=(sk.userId,))
+    ski.sendMsg(message)
+
 # docs for skype
 # https://github.com/Terrance/SkPy.docs
 # https://pypi.org/project/SkPy/
 #print(birthday('jess'))
+
