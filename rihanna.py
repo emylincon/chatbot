@@ -4,19 +4,10 @@ import requests
 import wikipedia
 import pyttsx3
 from selenium import webdriver
-import rihanna_tweet
-import rihanna_tfl
-import rihanna_maths as calc
-import rihanna_spell
-import rihanna_news
-import rihanna_time
-import rihanna_speak
-import rihanna_football
-import rihanna_one_char
-import rihanna_skype
+from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
+    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell
 import config
 import random as r
-import rihanna_email
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -141,7 +132,7 @@ def rihanna(message):
         elif message[:12] == 'show picture':
             return rihanna_skype.show_picture(message[13:].strip())
         elif message[:len('birthday for')] == 'birthday for':
-            return rihanna_skype.birthday(message[len('birthday for')+1:].strip())
+            return rihanna_skype.birthday(message[len('birthday for') + 1:].strip())
         elif message[:5] == 'skype':
             return rihanna_skype._skype(message[6:])
         else:
