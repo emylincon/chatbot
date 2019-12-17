@@ -1,7 +1,7 @@
 from spellchecker import SpellChecker
 
 spell = SpellChecker()
-spell.word_frequency.load_words(['microsoft', 'apple', 'google', 'tfl', 'rihanna', 'chatbot', 'skype'])
+spell.word_frequency.load_words(['microsoft', 'apple', 'google', 'tfl', 'rihanna', 'chatbot', 'skype', 'facebook'])
 
 
 def auto_correct(sentence):
