@@ -41,10 +41,13 @@ def twitter(message):
         return reply
 
     elif message[:5] == 'tweet':
-        tweet = message.strip()[6:]
-        reply = post_tweet(tweet)
-        display_twitter()
-        return reply
+        try:
+            tweet = message.strip()[6:]
+            reply = post_tweet(tweet)
+            display_twitter()
+            return reply
+        except Exception as e:
+            return "Error occurred in twitter"
 
     elif message[:14] == 'search twitter':
         search = message[15:].strip()
@@ -153,3 +156,4 @@ def twitter_search(query):
 
 #print(twitter_global_trends())
 #print(twitter_search("drake"))
+twitter("tweet test in 2")
