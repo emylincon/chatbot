@@ -5,7 +5,7 @@ import wikipedia
 import pyttsx3
 from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
-    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell
+    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook
 import config
 import random as r
 
@@ -196,6 +196,9 @@ def rihanna(message):
         reply = weather('london,uk')
         # rihanna_voice(reply)
         return reply
+
+    elif "facebook" in message:
+        return rihanna_facebook.fb(message)
 
     elif message == 'football match today':
         reply = rihanna_football.which_league()
