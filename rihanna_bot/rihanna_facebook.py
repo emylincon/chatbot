@@ -2,9 +2,7 @@ import config
 import facebook
 
 graph = facebook.GraphAPI(access_token=config.fb_access_token, version="2.12")
-
-
-#graph.put_object(parent_object='me', connection_name='feed', message='Hello, world from rihanna')
+# graph.put_object(parent_object='me', connection_name='feed', message='Hello, world from rihanna')
 
 
 def fb_likes():
