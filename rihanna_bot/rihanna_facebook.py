@@ -13,7 +13,7 @@ def fb(message):
             return fb_feed()
         elif {"facebook", "likes"} - set(message.split()) == set():
             return fb_likes()
-        elif message == "How many facebook friends do i have":
+        elif message == "how many facebook friends do i have":
             return f"You have {friends_num()} friends"
         else:
             return "Please ask me another question"
@@ -49,4 +49,4 @@ def friends_num():
 # https://facebook-sdk.readthedocs.io/en/latest/api.html
 # https://developers.facebook.com/tools/explorer/
 # print(friends_num())
-print(fb("show my facebook posts"))
+#print(fb("show my facebook posts"))
