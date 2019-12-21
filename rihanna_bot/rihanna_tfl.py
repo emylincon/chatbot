@@ -385,13 +385,13 @@ def tfl(message):
         reply = tfl_tube_status()
         return reply
 
-    elif message[:25] == 'tfl journey duration from':  # e.g journey duration from se1 5hp to se18 3px
+    elif message[:25] == 'tfl journey duration from':  # e.g tfl journey duration from se1 5hp to se18 3px
         detail = message.strip().lower()[25:].split(' to')
         #print(detail[0].strip(), detail[1].strip())
         reply = journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
-    elif message[:21] == 'tfl live arrivals for':  # e.g live arrivals for 53 at dunton road
+    elif message[:21] == 'tfl live arrivals for':  # e.g tfl live arrivals for 53 at dunton road
         detail = message.strip().lower()[21:].split(' at')
         reply = get_timetable(detail[0].strip(), detail[1].strip())
         return reply

@@ -47,4 +47,39 @@ skype get last message to <friend_name>
 ```
 
 ## Facebook
+```
+show my facebook posts
+show facebook pages i like
+how many facebook friends do i have
+```
 
+## Football
+```
+football match today
+```
+
+## Time & date
+any of the following will work
+date = ("what is the date", "what is todays date", "todays date", "current date", "date")
+time = ("what is the time", "time", "what is the current time", "current time")
+
+## Weather forecast
+```
+weather forecast today
+weather forecast Lagos Nigeria
+```
+
+## Play song
+```
+play <song_name>
+```
+
+## Google
+```
+google <what_to_google>
+```
+
+## Wikipedia
+```
+what is <what_to_look_up>
+```

@@ -31,6 +31,10 @@ def _skype(message):
         _name = new_msg[0]
         _msg = ' '.join(new_msg[1:])
         return send_message(_name, _msg)
+    elif message.strip()[:19] == 'get last message to':
+        return get_last_message(message[20:].strip())
+    else:
+        return "Thou shall not answer the phrased question"
 
 
 def show_picture(name):

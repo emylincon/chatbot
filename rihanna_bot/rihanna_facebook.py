@@ -11,7 +11,7 @@ def fb(message):
     try:
         if {"facebook", "posts"} - set(message.split()) == set():
             return fb_feed()
-        elif {"facebook", "likes"} - set(message.split()) == set():
+        elif {"facebook", "pages", "like"} - set(message.split()) == set():
             return fb_likes()
         elif message == "how many facebook friends do i have":
             return f"You have {friends_num()} friends"
