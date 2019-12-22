@@ -6,6 +6,15 @@ calculate 5 + 2
 calculate 5 * 2
 calculate 6 / 2
 calculate 5 - 2
+calculate 3 / 0
+```
+or
+```
+5 + 2
+5 * 2
+6 / 2
+5 - 2
+3 / 0
 ```
 
 ## Twitter
@@ -25,6 +34,7 @@ search twitter <search_query>
 tfl tube service report
 tfl journey duration from se1 5hp to se18 3px
 tfl live arrivals for 53 at dunton road
+tfl live arrivals for northern at bank underground station
 ```
 
 ## News
