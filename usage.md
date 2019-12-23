@@ -93,3 +93,6 @@ google <what_to_google>
 ```
 what is <what_to_look_up>
 ```
+
+## One Character Reply
+Type any one character to get a one character reply
