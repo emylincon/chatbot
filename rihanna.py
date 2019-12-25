@@ -145,8 +145,8 @@ def rihanna(message):
         email['run'] += 1
         return email_thread(message)
 
-    elif rihanna_football.football_key == 1:
-        return rihanna_football.match_today_(message)
+    elif rihanna_football.football_key['status'] == 1:
+        return rihanna_football.football_switch(message)
 
     elif {"send", "email"} - set(message.split()) == set():
         email['run'] += 1
@@ -200,8 +200,8 @@ def rihanna(message):
     elif "facebook" in message:
         return rihanna_facebook.fb(message)
 
-    elif message == 'football match today':
-        reply = rihanna_football.which_league()
+    elif message[:8] == 'football':
+        reply = rihanna_football.football(message)
         return reply
 
     elif message[:9] == 'calculate':
@@ -282,7 +282,7 @@ def get_response(usrText):
             return reply
         elif usrText.strip() == 'Bye':
             return 'Bye'
-            break
+
 
 # d = google_search("when is the wilder fight date")
 # print('hello')
