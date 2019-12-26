@@ -22,8 +22,25 @@ class ChatServer(WebSocket):
             h1.start()
             h2.start()
             '''
-            if '~' in response:
-                say = 'Please Enter a Key'
+            if (response[0] == '<') and ('~' in response):
+                say = 'find reply below'
+                display_response = response.replace("~", "")
+                answer = reply + display_response
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(say,))
+                h1.start()
+                h2.start()
+            elif response[0] == '<':
+                say = 'find reply below'
+                display_response = response
+                answer = reply + display_response
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(say,))
+                h1.start()
+                h2.start()
+
+            elif '~' in response:
+                say = 'find reply below'
                 display_response = response.replace("~", "")
                 answer = reply + display_response
                 h1 = Thread(target=self.sendMessage, args=(answer,))
@@ -67,8 +84,17 @@ class ChatServer(WebSocket):
                 h1.start()
                 h2.start()
 
+        elif (response[0] == '<') and ('~' in response):
+            say = 'find reply below'
+            display_response = response.replace('~', '')
+            # print(display_response)
+            h1 = Thread(target=self.sendMessage, args=(display_response,))
+            h2 = Thread(target=rihanna_voice, args=(say,))
+            h1.start()
+            h2.start()
+
         elif response[0] == '<':
-            say = 'picture provided'
+            say = 'find reply below'
             display_response = response
             #print(display_response)
             h1 = Thread(target=self.sendMessage, args=(display_response,))
@@ -77,7 +103,7 @@ class ChatServer(WebSocket):
             h2.start()
 
         elif '~' in response:
-            say = 'Please Enter a Key'
+            say = 'find reply below'
             display_response = response.replace('~', '')
             #print(display_response)
             h1 = Thread(target=self.sendMessage, args=(display_response,))

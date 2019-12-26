@@ -184,9 +184,49 @@ def season_status(msg):  # 'key_code = ss_key'
         return e
 
 
+def top_scorers(l_code):
+    global football_key
+
+    football_key['status'] = 0
+    football_key['key'] = ''
+    try:
+        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
+                           headers=headers)
+        data = req.json()
+        reply = f"Top Goal Scorers in {data['competition']['name']}<br>"
+        reply += "<table>\
+                      <tr>\
+                        <th>Name</th>\
+                        <th>Team</th>\
+                        <th>Nationality</th>\
+                        <th>Date of Birth</th>\
+                        <th>No of Goals</th>\
+                      </tr>\
+                    "
+        for i in data['scorers']:
+            reply += f"<tr>\
+                            <td>{i['player']['name']}</td>\
+                            <td>{i['team']['name']}</td>\
+                            <td>{i['player']['nationality']}</td>\
+                            <td>{i['player']['dateOfBirth']}</td>\
+                            <td>{i['numberOfGoals']}</td>\
+                          </tr>"
+        reply += "</table>~"
+        return reply
+    except Exception as e:
+        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
+                           headers=headers)
+        data = req.json()
+        if data['errorCode'] == 403:
+            return data['message']
+        else:
+            return f"Error: {e}"
+
+
 # print(match_today_(7))
 # print(match_schedules_pl(11))
-function_call = {'mt_key': match_today_, 'ms_key': match_schedules, 'ls_key': league_start, 'ss_key': season_status}
+function_call = {'mt_key': match_today_, 'ms_key': match_schedules, 'ls_key': league_start, 'ss_key': season_status,
+                 'ts_key': top_scorers}
 match_id = ''
 
 
@@ -207,12 +247,17 @@ def football(message):
         return which_league('ls_key')
     elif message == 'football league status':
         return which_league('ss_key')
+    elif message == 'football top scorers':
+        return which_league('ts_key')
     elif message[:28] == 'football match schedules for':
         match_id = message.split()[-1]
         return which_league('ms_key')
 
+
 # football match today
 # football league start
 # football league status
+# football top scorers
 # football match schedules for match 11
 # print(season_status(7))
+print(top_scorers(9))
