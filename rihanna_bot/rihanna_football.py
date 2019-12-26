@@ -146,16 +146,41 @@ def match_schedules(msg):
 # primeier league start
 def league_start(msg):
     global football_key
+
     code = league_code[msg]
     data = match_base(code, 1)
+
     football_key['status'] = 0
     football_key['key'] = ''
     return data['matches'][0]['season']['startDate']
 
 
+def season_status(msg):  # 'key_code = ss_key'
+    global football_key
+
+    try:
+        code = league_code[msg]
+        data = match_base(code, 1)
+
+        football_key['status'] = 0
+        football_key['key'] = ''
+
+        league_name = data['competition']['name']
+        start = data['matches'][0]['season']['startDate']
+        end = data['matches'][0]['season']['endDate']
+        cmd = data['matches'][0]['season']['currentMatchday']
+        reply = f"{league_name} Season Status: \nSeason started on {start} and will end on {end}.\n" \
+                f"The current match day is {cmd}"
+
+        return reply
+
+    except Exception as e:
+        return e
+
+
 # print(match_today_(7))
 # print(match_schedules_pl(11))
-function_call = {'mt_key': match_today_, 'ms_key': match_schedules, 'ls_key': league_start}
+function_call = {'mt_key': match_today_, 'ms_key': match_schedules, 'ls_key': league_start, 'ss_key': season_status}
 match_id = ''
 
 
@@ -174,10 +199,14 @@ def football(message):
         return which_league('mt_key')
     elif message == 'football league start':
         return which_league('ls_key')
+    elif message == 'football league status':
+        return which_league('ss_key')
     elif message[:28] == 'football match schedules for':
         match_id = message.split()[-1]
         return which_league('ms_key')
 
 # football match today
 # football league start
+# football league status
 # football match schedules for match 11
+# print(season_status(7))
