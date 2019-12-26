@@ -126,12 +126,18 @@ def match_schedules(msg):
         scores = f'{data["competition"]["name"]} Match Schedules for Game {match_id}:\n'
 
         for i in data['matches']:
-            team1 = i['homeTeam']['name']
-            team2 = i['awayTeam']['name']
-            s_team1 = i['score']['fullTime']['homeTeam']
-            s_team2 = i['score']['fullTime']['awayTeam']
-            result = f"{team1} {s_team1} vs {s_team2} {team2}\n"
-            scores += result
+            if i['status'] == 'FINISHED':
+                team1 = i['homeTeam']['name']
+                team2 = i['awayTeam']['name']
+                s_team1 = i['score']['fullTime']['homeTeam']
+                s_team2 = i['score']['fullTime']['awayTeam']
+                result = f"{team1} {s_team1} vs {s_team2} {team2}\n"
+                scores += result
+            else:
+                team1 = i['homeTeam']['name']
+                team2 = i['awayTeam']['name']
+                result = f"{team1} vs {team2}\n"
+                scores += result
         football_key['status'] = 0
         football_key['key'] = ''
         match_id = ''
