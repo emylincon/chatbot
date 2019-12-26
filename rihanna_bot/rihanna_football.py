@@ -94,7 +94,7 @@ def match_today_(msg):
             team2 = i['awayTeam']['name']
             s_team1 = i['score']['fullTime']['homeTeam']
             s_team2 = i['score']['fullTime']['awayTeam']
-            result = f"{team1} {s_team1} <-> {s_team2} {team2}\n"
+            result = f"{team1} {s_team1} vs {s_team2} {team2}\n"
             scores += result
     if scores != '':
         football_key['status'] = 0
@@ -123,14 +123,14 @@ def match_schedules(msg):
     code = league_code[msg]
     try:
         data = match_base(code, match_id)
-        scores = ''
+        scores = f'{data["competition"]["name"]} Match Schedules for Game {match_id}:\n'
 
         for i in data['matches']:
             team1 = i['homeTeam']['name']
             team2 = i['awayTeam']['name']
             s_team1 = i['score']['fullTime']['homeTeam']
             s_team2 = i['score']['fullTime']['awayTeam']
-            result = f"{team1} {s_team1} <-> {s_team2} {team2}\n"
+            result = f"{team1} {s_team1} vs {s_team2} {team2}\n"
             scores += result
         football_key['status'] = 0
         football_key['key'] = ''
