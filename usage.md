@@ -69,6 +69,7 @@ football match today
 football league start
 football league status
 football top scorers
+football top scorers graph
 football match schedules for match 11
 ```
 

@@ -1,5 +1,9 @@
 import requests
 import config
+import matplotlib.pyplot as plt
+import numpy as np
+import datetime as dt
+import os
 
 headers = {'X-Auth-Token': config.football_api_token}
 # https://www.football-data.org/documentation/quickstart
@@ -184,6 +188,49 @@ def season_status(msg):  # 'key_code = ss_key'
         return e
 
 
+def top_scorers_age_graph(l_code):
+    global football_key
+
+    football_key['status'] = 0
+    football_key['key'] = ''
+    age = []
+    names = []
+    scores = []
+    width = 0.4
+    path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\img\file.png'
+    #os.remove(path)
+
+    try:
+        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers",
+                           headers=headers)
+        data = req.json()
+        for i in data['scorers']:
+            names.append(i['player']['name'])
+            dob = i['player']['dateOfBirth'].split('-')
+            yob = dt.date(int(dob[0]), int(dob[1]), int(dob[2])).year
+            now = dt.date.today().year
+            age.append(now - yob)
+            scores.append(i['numberOfGoals'])
+        plt.bar(age, scores, width, color='r', alpha=0.3)
+        for i in range(len(names)):
+            plt.text(age[i], scores[i], '{}, {}'.format(names[i], scores[i]), rotation=0,
+                     ha="center", va="center", bbox=dict(boxstyle="round", ec=(1., 0.5, 0.5), fc=(1., 0.8, 0.8), ))
+        plt.xlabel('Ages')
+        plt.ylabel('Number of Goals')
+
+        plt.xlim([min(age) - 1, max(age) + 1])
+        plt.xticks(np.arange(min(age) - 1, max(age) + 1, 1))
+
+        plt.title(f"{data['competition']['name']} Top Scorers and Their Age")
+        plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\img\file.png')
+
+        picture = f'<img src="{path}">'
+        return picture
+
+    except Exception as e:
+        return e
+
+
 def top_scorers(l_code):
     global football_key
 
@@ -226,7 +273,7 @@ def top_scorers(l_code):
 # print(match_today_(7))
 # print(match_schedules_pl(11))
 function_call = {'mt_key': match_today_, 'ms_key': match_schedules, 'ls_key': league_start, 'ss_key': season_status,
-                 'ts_key': top_scorers}
+                 'ts_key': top_scorers, 'tsag_key': top_scorers_age_graph}
 match_id = ''
 
 
@@ -249,6 +296,8 @@ def football(message):
         return which_league('ss_key')
     elif message == 'football top scorers':
         return which_league('ts_key')
+    elif message == 'football top scorers graph':
+        return which_league('tsag_key')
     elif message[:28] == 'football match schedules for':
         match_id = message.split()[-1]
         return which_league('ms_key')
@@ -260,4 +309,6 @@ def football(message):
 # football top scorers
 # football match schedules for match 11
 # print(season_status(7))
-print(top_scorers(9))
+#print(top_scorers(9))
+#print(top_scorers_age_graph(0))
+#test(0)

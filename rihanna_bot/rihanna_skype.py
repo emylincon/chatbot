@@ -42,6 +42,10 @@ def show_picture(name):
         p_id = con.friends[name.lower()]
         picture = f'<img src="https://avatar.skype.com/v1/avatars/{p_id}/public">'
         return picture
+    elif name == 'me':
+        #path = r"C:\Users\emyli\PycharmProjects\Chatbot_Project\img\speak.png"
+        path = r"E:\deadlock files\img\public.png"
+        return f'<img src="{path}">'
     else:
         return f"Sorry I do not know {name}"
 
