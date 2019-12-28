@@ -43,9 +43,10 @@ def show_picture(name):
         picture = f'<img src="https://avatar.skype.com/v1/avatars/{p_id}/public">'
         return picture
     elif name == 'me':
-        #path = r"C:\Users\emyli\PycharmProjects\Chatbot_Project\img\speak.png"
-        path = r"E:\deadlock files\img\public.png"
-        return f'<img src="{path}">'
+        path = r"C:/Users/emyli/PycharmProjects/Chatbot_Project/img/file.png"
+        #path = r"E:/deadlock files/img/public.png"
+        #return f'<img src="{path}" alt="HTML5 Icon" width="128" height="128">'
+        return f'<img src="file.png" alt="HTML5 Icon" width="65%" height="65%">'
     else:
         return f"Sorry I do not know {name}"
 

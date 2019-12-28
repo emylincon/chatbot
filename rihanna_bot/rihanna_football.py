@@ -197,8 +197,11 @@ def top_scorers_age_graph(l_code):
     names = []
     scores = []
     width = 0.4
-    path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\img\file.png'
-    #os.remove(path)
+    path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\file.png'
+    try:
+        os.remove(path)
+    except Exception as e:
+        pass
 
     try:
         req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers",
@@ -222,9 +225,9 @@ def top_scorers_age_graph(l_code):
         plt.xticks(np.arange(min(age) - 1, max(age) + 1, 1))
 
         plt.title(f"{data['competition']['name']} Top Scorers and Their Age")
-        plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\img\file.png')
-
-        picture = f'<img src="{path}">'
+        plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\file.png')
+        _name = data['competition']['name']
+        picture = f'<img src="file.png" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
         return picture
 
     except Exception as e:

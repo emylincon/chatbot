@@ -96,7 +96,7 @@ class ChatServer(WebSocket):
         elif response[0] == '<':
             say = 'find reply below'
             display_response = response
-            #print(display_response)
+            print(display_response)
             h1 = Thread(target=self.sendMessage, args=(display_response,))
             h2 = Thread(target=rihanna_voice, args=(say,))
             h1.start()
