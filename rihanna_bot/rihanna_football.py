@@ -202,10 +202,10 @@ def top_scorers_age_graph(l_code):
     try:
         os.remove(path)
     except Exception as e:
-        print(e)
+        pass
 
     try:
-        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers",
+        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
                            headers=headers)
         data = req.json()
         for i in data['scorers']:
