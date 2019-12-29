@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import datetime as dt
 import os
+import time
 
 headers = {'X-Auth-Token': config.football_api_token}
 # https://www.football-data.org/documentation/quickstart
@@ -197,11 +198,11 @@ def top_scorers_age_graph(l_code):
     names = []
     scores = []
     width = 0.4
-    path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\file.png'
+    path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\file{l_code}.png'
     try:
         os.remove(path)
     except Exception as e:
-        pass
+        print(e)
 
     try:
         req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers",
@@ -225,9 +226,11 @@ def top_scorers_age_graph(l_code):
         plt.xticks(np.arange(min(age) - 1, max(age) + 1, 1))
 
         plt.title(f"{data['competition']['name']} Top Scorers and Their Age")
-        plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\file.png')
+        plt.savefig(rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\file{l_code}.png')
+        plt.close()
         _name = data['competition']['name']
-        picture = f'<img src="file.png" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
+        picture = f'<img src="file{l_code}.png" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
+        #time.sleep(1)
         return picture
 
     except Exception as e:
