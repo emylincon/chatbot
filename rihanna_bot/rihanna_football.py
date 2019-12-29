@@ -205,7 +205,7 @@ def top_scorers_age_graph(l_code):
         pass
 
     try:
-        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
+        req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=6",
                            headers=headers)
         data = req.json()
         for i in data['scorers']:
