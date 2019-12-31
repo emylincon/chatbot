@@ -5,7 +5,7 @@ import wikipedia
 import pyttsx3
 from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
-    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook
+    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon
 import config
 import random as r
 
@@ -157,6 +157,9 @@ def rihanna(message):
 
     elif ("twitter" in message) or ("tweet" in message):
         return rihanna_tweet.twitter(message)
+
+    elif message[:len('amazon')] == 'amazon':
+        return rihanna_amazon.selector(message)
 
     elif message in break_words:
         reply = stop_words()
