@@ -101,3 +101,10 @@ what is <what_to_look_up>
 
 ## One Character Reply
 Type any one character to get a one character reply
+
+
+## Amazon
+```
+amazon least price for <item_name>
+amazon max price for <item_name>
+```
