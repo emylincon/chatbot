@@ -6,7 +6,15 @@ header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'}
 
 
-
+def selector(msg):
+    if msg[:len("amazon least price for")] == "amazon least price for":
+        msg = msg[len("amazon least price for")+1:].strip()
+        return product_min_price(msg)
+    elif msg[:len("amazon max price for")] == "amazon max price for":
+        msg = msg[len("amazon max price for")+1:].strip()
+        return product_max_price(msg)
+    else:
+        return "We apologise on behalf of our brothers and sister in amazon.co.uk"
 
 
 def search_amazon(query):
