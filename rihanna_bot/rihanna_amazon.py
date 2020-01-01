@@ -23,30 +23,34 @@ def search_amazon(query):
     soup = BeautifulSoup(page.content, 'html.parser')
     items = soup.find_all("div", {"class": "s-include-content-margin s-border-bottom"})
     item_dict = {}
-    item_link = {}
+    item_link = {}     # item_link = {item: [item_link, image_link, rating]}
     for i in items:
         _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
         _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
         _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
+        _img = i.find("img", {"class": "s-image"}).get('src')
+        _rate = i.find("span", {"class": "a-icon-alt"}).get_text()
         item_dict[_name] = _price
-        item_link[_name] = _link
+        item_link[_name] = [_link, _img, _rate]
     return item_dict, item_link
 
 
 def product_min_price(query):
     item_dict, item_link = search_amazon(query)
     min_price = min(item_dict, key=item_dict.get)
-    reply = "<table>\
+    reply = "<table id='t01'>\
                   <tr>\
+                    <th>Image</th>\
                     <th>Product Name</th>\
                     <th>Price</th>\
-                    <th>Link</th>\
+                    <th>Rating</th>\
                   </tr>\
                 "
     reply += f"<tr>\
-                        <td>{min_price}</td>\
+                        <td><img src='{item_link[min_price][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                        <td><a href='https://www.amazon.co.uk{item_link[min_price][0]}' target='_blank'>{min_price}</a></td>\
                         <td>£{item_dict[min_price]}</td>\
-                        <td><a href='https://www.amazon.co.uk{item_link[min_price]}' target='_blank'>Follow Link</a></td>\
+                        <td>{item_link[min_price][2]}</td>\
                       </tr>"
     return reply
 
@@ -54,7 +58,7 @@ def product_min_price(query):
 def product_max_price(query):
     item_dict, item_link = search_amazon(query)
     max_price = max(item_dict, key=item_dict.get)
-    reply = "<table>\
+    reply = "<table id='t01'>\
                   <tr>\
                     <th>Product Name</th>\
                     <th>Price</th>\
