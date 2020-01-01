@@ -307,6 +307,8 @@ def football(message):
     elif message[:28] == 'football match schedules for':
         match_id = message.split()[-1]
         return which_league('ms_key')
+    else:
+        return "Sorry, Rihanna cannot help you with that"
 
 
 # football match today
