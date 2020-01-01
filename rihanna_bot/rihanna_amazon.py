@@ -59,16 +59,18 @@ def product_max_price(query):
     item_dict, item_link = search_amazon(query)
     max_price = max(item_dict, key=item_dict.get)
     reply = "<table id='t01'>\
-                  <tr>\
-                    <th>Product Name</th>\
-                    <th>Price</th>\
-                    <th>Link</th>\
-                  </tr>\
-                "
+                      <tr>\
+                        <th>Image</th>\
+                        <th>Product Name</th>\
+                        <th>Price</th>\
+                        <th>Rating</th>\
+                      </tr>\
+                    "
     reply += f"<tr>\
-                        <td>{max_price}</td>\
-                        <td>£{item_dict[max_price]}</td>\
-                        <td><a href='https://www.amazon.co.uk{item_link[max_price]}' target='_blank'>Follow Link</a></td>\
-                      </tr>"
+                            <td><img src='{item_link[max_price][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                            <td><a href='https://www.amazon.co.uk{item_link[max_price][0]}' target='_blank'>{max_price}</a></td>\
+                            <td>£{item_dict[max_price]}</td>\
+                            <td>{item_link[max_price][2]}</td>\
+                          </tr>"
     return reply
 
