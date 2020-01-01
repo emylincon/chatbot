@@ -107,4 +107,6 @@ Type any one character to get a one character reply
 ```
 amazon least price for <item_name>
 amazon max price for <item_name>
+amazon sort price for speakers at 11
+amazon sort rating for speakers at 4.5
 ```
