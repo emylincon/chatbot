@@ -128,7 +128,7 @@ def match_schedules(msg):
     code = league_code[msg]
     try:
         data = match_base(code, match_id)
-        scores = f'{data["competition"]["name"]} Match Schedules for Game {match_id}:\n'
+        scores = f'<bold> {data["competition"]["name"]} Match Schedules for Game {match_id}:</bold>\n'
 
         for i in data['matches']:
             if i['status'] == 'FINISHED':
@@ -246,7 +246,7 @@ def top_scorers(l_code):
         req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
                            headers=headers)
         data = req.json()
-        reply = f"Top Goal Scorers in {data['competition']['name']}<br>"
+        reply = f"<bold> Top Goal Scorers in {data['competition']['name']}</bold><br>"
         reply += "<table id='t01'>\
                       <tr>\
                         <th>Name</th>\
