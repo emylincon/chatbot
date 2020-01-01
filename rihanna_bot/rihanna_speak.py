@@ -23,7 +23,7 @@ def speech_recog():
             return text
         except Exception as e:
             #print('sorry could not recognize your voice')
-            return 'sorry could not recognize your voice'
+            return 'sorry, could not recognize your voice'
 
 
 """
