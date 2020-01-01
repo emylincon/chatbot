@@ -44,7 +44,7 @@ league_code = {0: 'SA',
 def which_league(_key):
     global football_key
 
-    reply = "<table>\
+    reply = "<table id='t01'>\
               <tr>\
                 <th>Key</th>\
                 <th>League</th>\
@@ -247,7 +247,7 @@ def top_scorers(l_code):
                            headers=headers)
         data = req.json()
         reply = f"Top Goal Scorers in {data['competition']['name']}<br>"
-        reply += "<table>\
+        reply += "<table id='t01'>\
                       <tr>\
                         <th>Name</th>\
                         <th>Team</th>\
