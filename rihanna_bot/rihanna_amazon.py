@@ -1,9 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+import config
 
 url = "https://www.amazon.co.uk/s?k="
-header = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'}
 
 
 def get_number(word):
@@ -35,7 +34,7 @@ def selector(msg):
 
 def search_amazon(query):
     req = url + query
-    page = requests.get(req, headers=header)
+    page = requests.get(req, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
     items = soup.find_all("div", {"class": "s-include-content-margin s-border-bottom"})
     item_dict = {}
@@ -93,7 +92,7 @@ def product_max_price(query):
 
 def search_amazon_sort(query):
     req = url + query
-    page = requests.get(req, headers=header)
+    page = requests.get(req, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
     items = soup.find_all("div", {"class": "s-include-content-margin s-border-bottom"})
     item_dict = {}
