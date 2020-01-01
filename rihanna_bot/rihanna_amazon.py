@@ -51,29 +51,10 @@ def search_amazon(query):
 
 
 def product_min_price(query):
-    item_dict, item_link = search_amazon(query)
-    min_price = min(item_dict, key=item_dict.get)
-    reply = "<table id='t01'>\
-                  <tr>\
-                    <th>Image</th>\
-                    <th>Product Name</th>\
-                    <th>Price</th>\
-                    <th>Rating</th>\
-                  </tr>\
-                "
-    reply += f"<tr>\
-                        <td><img src='{item_link[min_price][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                        <td><a href='https://www.amazon.co.uk{item_link[min_price][0]}' target='_blank'>{min_price}</a></td>\
-                        <td>£{item_dict[min_price]}</td>\
-                        <td>{item_link[min_price][2]}</td>\
-                      </tr>"
-    return reply
-
-
-def product_max_price(query):
-    item_dict, item_link = search_amazon(query)
-    max_price = max(item_dict, key=item_dict.get)
-    reply = "<table id='t01'>\
+    try:
+        item_dict, item_link = search_amazon(query)
+        min_price = min(item_dict, key=item_dict.get)
+        reply = "<table id='t01'>\
                       <tr>\
                         <th>Image</th>\
                         <th>Product Name</th>\
@@ -81,13 +62,38 @@ def product_max_price(query):
                         <th>Rating</th>\
                       </tr>\
                     "
-    reply += f"<tr>\
-                            <td><img src='{item_link[max_price][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                            <td><a href='https://www.amazon.co.uk{item_link[max_price][0]}' target='_blank'>{max_price}</a></td>\
-                            <td>£{item_dict[max_price]}</td>\
-                            <td>{item_link[max_price][2]}</td>\
+        reply += f"<tr>\
+                            <td><img src='{item_link[min_price][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                            <td><a href='https://www.amazon.co.uk{item_link[min_price][0]}' target='_blank'>{min_price}</a></td>\
+                            <td>£{item_dict[min_price]}</td>\
+                            <td>{item_link[min_price][2]}</td>\
                           </tr>"
-    return reply
+        return reply
+    except Exception as e:
+        return f'Error in product_min_price: {e}'
+
+
+def product_max_price(query):
+    try:
+        item_dict, item_link = search_amazon(query)
+        max_price = max(item_dict, key=item_dict.get)
+        reply = "<table id='t01'>\
+                          <tr>\
+                            <th>Image</th>\
+                            <th>Product Name</th>\
+                            <th>Price</th>\
+                            <th>Rating</th>\
+                          </tr>\
+                        "
+        reply += f"<tr>\
+                                <td><img src='{item_link[max_price][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                                <td><a href='https://www.amazon.co.uk{item_link[max_price][0]}' target='_blank'>{max_price}</a></td>\
+                                <td>£{item_dict[max_price]}</td>\
+                                <td>{item_link[max_price][2]}</td>\
+                              </tr>"
+        return reply
+    except Exception as e:
+        return f'Error in product_max_price: {e}'
 
 
 def search_amazon_sort(query):
@@ -112,94 +118,98 @@ def search_amazon_sort(query):
 
 
 def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
-    reply = ''
-    if len(_sort) == 0:
-        item_dict, item_link, item_rate = search_amazon_sort(query)
+    try:
+        reply = ''
+        if len(_sort) == 0:
+            item_dict, item_link, item_rate = search_amazon_sort(query)
 
-        reply = "<table id='t01'>\
-                  <tr>\
-                    <th>Image</th>\
-                    <th>Product Name</th>\
-                    <th>Price</th>\
-                    <th>Rating</th>\
-                  </tr>\
-                "
-        for i in list(item_dict.keys())[:no]:
-            reply += f"<tr>\
-                          <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                          <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
-                          <td>£{item_dict[i]}</td>\
-                          <td>{item_rate[i]}</td>\
-                        </tr>"
-    elif _sort[0] != 0:
-        item_dict, item_link, item_rate = search_amazon_sort(query)
-        sorted_price = {k: v for k, v in sorted(item_dict.items(), key=lambda item: item[1])}
-        start = 0
-        for i in sorted_price.values():
-            if i >= _sort[0]:
-                start = list(sorted_price.values()).index(i)
-                break
+            reply = "<table id='t01'>\
+                      <tr>\
+                        <th>Image</th>\
+                        <th>Product Name</th>\
+                        <th>Price</th>\
+                        <th>Rating</th>\
+                      </tr>\
+                    "
+            for i in list(item_dict.keys())[:no]:
+                reply += f"<tr>\
+                              <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                              <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
+                              <td>£{item_dict[i]}</td>\
+                              <td>{item_rate[i]}</td>\
+                            </tr>"
+        elif _sort[0] != 0:
+            item_dict, item_link, item_rate = search_amazon_sort(query)
+            sorted_price = {k: v for k, v in sorted(item_dict.items(), key=lambda item: item[1])}
+            start = 0
+            for i in sorted_price.values():
+                if i >= _sort[0]:
+                    start = list(sorted_price.values()).index(i)
+                    break
+                else:
+                    start = len(sorted_price)/2
+
+            reply = "<table id='t01'>\
+                      <tr>\
+                        <th>Image</th>\
+                        <th>Product Name</th>\
+                        <th>Price</th>\
+                        <th>Rating</th>\
+                      </tr>\
+                    "
+            if len(sorted_price) > (start + no):
+                for i in list(sorted_price.keys())[start:start + no]:
+                    reply += f"<tr>\
+                                <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                                <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
+                                <td>£{item_dict[i]}</td>\
+                                <td>{item_rate[i]} / 5</td>\
+                              </tr>"
             else:
-                start = len(sorted_price)/2
+                for i in list(sorted_price.keys())[start:]:
+                    reply += f"<tr>\
+                                <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                                <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
+                                <td>£{item_dict[i]}</td>\
+                                <td>{item_rate[i]} / 5</td>\
+                              </tr>"
 
-        reply = "<table id='t01'>\
-                  <tr>\
-                    <th>Image</th>\
-                    <th>Product Name</th>\
-                    <th>Price</th>\
-                    <th>Rating</th>\
-                  </tr>\
-                "
-        if len(sorted_price) > (start + no):
-            for i in list(sorted_price.keys())[start:start + no]:
-                reply += f"<tr>\
-                            <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                            <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
-                            <td>£{item_dict[i]}</td>\
-                            <td>{item_rate[i]} / 5</td>\
-                          </tr>"
-        else:
-            for i in list(sorted_price.keys())[start:]:
-                reply += f"<tr>\
-                            <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                            <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
-                            <td>£{item_dict[i]}</td>\
-                            <td>{item_rate[i]} / 5</td>\
-                          </tr>"
+        elif _sort[1] != 0:
+            item_dict, item_link, item_rate = search_amazon_sort(query)
+            sorted_rate = {k: v for k, v in sorted(item_rate.items(), key=lambda item: item[1])}
+            start = 0
+            for i in sorted_rate.values():
+                if i >= _sort[1]:
+                    start = list(sorted_rate.values()).index(i)
+                    break
+                else:
+                    start = len(sorted_rate)/2
 
-    elif _sort[1] != 0:
-        item_dict, item_link, item_rate = search_amazon_sort(query)
-        sorted_rate = {k: v for k, v in sorted(item_rate.items(), key=lambda item: item[1])}
-        start = 0
-        for i in sorted_rate.values():
-            if i >= _sort[1]:
-                start = list(sorted_rate.values()).index(i)
-                break
+            reply = "<table id='t01'>\
+                      <tr>\
+                        <th>Image</th>\
+                        <th>Product Name</th>\
+                        <th>Price</th>\
+                        <th>Rating</th>\
+                      </tr>\
+                    "
+            if len(sorted_rate) > (start + no):
+                for i in list(sorted_rate.keys())[start:start + no]:
+                    reply += f"<tr>\
+                                <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                                <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
+                                <td>£{item_dict[i]}</td>\
+                                <td>{item_rate[i]} / 5</td>\
+                              </tr>"
             else:
-                start = len(sorted_rate)/2
+                for i in list(sorted_rate.keys())[start:]:
+                    reply += f"<tr>\
+                                <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
+                                <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
+                                <td>£{item_dict[i]}</td>\
+                                <td>{item_rate[i]} / 5</td>\
+                              </tr>"
+        return reply
 
-        reply = "<table id='t01'>\
-                  <tr>\
-                    <th>Image</th>\
-                    <th>Product Name</th>\
-                    <th>Price</th>\
-                    <th>Rating</th>\
-                  </tr>\
-                "
-        if len(sorted_rate) > (start + no):
-            for i in list(sorted_rate.keys())[start:start + no]:
-                reply += f"<tr>\
-                            <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                            <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
-                            <td>£{item_dict[i]}</td>\
-                            <td>{item_rate[i]} / 5</td>\
-                          </tr>"
-        else:
-            for i in list(sorted_rate.keys())[start:]:
-                reply += f"<tr>\
-                            <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
-                            <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
-                            <td>£{item_dict[i]}</td>\
-                            <td>{item_rate[i]} / 5</td>\
-                          </tr>"
-    return reply
+    except Exception as e:
+        return f'Error in amazon sort_product: {e}'
