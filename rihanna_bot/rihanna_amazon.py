@@ -147,7 +147,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                     start = list(sorted_price.values()).index(i)
                     break
                 else:
-                    start = len(sorted_price)/2
+                    start = len(sorted_price)//2
 
             reply = "<table id='t01'>\
                       <tr>\
@@ -183,7 +183,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                     start = list(sorted_rate.values()).index(i)
                     break
                 else:
-                    start = len(sorted_rate)/2
+                    start = len(sorted_rate)//2
 
             reply = "<table id='t01'>\
                       <tr>\
@@ -213,3 +213,22 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
 
     except Exception as e:
         return f'Error in amazon sort_product: {e}'
+
+
+def BinarySearch(lys, val):
+    first = 0
+    last = len(lys)-1
+    index = -1
+    while (first <= last) and (index == -1):
+        mid = (first+last)//2
+        if lys[mid] == val:
+            index = mid
+        else:
+            if val<lys[mid]:
+                last = mid -1
+            else:
+                first = mid +1
+    return index
+
+
+#print(BinarySearch([10,20,30,40,50], 20))
