@@ -148,8 +148,9 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                     break
                 else:
                     start = len(sorted_price)//2
+                    reply = "Could Not Find the requested price"
 
-            reply = "<table id='t01'>\
+            reply += "<table id='t01'>\
                       <tr>\
                         <th>Image</th>\
                         <th>Product Name</th>\
@@ -184,8 +185,9 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                     break
                 else:
                     start = len(sorted_rate)//2
+                    reply = "No product with such rating at the moment"
 
-            reply = "<table id='t01'>\
+            reply += "<table id='t01'>\
                       <tr>\
                         <th>Image</th>\
                         <th>Product Name</th>\
@@ -209,6 +211,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                                 <td>£{item_dict[i]}</td>\
                                 <td>{item_rate[i]} / 5</td>\
                               </tr>"
+        reply += '~'
         return reply
 
     except Exception as e:
