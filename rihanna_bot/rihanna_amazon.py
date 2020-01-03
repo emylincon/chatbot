@@ -40,13 +40,16 @@ def search_amazon(query):
     item_dict = {}
     item_link = {}     # item_link = {item: [item_link, image_link, rating]}
     for i in items:
-        _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
-        _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
-        _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
-        _img = i.find("img", {"class": "s-image"}).get('src')
-        _rate = i.find("span", {"class": "a-icon-alt"}).get_text()
-        item_dict[_name] = _price
-        item_link[_name] = [_link, _img, _rate]
+        try:
+            _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
+            _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
+            _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
+            _img = i.find("img", {"class": "s-image"}).get('src')
+            _rate = i.find("span", {"class": "a-icon-alt"}).get_text()
+            item_dict[_name] = _price
+            item_link[_name] = [_link, _img, _rate]
+        except AttributeError:
+            continue
     return item_dict, item_link
 
 
@@ -105,14 +108,17 @@ def search_amazon_sort(query):
     item_link = {}  # item_link = {item: [item_link, image_link, rating]}
     item_rate = {}
     for i in items:
-        _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
-        _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
-        _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
-        _img = i.find("img", {"class": "s-image"}).get('src')
-        _rate = float(i.find("span", {"class": "a-icon-alt"}).get_text().split()[0])
-        item_dict[_name] = _price
-        item_link[_name] = [_link, _img]
-        item_rate[_name] = _rate
+        try:
+            _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
+            _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
+            _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
+            _img = i.find("img", {"class": "s-image"}).get('src')
+            _rate = float(i.find("span", {"class": "a-icon-alt"}).get_text().split()[0])
+            item_dict[_name] = _price
+            item_link[_name] = [_link, _img]
+            item_rate[_name] = _rate
+        except AttributeError:
+            continue
 
     return item_dict, item_link, item_rate
 
@@ -142,13 +148,16 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
             item_dict, item_link, item_rate = search_amazon_sort(query)
             sorted_price = {k: v for k, v in sorted(item_dict.items(), key=lambda item: item[1])}
             start = 0
+            j = 0
+
             for i in sorted_price.values():
                 if i >= _sort[0]:
                     start = list(sorted_price.values()).index(i)
+                    j = 1
                     break
-                else:
-                    start = len(sorted_price)//2
-                    reply = "Could Not Find the requested price"
+            if (start == 0) and (j == 1):
+                start = len(sorted_price)//2
+                reply = "Could Not Find the requested price"
 
             reply += "<table id='t01'>\
                       <tr>\
@@ -235,3 +244,6 @@ def BinarySearch(lys, val):
 
 
 #print(BinarySearch([10,20,30,40,50], 20))
+#s = search_amazon("external hard drive 2tb")
+#print(s)
+#print(selector("amazon least price for external hard drive 2tb"))
