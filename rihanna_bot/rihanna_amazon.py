@@ -3,6 +3,27 @@ from bs4 import BeautifulSoup
 import config
 
 url = "https://www.amazon.co.uk/s?k="
+out = 0
+
+
+def find_nearest(l, h, _array, x):
+    global out
+
+    if abs(l - h) == 1:
+        if abs(_array[l] - x) > abs(_array[h] - x):
+            out = h
+        else:
+            out = l
+        return 0
+    else:
+        m = int((l + h) / 2)
+        if _array[m] == x:
+            out = m
+            return 0
+        elif _array[m] < x:
+            find_nearest(m, h, _array, x)
+        elif _array[m] > x:
+            find_nearest(l, m, _array, x)
 
 
 def get_number(word):
@@ -147,6 +168,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
         elif _sort[0] != 0:
             item_dict, item_link, item_rate = search_amazon_sort(query)
             sorted_price = {k: v for k, v in sorted(item_dict.items(), key=lambda item: item[1])}
+            '''
             start = 0
             j = 0
 
@@ -158,6 +180,9 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
             if (start == 0) and (j == 1):
                 start = len(sorted_price)//2
                 reply = "Could Not Find the requested price"
+            '''
+            find_nearest(0, h=len(sorted_price) - 1, _array=list(sorted_price.values()), x=_sort[0])
+            start = out
 
             reply += "<table id='t01'>\
                       <tr>\
@@ -176,7 +201,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                                 <td>{item_rate[i]} / 5</td>\
                               </tr>"
             else:
-                for i in list(sorted_price.keys())[start:]:
+                for i in list(sorted_price.keys())[-no:]:
                     reply += f"<tr>\
                                 <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
                                 <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
@@ -187,6 +212,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
         elif _sort[1] != 0:
             item_dict, item_link, item_rate = search_amazon_sort(query)
             sorted_rate = {k: v for k, v in sorted(item_rate.items(), key=lambda item: item[1])}
+            '''
             start = 0
             for i in sorted_rate.values():
                 if i >= _sort[1]:
@@ -195,6 +221,9 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                 else:
                     start = len(sorted_rate)//2
                     reply = "No product with such rating at the moment"
+            '''
+            find_nearest(0,h=len(sorted_rate)-1,_array=list(sorted_rate.values()),x=_sort[1])
+            start = out
 
             reply += "<table id='t01'>\
                       <tr>\
@@ -213,7 +242,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                                 <td>{item_rate[i]} / 5</td>\
                               </tr>"
             else:
-                for i in list(sorted_rate.keys())[start:]:
+                for i in list(sorted_rate.keys())[-no:]:
                     reply += f"<tr>\
                                 <td><img src='{item_link[i][1]}' alt='{query} image' width='40%' height='40%'></td>\
                                 <td><a href='https://www.amazon.co.uk{item_link[i][0]}' target='_blank'>{i}</a></td>\
