@@ -135,6 +135,8 @@ def rihanna(message):
             return rihanna_skype.birthday(message[len('birthday for') + 1:].strip())
         elif message[:5] == 'skype':
             return rihanna_skype._skype(message[6:])
+        elif message[:len('amazon')] == 'amazon':
+            return rihanna_amazon.selector(format_string(message).lower().strip())
         else:
             message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
@@ -157,9 +159,6 @@ def rihanna(message):
 
     elif ("twitter" in message) or ("tweet" in message):
         return rihanna_tweet.twitter(message)
-
-    elif message[:len('amazon')] == 'amazon':
-        return rihanna_amazon.selector(message)
 
     elif message in break_words:
         reply = stop_words()
@@ -290,3 +289,4 @@ def get_response(usrText):
 # d = google_search("when is the wilder fight date")
 # print('hello')
 # print(rihanna('journey duration from se18 3px to se1 5hp'))
+#print(rihanna("amazon least price for external hard drive 2tb"))

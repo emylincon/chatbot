@@ -19,3 +19,4 @@ def auto_correct(sentence):
     return sentence
 
 #print(auto_correct("sned email"))
+#print(auto_correct("amazon least price for external hard drive  2 terabyte"))
