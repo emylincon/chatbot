@@ -34,21 +34,21 @@ def get_number(word):
 
 def selector(msg):
     if msg[:len("amazon least price for")] == "amazon least price for":
-        msg = msg[len("amazon least price for")+1:].strip()
+        msg = msg[len("amazon least price for") + 1:].strip()
         return product_min_price(msg)
     elif msg[:len("amazon max price for")] == "amazon max price for":
-        msg = msg[len("amazon max price for")+1:].strip()
+        msg = msg[len("amazon max price for") + 1:].strip()
         return product_max_price(msg)
-    elif msg[:len("amazon sort price for")] == "amazon sort price for":   # e.g amazon sort price for speakers at 11
-        sub_msg = msg[len("amazon sort price for")+1:].strip()
-        msg,price_raw = sub_msg.split(' at ')
+    elif msg[:len("amazon sort price for")] == "amazon sort price for":  # e.g amazon sort price for speakers at 11
+        sub_msg = msg[len("amazon sort price for") + 1:].strip()
+        msg, price_raw = sub_msg.split(' at ')
         price = get_number(price_raw)
-        return sort_products(msg, [price,0])
-    elif msg[:len("amazon sort rating for")] == "amazon sort rating for":   # e.g amazon sort rating for speakers at 4.5
-        sub_msg = msg[len("amazon sort rating for")+1:].strip()
-        msg,rate_raw = sub_msg.split(' at ')
+        return sort_products(msg, [price, 0])
+    elif msg[:len("amazon sort rating for")] == "amazon sort rating for":  # e.g amazon sort rating for speakers at 4.5
+        sub_msg = msg[len("amazon sort rating for") + 1:].strip()
+        msg, rate_raw = sub_msg.split(' at ')
         rate = get_number(rate_raw)
-        return sort_products(msg, [0,rate])
+        return sort_products(msg, [0, rate])
     else:
         return "We apologise on behalf of our brothers and sister in amazon.co.uk"
 
@@ -59,11 +59,12 @@ def search_amazon(query):
     soup = BeautifulSoup(page.content, 'html.parser')
     items = soup.find_all("div", {"class": "s-include-content-margin s-border-bottom"})
     item_dict = {}
-    item_link = {}     # item_link = {item: [item_link, image_link, rating]}
+    item_link = {}  # item_link = {item: [item_link, image_link, rating]}
     for i in items:
         try:
             _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
-            _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
+            raw_pice = i.find("span", {"class": "a-offscreen"}).get_text()[1:]
+            _price = float(raw_pice.replace(',', '') if ',' in raw_pice else raw_pice)
             _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
             _img = i.find("img", {"class": "s-image"}).get('src')
             _rate = i.find("span", {"class": "a-icon-alt"}).get_text()
@@ -77,6 +78,10 @@ def search_amazon(query):
 def product_min_price(query):
     try:
         item_dict, item_link = search_amazon(query)
+        if len(item_dict) == 0:
+            item_dict, item_link = search_amazon(query.split()[0])
+        if len(item_dict) == 0:
+            return "I am not in the mood to search for that query"
         min_price = min(item_dict, key=item_dict.get)
         reply = "<table id='t01'>\
                       <tr>\
@@ -100,6 +105,10 @@ def product_min_price(query):
 def product_max_price(query):
     try:
         item_dict, item_link = search_amazon(query)
+        if len(item_dict) == 0:
+            item_dict, item_link = search_amazon(query.split()[0])
+        if len(item_dict) == 0:
+            return "I am not in the mood to search for that query"
         max_price = max(item_dict, key=item_dict.get)
         reply = "<table id='t01'>\
                           <tr>\
@@ -131,7 +140,8 @@ def search_amazon_sort(query):
     for i in items:
         try:
             _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
-            _price = float(i.find("span", {"class": "a-offscreen"}).get_text()[1:])
+            raw_pice = i.find("span", {"class": "a-offscreen"}).get_text()[1:]
+            _price = float(raw_pice.replace(',', '') if ',' in raw_pice else raw_pice)
             _link = i.find("a", {"class": "a-link-normal a-text-normal"}).get('href')
             _img = i.find("img", {"class": "s-image"}).get('src')
             _rate = float(i.find("span", {"class": "a-icon-alt"}).get_text().split()[0])
@@ -149,6 +159,10 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
         reply = ''
         if len(_sort) == 0:
             item_dict, item_link, item_rate = search_amazon_sort(query)
+            if len(item_dict) == 0:
+                item_dict, item_link, item_rate = search_amazon_sort(query.split()[0])
+            if len(item_dict) == 0:
+                return "I am not in the mood to search for that query, ehhhhh."
 
             reply = "<table id='t01'>\
                       <tr>\
@@ -167,6 +181,10 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                             </tr>"
         elif _sort[0] != 0:
             item_dict, item_link, item_rate = search_amazon_sort(query)
+            if len(item_dict) == 0:
+                item_dict, item_link, item_rate = search_amazon_sort(query.split()[0])
+            if len(item_dict) == 0:
+                return "I am not in the mood to search for that query, ehhhhh."
             sorted_price = {k: v for k, v in sorted(item_dict.items(), key=lambda item: item[1])}
             '''
             start = 0
@@ -211,6 +229,10 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
 
         elif _sort[1] != 0:
             item_dict, item_link, item_rate = search_amazon_sort(query)
+            if len(item_dict) == 0:
+                item_dict, item_link, item_rate = search_amazon_sort(query.split()[0])
+            if len(item_dict) == 0:
+                return "I am not in the mood to search for that query, ehhhhh."
             sorted_rate = {k: v for k, v in sorted(item_rate.items(), key=lambda item: item[1])}
             '''
             start = 0
@@ -222,7 +244,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                     start = len(sorted_rate)//2
                     reply = "No product with such rating at the moment"
             '''
-            find_nearest(0,h=len(sorted_rate)-1,_array=list(sorted_rate.values()),x=_sort[1])
+            find_nearest(0, h=len(sorted_rate) - 1, _array=list(sorted_rate.values()), x=_sort[1])
             start = out
 
             reply += "<table id='t01'>\
@@ -255,24 +277,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
     except Exception as e:
         return f'Error in amazon sort_product: {e}'
 
-
-def BinarySearch(lys, val):
-    first = 0
-    last = len(lys)-1
-    index = -1
-    while (first <= last) and (index == -1):
-        mid = (first+last)//2
-        if lys[mid] == val:
-            index = mid
-        else:
-            if val<lys[mid]:
-                last = mid -1
-            else:
-                first = mid +1
-    return index
-
-
-#print(BinarySearch([10,20,30,40,50], 20))
-#s = search_amazon("external hard drive 2tb")
-#print(s)
-#print(selector("amazon least price for external hard drive 2tb"))
+# print(BinarySearch([10,20,30,40,50], 20))
+# s = search_amazon("external hard drive 2tb")
+# print(s)
+# print(selector("amazon least price for external hard drive 2tb"))
