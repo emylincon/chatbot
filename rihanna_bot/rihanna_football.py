@@ -129,23 +129,37 @@ def match_schedules(msg):
     try:
         data = match_base(code, match_id)
         scores = f'<bold> {data["competition"]["name"]} Match Schedules for Game {match_id}:</bold>\n'
+        scores += "<table id='t01'>\
+                      <tr>\
+                        <th>Home Team</th>\
+                        <th></th>\
+                        <th></th>\
+                        <th></th>\
+                        <th>Away Team</th>\
+                      </tr>\
+                    "
 
         for i in data['matches']:
             if i['status'] == 'FINISHED':
-                team1 = i['homeTeam']['name']
-                team2 = i['awayTeam']['name']
-                s_team1 = i['score']['fullTime']['homeTeam']
-                s_team2 = i['score']['fullTime']['awayTeam']
-                result = f"{team1} {s_team1} vs {s_team2} {team2}\n"
-                scores += result
+                scores += f"<tr>\
+                            <td>{i['homeTeam']['name']}</td>\
+                            <td>{i['score']['fullTime']['homeTeam']}</td>\
+                            <td>-</td>\
+                            <td>{i['score']['fullTime']['awayTeam']}</td>\
+                            <td>{i['awayTeam']['name']}</td>\
+                          </tr>"
             else:
-                team1 = i['homeTeam']['name']
-                team2 = i['awayTeam']['name']
-                result = f"{team1} vs {team2}\n"
-                scores += result
+                scores += f"<tr>\
+                                            <td>{i['homeTeam']['name']}</td>\
+                                            <td></td>\
+                                            <td>Vs</td>\
+                                            <td></td>\
+                                            <td>{i['awayTeam']['name']}</td>\
+                                          </tr>"
         football_key['status'] = 0
         football_key['key'] = ''
         match_id = ''
+        scores += "</table>~"
         return scores
     except Exception as e:
         football_key['status'] = 0
