@@ -10,7 +10,7 @@ class ChatServer(WebSocket):
     def handleMessage(self):
         # echo message back to client
         message = self.data
-        response = str(get_response(message))
+        response = get_response(message)
         # self.sendMessage(response)  f"{text};{result}"
         if ";" in response:                               # handling speak button clicked and the response
             result = response.split(';')
