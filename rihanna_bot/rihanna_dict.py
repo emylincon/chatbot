@@ -1,7 +1,23 @@
 from PyDictionary import PyDictionary
+from googletrans import Translator
 import config
 
 dictionary=PyDictionary()
+
+
+def selector(msg):
+    if msg[:len("dictionary meaning for")] == "dictionary meaning for":
+        msg = msg[len("dictionary meaning for") + 1:].strip()
+        return find_meaning(msg)
+    elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
+        msg = msg[len("dictionary synonym for") + 1:].strip()
+        return find_synonym(msg)
+    elif msg[:len("dictionary antonym for")] == "dictionary antonym for":
+        msg = msg[len("dictionary antonym for") + 1:].strip()
+        return find_antonym(msg)
+    elif msg[:len("dictionary translate")] == "dictionary translate":
+        msg = msg[len("dictionary translate") + 1:].strip().split(' to ')
+        return translate_sentence(msg[0], msg[1])
 
 
 def find_meaning(query):
@@ -27,21 +43,45 @@ def find_meaning(query):
 
 
 def find_synonym(query):
-    response = dictionary.synonym(query)
+    try:
+        response = dictionary.synonym(query)
+
+    except Exception as e:
+        return f"Error in find_synonym: {e}"
 
     return response
 
 
 def find_antonym(query):
-    response = dictionary.antonym(query)
+    try:
+        response = dictionary.antonym(query)
+    except Exception as e:
+        return f"Error in find_antonym: {e}"
 
     return response
 
 
 def translate_(query, lang):
-    response = dictionary.translate(query,config.trans_code[lang.capitalize()])
-
+    try:
+        response = dictionary.translate(query,config.trans_code[lang.capitalize()])
+    except Exception as e:
+        return f"Error in find_translate_: {e}"
     return response
 
 
+def translate_sentence(query, lang):
+    try:
+        translator = Translator()
+        dest = config.trans_code[lang.capitalize()]
+        obj = translator.translate(query, dest=dest)
+        response = obj.text
+        pronunciation = obj.pronunciation
+        reply = {'display': response, 'say': pronunciation}
+    except Exception as e:
+        return f"Error in find_translate_: {e}"
+    return reply
+
+
 #print(translate_('hello', 'igbo'))
+#print(selector("dictionary translate smart cities to japanese"))
+

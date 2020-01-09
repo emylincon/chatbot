@@ -5,7 +5,7 @@ import wikipedia
 import pyttsx3
 from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
-    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon
+    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, rihanna_dict
 import config
 import random as r
 
@@ -167,6 +167,9 @@ def rihanna(message):
     elif message == 'why':
         return "Sorry, I cant tell you. Its a secret"
 
+    elif message[:len('dictionary')] == 'dictionary':
+        return rihanna_dict.selector(message)
+
     elif message == 'what is your name':
         reply = "My name is Rihanna"
         # rihanna_voice(reply)
@@ -277,11 +280,12 @@ def get_response(usrText):
                 result = rihanna(text.strip())
                 result = f"{text};{result}"
                 reply = str(result)
+                #return str({'user_sent': text, 'reply': result, 'voice_check': 0, 'say': ''})
                 return reply
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
-            return reply
+            return reply                   #reply should be string else it wont work
         elif usrText.strip() == 'Bye':
             return 'Bye'
 
