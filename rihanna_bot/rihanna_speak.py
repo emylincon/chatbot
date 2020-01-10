@@ -33,3 +33,4 @@ for pyaudio first pip install pipwin
 then pipwin install pyaudio
 """
 #print(speech_recog())
+#rihanna_voice('buen día')

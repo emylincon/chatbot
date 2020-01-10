@@ -75,13 +75,64 @@ def translate_sentence(query, lang):
         dest = config.trans_code[lang.capitalize()]
         obj = translator.translate(query, dest=dest)
         response = obj.text
-        pronunciation = obj.pronunciation
+        if is_alpha(obj.text):
+            pronunciation = obj.text
+        else:
+            pronunciation = obj.extra_data['translation'][1][-1]
+        #pronunciation = obj.pronunciation
         reply = {'display': response, 'say': pronunciation}
     except Exception as e:
-        return f"Error in find_translate_: {e}"
+        return f"Error in translate_sentence: {e} \n request: {query} \n l: {lang}"
     return reply
 
+def aball(query,lang):
+    translator = Translator()
+    dest = config.trans_code[lang.capitalize()]
+    obj = translator.translate(query, dest=dest)
+    response = obj.text
+    if is_alpha(obj.text):
+        pronunciation = obj.text
+    else:
+        pronunciation = obj.extra_data['translation'][1][-1]
+    # pronunciation = obj.pronunciation
+    reply = {'display': response, 'say': pronunciation}
+    return reply
+
+
+def translate_sentence_code(query, lang):
+    try:
+        translator = Translator()
+        obj = translator.translate(str(query), dest=lang)
+        response = obj.text
+        if is_alpha(obj.text):
+            pronunciation = obj.text
+        else:
+            pronunciation = obj.extra_data['translation'][1][-1]
+        #pronunciation = obj.pronunciation
+        reply = {'display': response, 'say': pronunciation}
+
+    except Exception as e:
+        return f"Error in translate_sentence_code: {e} \n request: {query} \n l: {lang}"
+    return reply
+
+
+def is_alpha(word):
+    try:
+        return word.encode('ascii').isalpha()
+    except:
+        return False
+
+
+def detect_lang(query):
+    try:
+        translator = Translator()
+        return translator.detect(query).lang
+
+    except Exception as e:
+        return f"detect_lang error: {e}"
 
 #print(translate_('hello', 'igbo'))
 #print(selector("dictionary translate smart cities to japanese"))
 
+#a = translate_sentence_code(query='hello', lang='ja')
+#print(aball(query='hello', lang='japanese'))
