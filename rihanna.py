@@ -132,7 +132,7 @@ def rihanna(message):
         lang_code = rihanna_dict.detect_lang(message)
         message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
-        #print(f'trans: {message} \n l_code: {lang_code}')
+        print(f'trans: {message} \n l_code: {lang_code}')
 
         # Formatting message input
     if email['run'] == 0:
@@ -302,7 +302,7 @@ def get_response(usrText):
                 reply = str(result)
             else:
                 reply = str(rihanna_dict.translate_sentence_code(result, lang_code))
-                #print(reply)
+                print(reply)
                 lang_code = 'en'
             return reply                   #reply should be string else it wont work
         elif usrText.strip() == 'Bye':

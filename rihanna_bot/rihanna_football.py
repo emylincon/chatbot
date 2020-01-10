@@ -160,7 +160,9 @@ def match_schedules(msg):
         football_key['key'] = ''
         match_id = ''
         scores += "</table>~"
-        return scores
+        reply = {'display': scores,
+                 'say': f'Below is {data["competition"]["name"]} Match Schedules for Game {match_id}'}
+        return reply
     except Exception as e:
         football_key['status'] = 0
         football_key['key'] = ''
@@ -196,8 +198,10 @@ def season_status(msg):  # 'key_code = ss_key'
         cmd = data['matches'][0]['season']['currentMatchday']
         reply = f"{league_name} Season Status: \nSeason started on {start} and will end on {end}.\n" \
                 f"The current match day is {cmd}"
-
-        return reply
+        display = f"{league_name} Season Status: <p>Season started on {start} and will end on {end}.<p>" \
+                  f"The current match day is {cmd}"
+        reply_ = {'display': display, 'say': reply}
+        return reply_
 
     except Exception as e:
         return e
@@ -244,8 +248,9 @@ def top_scorers_age_graph(l_code):
         plt.close()
         _name = data['competition']['name']
         picture = f'<img src="file{l_code}.png" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
-        #time.sleep(1)
-        return picture
+        # time.sleep(1)
+        reply_ = {'display': picture, 'say': f"Find below a graph of {data['competition']['name']} Top Scorers and Their Age"}
+        return reply_
 
     except Exception as e:
         return e
@@ -279,7 +284,8 @@ def top_scorers(l_code):
                             <td>{i['numberOfGoals']}</td>\
                           </tr>"
         reply += "</table>~"
-        return reply
+        reply_ = {'display': reply, 'say': f"Find below a table of the Top Goal Scorers in {data['competition']['name']}"}
+        return reply_
     except Exception as e:
         req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
                            headers=headers)
@@ -324,13 +330,12 @@ def football(message):
     else:
         return "Sorry, Rihanna cannot help you with that"
 
-
 # football match today
 # football league start
 # football league status
 # football top scorers
 # football match schedules for match 11
 # print(season_status(7))
-#print(top_scorers(9))
-#print(top_scorers_age_graph(0))
-#test(0)
+# print(top_scorers(9))
+# print(top_scorers_age_graph(0))
+# test(0)
