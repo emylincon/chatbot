@@ -27,6 +27,8 @@ email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
 run_email = {1: 'which email address do you want to send to?', 2: 'what is the subject?',
              3: 'what do you wish to send to '}
 
+lang_code = 'en'
+
 
 def email_thread(message):
     global email
@@ -124,8 +126,15 @@ def stop_words():
 
 
 def rihanna(message):
+    global lang_code
 
-    # Formatting message input
+    if rihanna_dict.detect_lang(message) != 'en':
+        lang_code = rihanna_dict.detect_lang(message)
+        message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
+
+        #print(f'trans: {message} \n l_code: {lang_code}')
+
+        # Formatting message input
     if email['run'] == 0:
         if message[:3] == 'tfl':
             message = format_string(message).lower().strip()
@@ -137,6 +146,8 @@ def rihanna(message):
             return rihanna_skype._skype(message[6:])
         elif message[:len('amazon')] == 'amazon':
             return rihanna_amazon.selector(format_string(message).lower().strip())
+        elif message[:len('dictionary')] == 'dictionary':
+            return rihanna_dict.selector(message)
         else:
             message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
@@ -166,9 +177,6 @@ def rihanna(message):
 
     elif message == 'why':
         return "Sorry, I cant tell you. Its a secret"
-
-    elif message[:len('dictionary')] == 'dictionary':
-        return rihanna_dict.selector(message)
 
     elif message == 'what is your name':
         reply = "My name is Rihanna"
@@ -255,6 +263,8 @@ def rihanna(message):
 
 
 def get_response(usrText):
+    global lang_code
+
     bot = ChatBot('Bot',
                   storage_adapter='chatterbot.storage.SQLStorageAdapter',
                   logic_adapters=[
@@ -279,12 +289,21 @@ def get_response(usrText):
             else:
                 result = rihanna(text.strip())
                 result = f"{text};{result}"
-                reply = str(result)
+                if lang_code == 'en':
+                    reply = str(result)
+                else:
+                    reply = str(rihanna_dict.translate_sentence_code(result, lang_code))
+                    lang_code = 'en'
                 #return str({'user_sent': text, 'reply': result, 'voice_check': 0, 'say': ''})
                 return reply
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
-            reply = str(result)
+            if lang_code == 'en':
+                reply = str(result)
+            else:
+                reply = str(rihanna_dict.translate_sentence_code(result, lang_code))
+                #print(reply)
+                lang_code = 'en'
             return reply                   #reply should be string else it wont work
         elif usrText.strip() == 'Bye':
             return 'Bye'

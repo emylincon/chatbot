@@ -3,6 +3,7 @@ from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 from rihanna import get_response
 from rihanna import rihanna_voice
 from threading import Thread
+import ast
 
 
 class ChatServer(WebSocket):
@@ -22,7 +23,14 @@ class ChatServer(WebSocket):
             h1.start()
             h2.start()
             '''
-            if (response[0] == '<') and ('~' in response):
+            if response[0] == '{':
+                response = ast.literal_eval(response)
+                answer = reply + response['display']
+                h1 = Thread(target=self.sendMessage, args=(answer,))
+                h2 = Thread(target=rihanna_voice, args=(response['say'],))
+                h1.start()
+                h2.start()
+            elif (response[0] == '<') and ('~' in response):
                 say = 'find reply below'
                 display_response = response.replace("~", "")
                 answer = reply + display_response
@@ -83,6 +91,13 @@ class ChatServer(WebSocket):
                 h2 = Thread(target=rihanna_voice, args=(response,))
                 h1.start()
                 h2.start()
+
+        elif response[0] == '{':
+            response = ast.literal_eval(response)
+            h1 = Thread(target=self.sendMessage, args=(response['display'],))
+            h2 = Thread(target=rihanna_voice, args=(response['say'],))
+            h1.start()
+            h2.start()
 
         elif (response[0] == '<') and ('~' in response):
             say = 'find reply below'
