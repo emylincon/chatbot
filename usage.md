@@ -110,3 +110,12 @@ amazon max price for <item_name>
 amazon sort price for speakers at 11
 amazon sort rating for speakers at 4.5
 ```
+
+
+## Dictionary
+```
+dictionary definition for <word>
+dictionary synonym for <word>
+dictionary antonym for <word>
+dictionary translate <sentence> to <language>
+```
