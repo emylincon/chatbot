@@ -1,7 +1,7 @@
 from skpy import SkypeAuthException
 from skpy import Skype
 
-
+import trans_
 import config as con
 import datetime as dt
 
@@ -46,7 +46,13 @@ def show_picture(name):
         path = r"C:/Users/emyli/PycharmProjects/Chatbot_Project/img/file.png"
         #path = r"E:/deadlock files/img/public.png"
         #return f'<img src="{path}" alt="HTML5 Icon" width="128" height="128">'
-        return f'<img src="file.png" alt="Test image" width="65%" height="65%">'
+        display =  f'<img src="file.png" alt="Test image" width="65%" height="65%">'
+        say = f'find picture of {name}'
+        reply = {'display': display, 'say': say}
+        if con.lang_code != 'en':
+            reply['say'] = trans_.translate_sentence_code(reply['say'], con.lang_code)
+            con.lang_code = 'en'
+        return reply
     else:
         return f"Sorry I do not know {name}"
 

@@ -1,5 +1,6 @@
 import requests
 import config
+import trans_
 
 
 def bbc():
@@ -11,14 +12,38 @@ def bbc():
 
     # getting all articles in a string article
     article = open_bbc_page["articles"]
-    reply = "Top 5 BBC News :"
+    if config.lang_code == 'en':
+        display = "Top 5 BBC News :"
+        say = "Top 5 BBC News :"
 
-    nos = 1
-    for ar in article[:5]:
-        news = ar["title"]
-        url = ar["url"]
+        nos = 1
+        for ar in article[:5]:
+            news = ar["title"]
+            url = ar["url"]
 
-        reply += f'\n{nos}. {news} |<a href={url} target="_blank">Read</a>'
-        nos += 1
+            display += f'<br>{nos}. {news} <a href={url} target="_blank">Read</a></br>'
 
-    return reply
+            say += f'\n{nos}. {news}'
+            nos += 1
+        reply_ = {'display': display, 'say': say}
+    else:
+        ans = trans_.translate_sentence_code("Top 5 BBC News", config.lang_code)
+        display = ans['display'] + ':'
+        say = "Top 5 BBC News"
+        nos = 1
+        for ar in article[:5]:
+            news = trans_.translate_sentence_code(ar["title"], config.lang_code)['display']
+            url = ar["url"]
+            read = trans_.translate_sentence_code("Read", config.lang_code)['display']
+
+            display += f'<br>{nos}. {news} <a href={url} target="_blank">{read}</a></br>'
+
+            say += f'\n{nos}. {news}'
+            nos += 1
+        say = trans_.translate_sentence_code(say, config.lang_code)['say']
+        reply_ = {'display': display, 'say': say}
+        config.lang_code = 'en'
+
+    return reply_
+
+
