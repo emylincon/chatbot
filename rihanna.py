@@ -27,8 +27,6 @@ email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
 run_email = {1: 'which email address do you want to send to?', 2: 'what is the subject?',
              3: 'what do you wish to send to '}
 
-lang_code = 'en'
-
 
 def email_thread(message):
     global email
@@ -126,13 +124,12 @@ def stop_words():
 
 
 def rihanna(message):
-    global lang_code
 
     if rihanna_dict.detect_lang(message) != 'en':
-        lang_code = rihanna_dict.detect_lang(message)
+        config.lang_code = rihanna_dict.detect_lang(message)
         message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
-        print(f'trans: {message} \n l_code: {lang_code}')
+        #print(f'trans: {message} \n l_code: {lang_code}')
 
         # Formatting message input
     if email['run'] == 0:
@@ -173,14 +170,23 @@ def rihanna(message):
 
     elif message in break_words:
         reply = stop_words()
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
         return reply
 
     elif message == 'why':
-        return "Sorry, I cant tell you. Its a secret"
+        reply = "Sorry, I cant tell you. Its a secret"
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
+        return reply
 
     elif message == 'what is your name':
         reply = "My name is Rihanna"
-        # rihanna_voice(reply)
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
         return reply
 
     elif message in _date:
@@ -194,12 +200,17 @@ def rihanna(message):
     elif message[0:7] == 'what is':
         try:
             reply = wikipedia.summary(message.strip()[7:], sentences=1)
-            # rihanna_voice(reply)
+            if config.lang_code != 'en':
+                reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+                config.lang_code = 'en'
             return reply
 
         except:
-            # rihanna_voice("{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:]))
-            return '{}? hmm.. I know what it is but I can not tell you'.format(message.strip()[7:])
+            reply = "{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:])
+            if config.lang_code != 'en':
+                reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+                config.lang_code = 'en'
+            return reply
 
     elif {"bbc", "news"} - set(message.split()) == set():
         reply = rihanna_news.bbc()
@@ -208,6 +219,9 @@ def rihanna(message):
     elif message == 'weather forecast today':
         reply = weather('london,uk')
         # rihanna_voice(reply)
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
         return reply
 
     elif "facebook" in message:
@@ -226,6 +240,9 @@ def rihanna(message):
         search = message.strip()[7:]
         display = google_search(search)
         reply = "Googling . . ."
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
         return reply
 
     elif message[:3] == 'tfl':
@@ -233,7 +250,9 @@ def rihanna(message):
 
     elif message[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
-        # rihanna_voice(reply)
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
         return reply
 
     elif message[0:4] == 'play':
@@ -241,7 +260,11 @@ def rihanna(message):
                   "that's my jam", "someone turn the music up", "you have a terrible song taste"]
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
-        return critic[r.randrange(len(critic))]
+        reply =  critic[r.randrange(len(critic))]
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
+        return reply
 
     elif len([i for i in calc.opp_code if i in message]) > 0:
         reply = calc.calculate(message)
@@ -259,11 +282,13 @@ def rihanna(message):
         else:
             # rihanna_voice(reply)
             pass
+        if config.lang_code != 'en':
+            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+            config.lang_code = 'en'
         return reply
 
 
 def get_response(usrText):
-    global lang_code
 
     bot = ChatBot('Bot',
                   storage_adapter='chatterbot.storage.SQLStorageAdapter',
@@ -289,21 +314,12 @@ def get_response(usrText):
             else:
                 result = rihanna(text.strip())
                 result = f"{text};{result}"
-                if lang_code == 'en':
-                    reply = str(result)
-                else:
-                    reply = str(rihanna_dict.translate_sentence_code(result, lang_code))
-                    lang_code = 'en'
+                reply = str(result)
                 #return str({'user_sent': text, 'reply': result, 'voice_check': 0, 'say': ''})
                 return reply
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
-            if lang_code == 'en':
-                reply = str(result)
-            else:
-                reply = str(rihanna_dict.translate_sentence_code(result, lang_code))
-                print(reply)
-                lang_code = 'en'
+            reply = str(result)
             return reply                   #reply should be string else it wont work
         elif usrText.strip() == 'Bye':
             return 'Bye'
@@ -313,3 +329,4 @@ def get_response(usrText):
 # print('hello')
 # print(rihanna('journey duration from se18 3px to se1 5hp'))
 #print(rihanna("amazon least price for external hard drive 2tb"))
+#print(get_response("jugar drake va mal"))

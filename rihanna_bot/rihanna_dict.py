@@ -6,8 +6,8 @@ dictionary=PyDictionary()
 
 
 def selector(msg):
-    if msg[:len("dictionary meaning for")] == "dictionary meaning for":
-        msg = msg[len("dictionary meaning for") + 1:].strip()
+    if msg[:len("dictionary definition for")] == "dictionary definition for":
+        msg = msg[len("dictionary definition for") + 1:].strip()
         return find_meaning(msg)
     elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
         msg = msg[len("dictionary synonym for") + 1:].strip()
@@ -25,21 +25,22 @@ def find_meaning(query):
     reply = "<table id='t01'>\
                   <tr>\
                     <th>Word Type</th>\
-                    <th>Meaning</th>\
+                    <th>Definition</th>\
                   </tr>\
                 "
     for i in response:
-        meaning = ''
+        definition = ''
         if len(response[i]) > 1:
             for j in response[i]:
-                meaning += f"<p>{j.replace(';', ',')}."
+                definition += f"<p>{j.replace(';', ',')}."
         else:
-            meaning = response[i][0]
+            definition = response[i][0]
         reply += f"<tr>\
                             <td>{i}</td>\
-                            <td>{meaning}</td>\
+                            <td>{definition}</td>\
                           </tr>"
-    return reply
+    reply_ = {'display': reply, 'say': f'find below the definition of {query}'}
+    return reply_
 
 
 def find_synonym(query):
@@ -78,7 +79,10 @@ def translate_sentence(query, lang):
         if is_alpha(obj.text):
             pronunciation = obj.text
         else:
-            pronunciation = obj.extra_data['translation'][1][-1]
+            try:
+                pronunciation = obj.extra_data['translation'][1][-1]
+            except Exception as e:
+                pronunciation = obj.text
         #pronunciation = obj.pronunciation
         reply = {'display': response, 'say': pronunciation}
     except Exception as e:
@@ -87,8 +91,8 @@ def translate_sentence(query, lang):
 
 def aball(query,lang):
     translator = Translator()
-    dest = config.trans_code[lang.capitalize()]
-    obj = translator.translate(query, dest=dest)
+    #dest = config.trans_code[lang.capitalize()]
+    obj = translator.translate(query, dest=lang)
     response = obj.text
     if is_alpha(obj.text):
         pronunciation = obj.text
@@ -107,18 +111,45 @@ def translate_sentence_code(query, lang):
         if is_alpha(obj.text):
             pronunciation = obj.text
         else:
-            pronunciation = obj.extra_data['translation'][1][-1]
+            try:
+                pronunciation = obj.extra_data['translation'][1][-1]
+            except Exception as e:
+                pronunciation = obj.text
         #pronunciation = obj.pronunciation
         reply = {'display': response, 'say': pronunciation}
 
     except Exception as e:
-        return f"Error in translate_sentence_code: {e} \n request: {query} \n l: {lang}"
+        print(f"Error in translate_sentence_code: {e} \n request: {query} \n l: {lang}")
+        return {'display': "ask me a question",
+                'say': f"Error in translate_sentence_code: {e} \n request: {query} \n l: {lang}"}
+    return reply
+
+
+def translate_list(query, lang):
+    try:
+        translator = Translator()
+        obj = translator.translate(query, dest=lang)
+        response = obj.text
+        if is_alpha(obj.text):
+            pronunciation = obj.text
+        else:
+            try:
+                pronunciation = obj.extra_data['translation'][1][-1]
+            except Exception as e:
+                pronunciation = obj.text
+        #pronunciation = obj.pronunciation
+        reply = {'display': response, 'say': pronunciation}
+
+    except Exception as e:
+        print(f"Error in translate_sentence_code: {e} \n request: {query} \n l: {lang}")
+        return {'display': "ask me a question",
+                'say': f"Error in translate_sentence_code: {e} \n request: {query} \n l: {lang}"}
     return reply
 
 
 def is_alpha(word):
     try:
-        return word.encode('ascii').isalpha()
+        return word[:1].encode('ascii').isalpha()
     except:
         return False
 
@@ -135,4 +166,5 @@ def detect_lang(query):
 #print(selector("dictionary translate smart cities to japanese"))
 
 #a = translate_sentence_code(query='hello', lang='ja')
-#print(aball(query='hello', lang='japanese'))
+#print(aball(query='jugar drake va mal', lang='en'))
+#print(is_alpha("j"))
