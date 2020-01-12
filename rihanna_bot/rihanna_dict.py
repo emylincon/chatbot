@@ -6,18 +6,21 @@ dictionary=PyDictionary()
 
 
 def selector(msg):
-    if msg[:len("dictionary definition for")] == "dictionary definition for":
-        msg = msg[len("dictionary definition for") + 1:].strip()
-        return find_meaning(msg)
-    elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
-        msg = msg[len("dictionary synonym for") + 1:].strip()
-        return find_synonym(msg)
-    elif msg[:len("dictionary antonym for")] == "dictionary antonym for":
-        msg = msg[len("dictionary antonym for") + 1:].strip()
-        return find_antonym(msg)
-    elif msg[:len("dictionary translate")] == "dictionary translate":
-        msg = msg[len("dictionary translate") + 1:].strip().split(' to ')
-        return translate_sentence(msg[0], msg[1])
+    try:
+        if msg[:len("dictionary definition for")] == "dictionary definition for":
+            msg = msg[len("dictionary definition for") + 1:].strip()
+            return find_meaning(msg)
+        elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
+            msg = msg[len("dictionary synonym for") + 1:].strip()
+            return find_synonym(msg)
+        elif msg[:len("dictionary antonym for")] == "dictionary antonym for":
+            msg = msg[len("dictionary antonym for") + 1:].strip()
+            return find_antonym(msg)
+        elif msg[:len("dictionary translate")] == "dictionary translate":
+            msg = msg[len("dictionary translate") + 1:].strip().split(' to ')
+            return translate_sentence(msg[0], msg[1])
+    except Exception as e:
+        return f"error in dictionary selector: {e}"
 
 
 def find_meaning(query):
