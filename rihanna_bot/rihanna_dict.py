@@ -24,26 +24,54 @@ def selector(msg):
 
 
 def find_meaning(query):
-    response = dictionary.meaning(query)
-    reply = "<table id='t01'>\
-                  <tr>\
-                    <th>Word Type</th>\
-                    <th>Definition</th>\
-                  </tr>\
-                "
-    for i in response:
-        definition = ''
-        if len(response[i]) > 1:
-            for j in response[i]:
-                definition += f"<p>{j.replace(';', ',')}."
+    try:
+        response = dictionary.meaning(query)
+        if config.lang_code == 'en':
+            reply = "<table id='t01'>\
+                          <tr>\
+                            <th>Word Type</th>\
+                            <th>Definition</th>\
+                          </tr>\
+                        "
+            for i in response:
+                definition = ''
+                if len(response[i]) > 1:
+                    for j in response[i]:
+                        definition += f"<p>{j.replace(';', ',')}."
+                else:
+                    definition = response[i][0]
+                reply += f"<tr>\
+                                    <td>{i}</td>\
+                                    <td>{definition}</td>\
+                                  </tr>"
+            reply_ = {'display': reply, 'say': f'find below the definition of {query}'}
         else:
-            definition = response[i][0]
-        reply += f"<tr>\
-                            <td>{i}</td>\
-                            <td>{definition}</td>\
-                          </tr>"
-    reply_ = {'display': reply, 'say': f'find below the definition of {query}'}
-    return reply_
+            reply = f"<table id='t01'>\
+                                  <tr>\
+                                    <th>{translate_sentence_code(query='Word Type', lang=config.lang_code)}</th>\
+                                    <th>{translate_sentence_code(query='Definition', lang=config.lang_code)}</th>\
+                                  </tr>\
+                                "
+            for i in response:
+                definition = ''
+                if len(response[i]) > 1:
+                    for j in response[i]:
+                        value = translate_sentence_code(query=j.replace(';', ','), lang=config.lang_code)
+                        definition += f"<p>{value}."
+                else:
+                    definition = translate_sentence_code(query=response[i][0], lang=config.lang_code)
+                word = translate_sentence_code(query=i, lang=config.lang_code)
+                reply += f"<tr>\
+                                            <td>{word}</td>\
+                                            <td>{definition}</td>\
+                                          </tr>"
+            say = translate_sentence_code(query=f'find below the definition of {query}', lang=config.lang_code)
+            reply_ = {'display': reply, 'say': say}
+            config.lang_code = 'en'
+
+        return reply_
+    except Exception as e:
+        return f"Error in find_meaning: {e}"
 
 
 def find_synonym(query):
