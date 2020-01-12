@@ -112,7 +112,7 @@ def weather(place):
         forecast = f"{desc} in {city}. The temperature is {temp_c}° celcius with wind speed of {wind}"
 
     except:
-        forecast = 'Sorry could not find {}'.format(place)
+        forecast = 'Sorry could not find location {}'.format(place)
 
     return forecast
 
@@ -125,7 +125,7 @@ def stop_words():
 
 def rihanna(message):
 
-    if rihanna_dict.detect_lang(message) != 'en':
+    if (message[:len("dictionary translate")] != "dictionary translate") and (rihanna_dict.detect_lang(message) != 'en'):
         config.lang_code = rihanna_dict.detect_lang(message)
         message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
