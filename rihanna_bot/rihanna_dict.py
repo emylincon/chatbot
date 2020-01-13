@@ -1,5 +1,6 @@
 from PyDictionary import PyDictionary
 from googletrans import Translator
+from nltk.corpus import wordnet
 import config
 
 dictionary=PyDictionary()
@@ -7,7 +8,10 @@ dictionary=PyDictionary()
 
 def selector(msg):
     try:
-        if msg[:len("dictionary definition for")] == "dictionary definition for":
+        if msg[:len("dictionary definition")] == "dictionary definition":
+            msg = msg[len("dictionary definition") + 1:].strip()
+            return find_definition(msg)
+        elif msg[:len("dictionary definition for")] == "dictionary definition for":
             msg = msg[len("dictionary definition for") + 1:].strip()
             return find_meaning(msg)
         elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
@@ -48,30 +52,123 @@ def find_meaning(query):
         else:
             reply = f"<table id='t01'>\
                                   <tr>\
-                                    <th>{translate_sentence_code(query='Word Type', lang=config.lang_code)}</th>\
-                                    <th>{translate_sentence_code(query='Definition', lang=config.lang_code)}</th>\
+                                    <th>{translate_sentence_code(query='Word Type', lang=config.lang_code)['display']}</th>\
+                                    <th>{translate_sentence_code(query='Definition', lang=config.lang_code)['display']}</th>\
                                   </tr>\
                                 "
             for i in response:
                 definition = ''
                 if len(response[i]) > 1:
                     for j in response[i]:
-                        value = translate_sentence_code(query=j.replace(';', ','), lang=config.lang_code)
+                        value = translate_sentence_code(query=j.replace(';', ','), lang=config.lang_code)['display']
                         definition += f"<p>{value}."
                 else:
-                    definition = translate_sentence_code(query=response[i][0], lang=config.lang_code)
-                word = translate_sentence_code(query=i, lang=config.lang_code)
+                    definition = translate_sentence_code(query=response[i][0], lang=config.lang_code)['display']
+                word = translate_sentence_code(query=i, lang=config.lang_code)['display']
                 reply += f"<tr>\
                                             <td>{word}</td>\
                                             <td>{definition}</td>\
                                           </tr>"
-            say = translate_sentence_code(query=f'find below the definition of {query}', lang=config.lang_code)
+            say = translate_sentence_code(query=f'find below the definition of {query}', lang=config.lang_code)['say']
             reply_ = {'display': reply, 'say': say}
             config.lang_code = 'en'
 
         return reply_
     except Exception as e:
         return f"Error in find_meaning: {e}"
+
+
+def find_definition(query):
+    word_type = {'n': 'NOUN', 'v': 'VERB', 'a': 'ADJECTIVE', 's': 'ADJECTIVE SATELLITE', 'r': 'ADVERB'}
+    try:
+        response = wordnet.synsets(query)
+        if config.lang_code == 'en':
+            reply = "<table id='t01'>\
+                          <tr>\
+                            <th>Word Type</th>\
+                            <th>Definition</th>\
+                            <th>Example</th>\
+                          </tr>\
+                        "
+            for i in response:
+                w_type = word_type[i.pos()] if i.pos() in word_type else i.pos()
+                definition = i.definition().replace(';', ',')
+                example = f'{query}' if len(i.examples()) == 0 else i.examples()[0].replace(';', ',')
+                reply += f"<tr>\
+                                    <td>{w_type}</td>\
+                                    <td>{definition}</td>\
+                                    <td>{example}</td>\
+                                  </tr>"
+            reply_ = {'display': reply, 'say': f'find below the definition of {query}'}
+        else:
+            reply = f"<table id='t01'>\
+                                  <tr>\
+                                    <th>{translate_sentence_code(query='Word Type', lang=config.lang_code)['display']}</th>\
+                                    <th>{translate_sentence_code(query='Definition', lang=config.lang_code)['display']}</th>\
+                                    <th>{translate_sentence_code(query='Example', lang=config.lang_code)['display']}</th>\
+                                  </tr>\
+                                "
+            for i in response:
+                w_type = word_type[i.pos()] if i.pos() in word_type else i.pos()
+                definition = i.definition().replace(';', ',')
+                example = f'{query}' if len(i.examples()) == 0 else i.examples()[0].replace(';', ',')
+                reply += f"<tr>\
+                                    <td>{translate_sentence_code(query=w_type, lang=config.lang_code)['display']}</td>\
+                                    <td>{translate_sentence_code(query=definition, lang=config.lang_code)['display']}</td>\
+                                    <td>{translate_sentence_code(query=example, lang=config.lang_code)['display']}</td>\
+                                  </tr>"
+            say = translate_sentence_code(query=f'find below the definition of {query}', lang=config.lang_code)['say']
+            reply_ = {'display': reply, 'say': say}
+            config.lang_code = 'en'
+
+        return reply_
+    except Exception as e:
+        return f"Error in find_definition: {e}"
+
+
+def defin(query):
+    word_type = {'n': 'NOUN', 'v': 'VERB', 'a': 'ADJECTIVE', 's': 'ADJECTIVE SATELLITE', 'r': 'ADVERB'}
+    response = wordnet.synsets(query)
+    if config.lang_code == 'en':
+        reply = "<table id='t01'>\
+                              <tr>\
+                                <th>Word Type</th>\
+                                <th>Definition</th>\
+                                <th>Example</th>\
+                              </tr>\
+                            "
+        for i in response:
+            w_type = word_type[i.pos()] if i.pos() in word_type else i.pos()
+            definition = i.definition()
+            example = f'{query}' if len(i.examples()) == 0 else i.examples()[0]
+            reply += f"<tr>\
+                                        <td>{w_type}</td>\
+                                        <td>{definition}</td>\
+                                        <td>{example}</td>\
+                                      </tr>"
+        reply_ = {'display': reply, 'say': f'find below the definition of {query}'}
+    else:
+        reply = f"<table id='t01'>\
+                                      <tr>\
+                                        <th>{translate_sentence_code(query='Word Type', lang=config.lang_code)['display']}</th>\
+                                        <th>{translate_sentence_code(query='Definition', lang=config.lang_code)['display']}</th>\
+                                        <th>{translate_sentence_code(query='Example', lang=config.lang_code)['display']}</th>\
+                                      </tr>\
+                                    "
+        for i in response:
+            w_type = word_type[i.pos()] if i.pos() in word_type else i.pos()
+            definition = i.definition()
+            example = f'{query}' if len(i.examples()) == 0 else i.examples()[0]
+            reply += f"<tr>\
+                                        <td>{translate_sentence_code(query=w_type, lang=config.lang_code)['display']}</td>\
+                                        <td>{translate_sentence_code(query=definition, lang=config.lang_code)['display']}</td>\
+                                        <td>{translate_sentence_code(query=example, lang=config.lang_code)['display']}</td>\
+                                      </tr>"
+        say = translate_sentence_code(query=f'find below the definition of {query}', lang=config.lang_code)['say']
+        reply_ = {'display': reply, 'say': say}
+        config.lang_code = 'en'
+
+    return reply_
 
 
 def find_synonym(query):
@@ -199,3 +296,4 @@ def detect_lang(query):
 #a = translate_sentence_code(query='hello', lang='ja')
 #print(aball(query='jugar drake va mal', lang='en'))
 #print(is_alpha("j"))
+#print(defin('query'))
