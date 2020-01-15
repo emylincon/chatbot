@@ -2,6 +2,7 @@ import base64
 import codecs as c
 import socket
 import os
+import time
 
 
 def selector(msg):
@@ -9,12 +10,12 @@ def selector(msg):
         query = msg[len("iot graph from")+1:].strip()
         return iot_graph(query)
     elif msg[:len("iot light off for")] == "iot light off for":
-        query = msg[len("iot light off for")+1:].strip()
-        send_client(query, 'light off')
+        host_ip = msg[len("iot light off for")+1:].strip()
+        send_client(host_ip, 'light off')
         return "light switched off"
     elif msg[:len("iot light on for")] == "iot light on for":
-        query = msg[len("iot light on for")+1:].strip()
-        send_client(query, 'light on')
+        host_ip = msg[len("iot light on for")+1:].strip()
+        send_client(host_ip, 'light on')
         return "light switched on"
 
 
@@ -44,7 +45,7 @@ def client(host):
             s.close()
 
     except Exception as e:
-        print(e)
+        print('Error from client: ', e)
 
 
 def send_client(host, msg):
@@ -55,10 +56,11 @@ def send_client(host, msg):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((host, port))
             s.sendall(msg.encode())
+            time.sleep(1)
             s.sendall('exit'.encode())
             s.close()
     except Exception as e:
-        print(e)
+        print('Error from send_client: ', e)
 
 
 def iot_graph(query):
