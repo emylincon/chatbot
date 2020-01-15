@@ -5,7 +5,7 @@ import wikipedia
 import pyttsx3
 from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
-    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, rihanna_dict
+    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, rihanna_dict, rihanna_iot
 import config
 import random as r
 
@@ -141,6 +141,8 @@ def rihanna(message):
             return rihanna_skype.birthday(message[len('birthday for') + 1:].strip())
         elif message[:5] == 'skype':
             return rihanna_skype._skype(message[6:])
+        elif message[:len('iot')] == 'iot':
+            return rihanna_iot.selector(message)
         elif message[:len('amazon')] == 'amazon':
             return rihanna_amazon.selector(format_string(message).lower().strip())
         elif message[:len('dictionary')] == 'dictionary':

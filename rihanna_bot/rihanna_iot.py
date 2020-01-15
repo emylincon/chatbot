@@ -43,8 +43,8 @@ def client(host):
             s.sendall('exit'.encode())
             s.close()
 
-    except KeyboardInterrupt:
-        print('Programme Terminated')
+    except Exception as e:
+        print(e)
 
 
 def send_client(host, msg):
