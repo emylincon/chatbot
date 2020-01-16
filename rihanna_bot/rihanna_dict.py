@@ -16,10 +16,10 @@ def selector(msg):
             return find_meaning(msg)
         elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
             msg = msg[len("dictionary synonym for") + 1:].strip()
-            return find_synonym(msg)
+            return find_syn(msg)
         elif msg[:len("dictionary antonym for")] == "dictionary antonym for":
             msg = msg[len("dictionary antonym for") + 1:].strip()
-            return find_antonym(msg)
+            return find_ant(msg)
         elif msg[:len("dictionary translate")] == "dictionary translate":
             msg = msg[len("dictionary translate") + 1:].strip().split(' to ')
             return translate_sentence(msg[0], msg[1])
@@ -181,6 +181,29 @@ def find_synonym(query):
     return response
 
 
+def find_syn(query):
+    synonyms = []
+    for syn in wordnet.synsets(query):
+        for l in syn.lemmas():
+            synonyms.append(l.name())
+    if len(synonyms) > 0:
+        return f"synonyms for {query}: " + ', '.join(set(synonyms))
+    else:
+        return f"can't find synonyms for {query}"
+
+
+def find_ant(query):
+    antonyms = []
+    for syn in wordnet.synsets(query):
+        for l in syn.lemmas():
+            if l.antonyms():
+                antonyms.append(l.antonyms()[0].name())
+    if len(antonyms) > 0:
+        return f"Antonyms for {query}: " + ', '.join(set(antonyms))
+    else:
+        return f"can't find antonyms for {query}"
+
+
 def find_antonym(query):
     try:
         response = dictionary.antonym(query)
@@ -297,3 +320,4 @@ def detect_lang(query):
 #print(aball(query='jugar drake va mal', lang='en'))
 #print(is_alpha("j"))
 #print(defin('query'))
+#print(find_ant('active'))
