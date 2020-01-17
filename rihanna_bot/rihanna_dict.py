@@ -187,9 +187,9 @@ def find_syn(query):
         for l in syn.lemmas():
             synonyms.append(l.name())
     if len(synonyms) > 0:
-        return f"synonyms for {query}: " + ', '.join(set(synonyms))
+        return f"synonyms for {query}: " + ', '.join(set(synonyms)).replace('_', '-')
     else:
-        return f"can't find synonyms for {query}"
+        return f"There is no synonyms for {query}"
 
 
 def find_ant(query):
@@ -199,9 +199,9 @@ def find_ant(query):
             if l.antonyms():
                 antonyms.append(l.antonyms()[0].name())
     if len(antonyms) > 0:
-        return f"Antonyms for {query}: " + ', '.join(set(antonyms))
+        return f"Antonyms for {query}: " + ', '.join(set(antonyms)).replace('_', '-')
     else:
-        return f"can't find antonyms for {query}"
+        return f"There is no antonyms for {query}"
 
 
 def find_antonym(query):
@@ -211,6 +211,20 @@ def find_antonym(query):
         return f"Error in find_antonym: {e}"
 
     return response
+
+
+def ant_syn(query):
+    words = []
+    for syn in wordnet.synsets(query):
+        for l in syn.lemmas():
+            words.append(l.name())
+            if l.antonyms():
+                words.append(l.antonyms()[0].name())
+
+    if len(words) > 0:
+        return f"synonyms for {query}: " + ', '.join(set(words)).replace('_', '-')
+    else:
+        return f"There is no synonyms for {query}"
 
 
 def translate_(query, lang):
