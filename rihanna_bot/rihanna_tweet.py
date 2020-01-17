@@ -5,6 +5,8 @@ import ast
 import config
 import re
 import rihanna
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 api = twitter.Api(consumer_key=config.consumer_key,
@@ -14,7 +16,10 @@ api = twitter.Api(consumer_key=config.consumer_key,
 
 
 def twitter(message):
-    if {"global", "trending", "twitter", "topics"} - set(message.split()) == set():
+    if {"global", "trending", "twitter", "topics", "graph"} - set(message.split()) == set():
+        reply = twitter_global_trends_graph()
+        return reply
+    elif {"global", "trending", "twitter", "topics"} - set(message.split()) == set():
         reply = twitter_global_trends()
         return reply
 
@@ -114,6 +119,49 @@ def twitter_trend():
     return reply
 
 
+def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
+    tweets = tweet_data.keys()
+    y_pos = np.arange(len(tweets))
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    ax.barh(y_pos, tweet_data.values(), align='center', color='b', alpha=0.3)
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(tweets, labelpad=30)
+    ax.invert_yaxis()  # labels read top-to-bottom
+    ax.set_xlabel('Tweet Volume')
+    ax.set_title('Global Twitter Trends Plot')
+    plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet.png')
+
+
+def twitter_global_trends_graph():
+    try:
+        result = api.GetTrendsCurrent()[:5]
+        tweet_data = {}
+
+        for trend in result:
+            _trend = ast.literal_eval(str(trend))
+            name = _trend['name']
+            try:
+                volume = int(_trend['tweet_volume'])
+            except KeyError:
+                if len(tweet_data) == 0:
+                    volume = 1000
+                else:
+                    k = min(tweet_data, key=tweet_data.keys())
+                    volume = k + 1000
+            tweet_data[name] = volume
+        plot_tweet(tweet_data)
+        picture = f'<img src="tweet.png?{time.time()}" alt="Graph of Top Global Trends in Twitter" width="65%" height="65%">'
+        # time.sleep(1)
+        reply_ = {'display': picture,
+                  'say': f"Find below a graph of Top Global Trends in Twitter"}
+
+        return reply_
+    except Exception as e:
+        return 'Twitter is currently withholding this information | ' \
+               '<a href="https://trends24.in/" target="_blank">view</a>'
+
+
 def twitter_global_trends():
     try:
         result = api.GetTrendsCurrent()[:5]
@@ -157,3 +205,4 @@ def twitter_search(query):
 #print(twitter_global_trends())
 #print(twitter_search("drake"))
 #twitter("tweet test in 2")
+print(twitter_global_trends_graph())
