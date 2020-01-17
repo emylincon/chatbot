@@ -205,4 +205,4 @@ def twitter_search(query):
 #print(twitter_global_trends())
 #print(twitter_search("drake"))
 #twitter("tweet test in 2")
-print(twitter_global_trends_graph())
+#print(twitter_global_trends_graph())

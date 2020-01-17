@@ -103,6 +103,6 @@ def iot_graph(query):
     except Exception as e:
         pass
     client(query)
-    picture = f'<img src="new.png" alt="Iot Graph" width="65%" height="65%">'
+    picture = f'<img src="new.png?{time.time()}" alt="Iot Graph" width="65%" height="65%">'
     reply = {'display': picture, 'say': f'find below the IoT graph from {query}'}
     return reply
