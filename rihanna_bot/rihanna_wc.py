@@ -8,9 +8,26 @@ from wordcloud import WordCloud, STOPWORDS
 from rihanna_bot import rihanna_dict
 import time
 import os
+import requests
+from bs4 import BeautifulSoup
+import config
+
+
+url2 = "https://www.google.com/search?q="
 
 # get path to script's directory
 currdir = path.dirname(__file__)
+
+
+def scrap(query):
+    req = url2 + query
+    page = requests.get(req, headers=config.header)
+    soup = BeautifulSoup(page.content, 'lxml')
+
+    reply = ''
+    for i in soup.find_all('p'):
+        reply += i.text
+    return reply
 
 
 def selector(msg):
@@ -61,7 +78,6 @@ def word_cloud_syn_ant(query):
     text = rihanna_dict.ant_syn(query)
     # generate wordcloud
     create_wordcloud(text)
-    time.sleep(3)
 
     reply = {'display': f'<img src="wc.png?{time.time()}" alt="Test image" width="65%" height="65%">',
              'say': f'find word cloud for {query}'}
@@ -76,13 +92,16 @@ def word_cloud(query):
     except Exception as e:
         pass
     # get text for given query
-    text = get_wiki(query)
+    try:
+        text = get_wiki(query)
+    except Exception as e:
+        text = scrap(query)
     # generate wordcloud
     create_wordcloud(text)
-    time.sleep(3)
 
     reply = {'display': f'<img src="wc.png?{time.time()}" alt="Test image" width="65%" height="65%">',
              'say': f'find word cloud for {query}'}
 
     return reply
 
+print(word_cloud('hello'))
