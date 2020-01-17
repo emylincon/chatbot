@@ -247,7 +247,7 @@ def top_scorers_age_graph(l_code):
         plt.savefig(rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\file{l_code}.png')
         plt.close()
         _name = data['competition']['name']
-        picture = f'<img src="file{l_code}.png" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
+        picture = f'<img src="file{l_code}.png?{time.time()}" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
         # time.sleep(1)
         reply_ = {'display': picture, 'say': f"Find below a graph of {data['competition']['name']} Top Scorers and Their Age"}
         return reply_
