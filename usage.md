@@ -20,6 +20,7 @@ or
 ## Twitter
 ```
 show global trending topics on twitter
+show global trending topics on twitter graph
 show trending topics on twitter
 show my twitter status
 show twitter status for <user_twitter_id>
@@ -118,4 +119,21 @@ dictionary definition for <word>
 dictionary synonym for <word>
 dictionary antonym for <word>
 dictionary translate <sentence> to <language>
+```
+
+## IoT module
+```
+iot graph from <ip_address>
+iot light off for <ip_address>
+iot light on for <ip_address>
+iot temperature for <ip_address>
+iot cpu for <ip_address>
+iot memory for <ip_address>
+```
+
+
+## word cloud
+```
+word cloud <word>
+word cloud antonyms and synonyms <word>
 ```
