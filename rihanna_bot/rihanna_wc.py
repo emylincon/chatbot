@@ -104,4 +104,4 @@ def word_cloud(query):
 
     return reply
 
-print(word_cloud('hello'))
+#print(word_cloud('hello'))

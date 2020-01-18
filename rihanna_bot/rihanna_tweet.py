@@ -120,17 +120,25 @@ def twitter_trend():
 
 
 def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
-    tweets = tweet_data.keys()
-    y_pos = np.arange(len(tweets))
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
-    ax.barh(y_pos, tweet_data.values(), align='center', color='b', alpha=0.3)
-    ax.set_yticks(y_pos)
-    ax.set_yticklabels(tweets, labelpad=70)
-    ax.invert_yaxis()  # labels read top-to-bottom
-    ax.set_xlabel('Tweet Volume')
-    ax.set_title('Global Twitter Trends Plot')
-    plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet.png')
+    try:
+        tweets = tweet_data.keys()
+        y_pos = np.arange(len(tweets))
+        plt.rcdefaults()
+        fig, ax = plt.subplots()
+        ax.grid(True)
+        ax.barh(y_pos, tweet_data.values(), align='center', color='b', alpha=0.3)
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(tweets)
+        ax.invert_yaxis()  # labels read top-to-bottom
+        ax.set_xlabel('Tweet Volume')
+        #ax.set_ylabel(labelpad=70)
+        ax.set_title('Global Twitter Trends Plot')
+        plt.subplots_adjust(left=0.3)
+        #plt.axis('off')
+        #plt.show()
+        plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet.png')
+    except Exception as e:
+        print(f'error in plot_tweet: {e}')
 
 
 def twitter_global_trends_graph():
@@ -158,8 +166,11 @@ def twitter_global_trends_graph():
 
         return reply_
     except Exception as e:
+        '''
         return 'Twitter is currently withholding this information | ' \
                '<a href="https://trends24.in/" target="_blank">view</a>'
+        '''
+        return f'error in plot_tweet_graph: {e}'
 
 
 def twitter_global_trends():
@@ -206,3 +217,4 @@ def twitter_search(query):
 #print(twitter_search("drake"))
 #twitter("tweet test in 2")
 #print(twitter_global_trends_graph())
+#plot_tweet({'this is not you and me okay but yes': 20, 'no':50})
