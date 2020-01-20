@@ -129,6 +129,7 @@ def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
         ax.barh(y_pos, tweet_data.values(), align='center', color='b', alpha=0.3)
         ax.set_yticks(y_pos)
         ax.set_yticklabels(tweets)
+        plt.xticks(rotation=45)
         ax.invert_yaxis()  # labels read top-to-bottom
         ax.set_xlabel('Tweet Volume')
         #ax.set_ylabel(labelpad=70)
