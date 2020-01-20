@@ -132,10 +132,8 @@ def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
         plt.xticks(rotation=45)
         ax.invert_yaxis()  # labels read top-to-bottom
         ax.set_xlabel('Tweet Volume')
-        #ax.set_ylabel(labelpad=70)
         ax.set_title('Global Twitter Trends Plot')
         plt.subplots_adjust(left=0.3)
-        #plt.axis('off')
         #plt.show()
         plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet.png')
     except Exception as e:
