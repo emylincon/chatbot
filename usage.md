@@ -129,6 +129,7 @@ iot light on for <ip_address>
 iot temperature for <ip_address>
 iot cpu for <ip_address>
 iot memory for <ip_address>
+iot humidity for <ip_address>
 ```
 
 
