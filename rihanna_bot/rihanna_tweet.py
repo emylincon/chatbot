@@ -212,8 +212,24 @@ def twitter_search(query):
         reply += f"\n@{user} Tweeted: {tweet}"
     return reply
 
+
+def twitter_search_cloud(query):
+    result = api.GetSearch(term=query, count=20)
+    answer = ''
+    for status in result:
+        tweet = status.text
+        links = re.findall(r'(https?://\S+)', tweet)
+        if links:
+            for i in links:
+
+                tweet = tweet.replace(i, '')
+        answer += f'{tweet} '
+    return answer.replace(query, '')
+
+
 #print(twitter_global_trends())
 #print(twitter_search("drake"))
 #twitter("tweet test in 2")
 #print(twitter_global_trends_graph())
 #plot_tweet({'this is not you and me okay but yes': 20, 'no':50})
+#print(twitter_search_cloud('microsoft'))
