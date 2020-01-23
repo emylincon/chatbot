@@ -20,7 +20,7 @@ def selector(msg):
     elif msg[:len("iot temperature for")] == "iot temperature for":
         host_ip = msg[len("iot temperature for") + 1:].strip()
         data = send_recv_client(host_ip, "last temp")
-        return "last Recorded temp is "+ data+ ' Celsius' if data[0].isdigit() else data
+        return "last recorded temp is "+ data+ ' Celsius' if data[0].isdigit() else data
     elif msg[:len("iot cpu for")] == "iot cpu for":
         host_ip = msg[len("iot cpu for") + 1:].strip()
         data = send_recv_client(host_ip, "cpu util")
