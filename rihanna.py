@@ -167,6 +167,9 @@ def rihanna(message):
     elif (len(message) == 1) or message.isdigit():
         return rihanna_one_char.main(message)
 
+    elif message[:len('word cloud')] == 'word cloud':
+        return rihanna_wc.selector(message)
+
     elif ("twitter" in message) or ("tweet" in message):
         return rihanna_tweet.twitter(message)
 
@@ -198,9 +201,6 @@ def rihanna(message):
     elif message in _time:
         reply = rihanna_time.rihanna_time()
         return reply
-
-    elif message[:len('word cloud')] == 'word cloud':
-        return rihanna_wc.selector(message)
 
     elif message[0:7] == 'what is':
         try:
