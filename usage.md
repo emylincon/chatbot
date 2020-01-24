@@ -137,4 +137,5 @@ iot humidity for <ip_address>
 ```
 word cloud <word>
 word cloud antonyms and synonyms <word>
+word cloud twitter <word>
 ```
