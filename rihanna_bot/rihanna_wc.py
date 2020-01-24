@@ -11,7 +11,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import config
-
+import random as r
 
 url2 = "https://www.google.com/search?q="
 
@@ -56,7 +56,10 @@ def get_wiki(query):
 
 def create_wordcloud(text):
     # create numpy araay for wordcloud mask image
-    mask = np.array(Image.open(path.join(currdir, "cloud.png")))
+    img_list = ['cloud', 'pic', 'heart', 'house', 'dv']
+    an = r.randrange(len(img_list))
+    img = img_list[an]
+    mask = np.array(Image.open(path.join(currdir, f"{img}.png")))
 
     # create set of stopwords
     stopwords = set(STOPWORDS)
@@ -126,4 +129,4 @@ def word_cloud_twitter(query):
 
 
 
-#print(word_cloud('hello'))
+print(word_cloud('hello'))
