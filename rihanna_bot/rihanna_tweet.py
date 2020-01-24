@@ -214,7 +214,7 @@ def twitter_search(query):
 
 
 def twitter_search_cloud(query):
-    result = api.GetSearch(term=query, count=20)
+    result = api.GetSearch(term=query, count=30)
     answer = ''
     for status in result:
         tweet = status.text
@@ -224,7 +224,7 @@ def twitter_search_cloud(query):
 
                 tweet = tweet.replace(i, '')
         answer += f'{tweet} '
-    return answer.replace(query, '')
+    return answer.lower().replace(query, '')
 
 
 #print(twitter_global_trends())

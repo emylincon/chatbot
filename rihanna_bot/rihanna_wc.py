@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 import wikipedia
 from wordcloud import WordCloud, STOPWORDS
-from rihanna_bot import rihanna_dict
+from rihanna_bot import rihanna_dict, rihanna_tweet
 import time
 import os
 import requests
@@ -38,6 +38,11 @@ def selector(msg):
     elif msg[:len('word cloud')] == 'word cloud':
         query = msg[len('word cloud')+1:]
         return word_cloud(query)
+    elif msg[:len('word cloud twitter')] == 'word cloud twitter':
+        query = msg[len('word cloud twitter')+1:]
+        return word_cloud_twitter(query)
+    else:
+        return "Rihanna is not in the mood for Word cloud at the moment"
 
 
 def get_wiki(query):
@@ -103,5 +108,22 @@ def word_cloud(query):
              'say': f'find word cloud for {query}'}
 
     return reply
+
+
+def word_cloud_twitter(query):
+    path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\wc.png'
+    try:
+        os.remove(path)
+    except Exception as e:
+        pass
+    text = rihanna_tweet.twitter_search_cloud(query)
+    create_wordcloud(text)
+
+    reply = {'display': f'<img src="wc.png?{time.time()}" alt="Test image" width="65%" height="65%">',
+             'say': f'find word cloud from twitter for {query}'}
+
+    return reply
+
+
 
 #print(word_cloud('hello'))
