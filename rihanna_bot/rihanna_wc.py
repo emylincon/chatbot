@@ -129,4 +129,4 @@ def word_cloud_twitter(query):
 
 
 
-print(word_cloud('hello'))
+#print(word_cloud('hello'))
