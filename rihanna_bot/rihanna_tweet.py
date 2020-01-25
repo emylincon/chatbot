@@ -210,9 +210,10 @@ def twitter_search(query):
                 tweet = tweet.replace(i, link)
         user = obj[2].split(',')[0]
         reply += f"\n@{user} Tweeted: {tweet}"
-    return reply
+    return reply.replace(';', '')
 
 
+# this function is for word cloud
 def twitter_search_cloud(query):
     result = api.GetSearch(term=query, count=30)
     answer = ''
