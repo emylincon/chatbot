@@ -5,33 +5,58 @@ import os
 import time
 
 
+ip = '192.168.43.136'
+
+
 def selector(msg):
     if msg[:len("iot graph from")] == "iot graph from":
         query = msg[len("iot graph from")+1:].strip()
-        return iot_graph(query)
+        if query[0].isdigit():
+            return iot_graph(query)
+        else:
+            return iot_graph(ip)
     elif msg[:len("iot light off for")] == "iot light off for":
         host_ip = msg[len("iot light off for")+1:].strip()
-        send_client(host_ip, 'light off')
+        if host_ip[0].isdigit():
+            send_client(host_ip, 'light off')
+        else:
+            send_client(ip, 'light off')
         return "light switched off"
     elif msg[:len("iot light on for")] == "iot light on for":
         host_ip = msg[len("iot light on for")+1:].strip()
-        send_client(host_ip, 'light on')
+        if host_ip[0].isdigit():
+            send_client(host_ip, 'light on')
+        else:
+            send_client(ip, 'light on')
+        #send_client(host_ip, 'light on')
         return "light switched on"
     elif msg[:len("iot temperature for")] == "iot temperature for":
         host_ip = msg[len("iot temperature for") + 1:].strip()
-        data = send_recv_client(host_ip, "last temp")
-        return "last recorded temp is "+ data+ ' Celsius' if data[0].isdigit() else data
+        if host_ip[0].isdigit():
+            data = send_recv_client(host_ip, "last temp")
+        else:
+            data = send_recv_client(ip, "last temp")
+        return "last recorded temperature is "+ data+ ' Celsius' if data[0].isdigit() else data
     elif msg[:len("iot cpu for")] == "iot cpu for":
         host_ip = msg[len("iot cpu for") + 1:].strip()
-        data = send_recv_client(host_ip, "cpu util")
+        if host_ip[0].isdigit():
+            data = send_recv_client(host_ip, "cpu util")
+        else:
+            data = send_recv_client(ip, "cpu util")
         return "last cpu utilization is ", data if data[0].isdigit() else data
     elif msg[:len("iot memory for")] == "iot memory for":
         host_ip = msg[len("iot memory for") + 1:].strip()
-        data = send_recv_client(host_ip, "mem util")
+        if host_ip[0].isdigit():
+            data = send_recv_client(host_ip, "mem util")
+        else:
+            data = send_recv_client(ip, "mem util")
         return "last memory utilization is ", data if data[0].isdigit() else data
     elif msg[:len("iot humidity for")] == "iot humidity for":
         host_ip = msg[len("iot humidity for") + 1:].strip()
-        data = send_recv_client(host_ip, "last hum")
+        if host_ip[0].isdigit():
+            data = send_recv_client(host_ip, "last hum")
+        else:
+            data = send_recv_client(ip, "last hum")
         return "Humidity Level is at "+ data+" Percent" if data[0].isdigit() else data
     else:
         return "Rihanna is busy at the moment"
