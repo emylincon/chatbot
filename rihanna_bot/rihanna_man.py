@@ -49,11 +49,11 @@ def man_twitter():
             "show global trending topics on twitter graph",
             "show trending topics on twitter",
             "show my twitter status",
-            "show twitter status for <user_twitter_id>",
+            "show twitter status for <b>user_twitter_id</b>",
             "show my last tweet",
-            "show last twitter status for <user_twitter_id>",
-            "tweet <message>",
-            "search twitter <search_query>"]
+            "show last twitter status for <b>user_twitter_id</b>",
+            "tweet <b>message</b>",
+            "search twitter <b>search_query</b>"]
     for i in func:
         display += f"<tr>\
                         <td>{i}</td>\
@@ -70,9 +70,9 @@ def man_tfl():
                         </tr>\
                         "
     func = ["tfl tube service report",
-            "tfl journey duration from se1 5hp to se18 3px",
-            "tfl live arrivals for 53 at dunton road",
-            "tfl live arrivals for northern at bank underground station"]
+            "tfl journey duration from <b>se1 5hp</b> to <b>se18 3px</b>",
+            "tfl live arrivals for <b>53</b> at <b>dunton road</b>",
+            "tfl live arrivals for <b>northern</b> at <b>bank underground station</b>"]
     for i in func:
         display += f"<tr>\
                         <td>{i}</td>\
@@ -117,7 +117,7 @@ def man_google():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td>google <what_to_google></td>\
+                    <td>google <b>what_to_google</b></td>\
                 </tr>"
     say = "Find below How to use the google feature"
     reply = {'display': display, 'say': say}
@@ -130,10 +130,10 @@ def man_skype():
                             <th>Skype Usage</th>\
                         </tr>\
                         "
-    func = ["skype chat <friend_name> <message>",
-            "show picture <friend_name>",
-            "birthday for <friend_name>",
-            "skype get last message to <friend_name>"]
+    func = ["skype chat <b>friend_name</b> <b>message</b>",
+            "show picture <b>friend_name</b>",
+            "birthday for <b>friend_name</b>",
+            "skype get last message to <b>friend_name</b>"]
     for i in func:
         display += f"<tr>\
                         <td>{i}</td>\
@@ -150,7 +150,7 @@ def man_wiki():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td>what is <what_to_look_up></td>\
+                    <td>what is <b>what_to_look_up></b></td>\
                 </tr>"
     say = "Find below How to use the Wikipedia feature"
     reply = {'display': display, 'say': say}
@@ -186,7 +186,7 @@ def man_football():
             "football league status",
             "football top scorers",
             "football top scorers graph",
-            "football match schedules for match 11",
+            "football match schedules for match <b>11</b>",
             ]
     for i in func:
         display += f"<tr>\
@@ -252,7 +252,7 @@ def man_youtube():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td>play <video_name></td>\
+                    <td>play <em>video_name></em></td>\
                 </tr>"
     say = "Find below How to use the Youtube feature"
     reply = {'display': display, 'say': say}
@@ -265,10 +265,10 @@ def man_amazon():
                             <th>Amazon Usage</th>\
                         </tr>\
                         "
-    func = ["amazon least price for <item_name>",
-            "amazon max price for <item_name>",
-            "amazon sort price for speakers at 11",
-            "amazon sort rating for speakers at 4.5"
+    func = ["amazon least price for <b>item_name</b>",
+            "amazon max price for <b>item_name</b>",
+            "amazon sort price for <b>speakers</b> at <b>11</b>",
+            "amazon sort rating for <b>speakers</b> at <b>4.5</b>"
             ]
     for i in func:
         display += f"<tr>\
@@ -285,10 +285,10 @@ def man_dictionary():
                             <th>Dictionary Usage</th>\
                         </tr>\
                         "
-    func = ["dictionary definition for <word>",
-            "dictionary synonym for <word>",
-            "dictionary antonym for <word>",
-            "dictionary translate <sentence> to <language>"
+    func = ["dictionary definition for <em>word</em>",
+            "dictionary synonym for <em>word</em>",
+            "dictionary antonym for <em>word</em>",
+            "dictionary translate <em>sentence</em> to <em>language</em>"
             ]
     for i in func:
         display += f"<tr>\
@@ -327,9 +327,9 @@ def man_word_cloud():
                             <th>Word Cloud Usage</th>\
                         </tr>\
                         "
-    func = ["word cloud <word>",
-            "word cloud antonyms and synonyms <word>",
-            "word cloud twitter <word>"
+    func = ["word cloud <em>word</em>",
+            "word cloud antonyms and synonyms <em>word</em>",
+            "word cloud twitter <em>word</em>"
             ]
     for i in func:
         display += f"<tr>\
