@@ -2,7 +2,7 @@ def selector(query):
     if query in man_dict:
         return man_dict[query]()
     else:
-        return "I am sorry. I do not know which man page you want. \nUse 'man page' to view your options"
+        return "I am sorry. I do not know which man page you want. \nUse 'man help' to view your options"
 
 
 def man_help():
@@ -305,13 +305,13 @@ def man_iot():
                         <th>IoT Usage</th>\
                     </tr>\
                     "
-    func = ["iot graph from <ip_address>",
-            "iot light off for <ip_address>",
-            "iot light on for <ip_address>",
-            "iot temperature for <ip_address>",
-            "iot cpu for <ip_address>",
-            "iot memory for <ip_address>",
-            "iot humidity for <ip_address>"]
+    func = ["iot graph from <em><b>ip_address</b></em>",
+            "iot light off for <b>ip_address</b>",
+            "iot light on for <b>ip_address</b>",
+            "iot temperature for <b>ip_address</b>",
+            "iot cpu for <b>ip_address</b>",
+            "iot memory for <b>ip_address</b>",
+            "iot humidity for <b>ip_address</b>"]
     for i in func:
         display += f"<tr>\
                         <td>{i}</td>\
