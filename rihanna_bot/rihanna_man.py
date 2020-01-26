@@ -15,8 +15,8 @@ def man_help():
                 "
     for feature in man_dict:
         reply += f"<tr>\
-                        <td>{feature.replace('man ', '').upper()}</td>\
-                        <td>{feature}</td>\
+                        <td><font color='blue'>{feature.replace('man ', '').capitalize()}</font></td>\
+                        <td><em>{feature}</em></td>\
                     </tr>"
     reply_ = {'display': reply, 'say': 'Please find below the features and manual pages'}
     return reply_
@@ -285,10 +285,10 @@ def man_dictionary():
                             <th>Dictionary Usage</th>\
                         </tr>\
                         "
-    func = ["dictionary definition for <em>word</em>",
-            "dictionary synonym for <em>word</em>",
-            "dictionary antonym for <em>word</em>",
-            "dictionary translate <em>sentence</em> to <em>language</em>"
+    func = ["dictionary definition for <em><b>word</b></em>",
+            "dictionary synonym for <em><b>word</b></em>",
+            "dictionary antonym for <em><b>word</b></em>",
+            "dictionary translate <em><b>sentence</b></em> to <em><b>language</b></em>"
             ]
     for i in func:
         display += f"<tr>\
@@ -327,9 +327,9 @@ def man_word_cloud():
                             <th>Word Cloud Usage</th>\
                         </tr>\
                         "
-    func = ["word cloud <em>word</em>",
-            "word cloud antonyms and synonyms <em>word</em>",
-            "word cloud twitter <em>word</em>"
+    func = ["word cloud <em><b>word</b></em>",
+            "word cloud antonyms and synonyms <em><b>word</b></em>",
+            "word cloud twitter <em><b>word</b></em>"
             ]
     for i in func:
         display += f"<tr>\
