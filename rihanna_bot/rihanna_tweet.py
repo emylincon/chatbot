@@ -154,7 +154,7 @@ def twitter_global_trends_graph():
                 if len(tweet_data) == 0:
                     volume = 1000
                 else:
-                    k = min(tweet_data, key=tweet_data.keys())
+                    k = min(tweet_data, key=tweet_data.get)
                     volume = k + 1000
             tweet_data[name] = volume
         plot_tweet(tweet_data)
