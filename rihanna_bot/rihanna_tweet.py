@@ -4,7 +4,7 @@ import time
 import ast
 import config
 import re
-import rihanna
+from rihanna import google_search
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -60,7 +60,7 @@ def twitter(message):
         return reply
 
     else:
-        display = rihanna.google_search(message)
+        display = google_search(message)
         reply = "Googling . . ."
         return reply
 
@@ -155,7 +155,7 @@ def twitter_global_trends_graph():
                     volume = 1000
                 else:
                     k = min(tweet_data, key=tweet_data.get)
-                    volume = k + 1000
+                    volume = tweet_data[k] + 1000
             tweet_data[name] = volume
         plot_tweet(tweet_data)
         picture = f'<img src="tweet.png?{time.time()}" alt="Graph of Top Global Trends in Twitter" width="65%" height="65%">'
