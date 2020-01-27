@@ -16,7 +16,7 @@ def man_help():
     for feature in man_dict:
         reply += f"<tr>\
                         <td><font color='blue'>{feature.replace('man ', '').capitalize()}</font></td>\
-                        <td><em>{feature}</em></td>\
+                        <td>{feature}</td>\
                     </tr>"
     reply_ = {'display': reply, 'say': 'Please find below the features and manual pages'}
     return reply_
