@@ -56,7 +56,7 @@ def twitter(message):
 
     elif message[:14] == 'search twitter':
         search = message[15:].strip()
-        reply = twitter_search(search)
+        reply = twitter_search_(search)
         return reply
 
     else:
@@ -197,6 +197,7 @@ def twitter_global_trends():
 
 def twitter_search(query):
     result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
+    result = api.GetSearch(term=query, count=5)
     reply = "Top 5 Search Results :"
     for status in result:
         obj = status.split('=')
@@ -211,6 +212,41 @@ def twitter_search(query):
         user = obj[2].split(',')[0]
         reply += f"\n@{user} Tweeted: {tweet}"
     return reply.replace(';', '')
+
+
+def twitter_search_(query):
+    #result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
+    result = api.GetSearch(term=query, count=5)
+    say = f"Top 5 Search Results for {query}"
+    display = f"<table id='t01'>\
+                                    <tr>\
+                                        <th style='text-align:center'>User</th>\
+                                        <th style='text-align:center'>Tweet</th>\
+                                        <th>Retweets</th>\
+                                    </tr>\
+                                    "
+
+    for status in result:
+        user = status.user.screen_name
+        name = status.user.name
+        pic = status.user.profile_image_url
+        retweet_count = status.retweet_count
+        tweet = status.text
+        links = re.findall(r'(https?://\S+)', tweet)
+        #print('l:', links)
+        if links:
+            for i in links:
+                link = f'<a href={i} target="_blank">link</a>'
+                #print(i, link)
+                tweet = tweet.replace(i, link)
+
+        display += f"<tr>\
+                        <td style='text-align:center'><img src='{pic}' alt='user pic'> <p>{name} @<b>{user}</b></p></td>\
+                        <td style='text-align:center'>{tweet}</td>\
+                        <td style='text-align:center'>{retweet_count}</td>\
+                    </tr>"
+    reply = {'display': display.replace(';', ''), 'say': say}
+    return reply
 
 
 # this function is for word cloud
@@ -229,7 +265,7 @@ def twitter_search_cloud(query):
 
 
 #print(twitter_global_trends())
-#print(twitter_search("drake"))
+#print(twitter_search_("drake"))
 #twitter("tweet test in 2")
 #print(twitter_global_trends_graph())
 #plot_tweet({'this is not you and me okay but yes': 20, 'no':50})
