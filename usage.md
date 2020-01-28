@@ -28,6 +28,7 @@ show my last tweet
 show last twitter status for <user_twitter_id>
 tweet <message>
 search twitter <search_query>
+show twitter hashtags associated with <query>
 ```
 
 ## TFL
@@ -138,4 +139,5 @@ iot humidity for <ip_address>
 word cloud <word>
 word cloud antonyms and synonyms <word>
 word cloud twitter <word>
+word cloud twitter user <word>
 ```
