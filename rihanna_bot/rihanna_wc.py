@@ -41,6 +41,9 @@ def selector(msg):
     elif msg[:len('word cloud twitter')] == 'word cloud twitter':
         query = msg[len('word cloud twitter')+1:]
         return word_cloud_twitter(query)
+    elif msg[:len('word cloud twitter user')] == 'word cloud twitter user':
+        query = msg[len('word cloud twitter user')+1:]
+        return word_cloud_twitter(query, user=1)
     else:
         return "Rihanna is not in the mood for Word cloud at the moment"
 
@@ -65,7 +68,7 @@ def create_wordcloud(text):
     stopwords = set(STOPWORDS)
 
     # create wordcloud object
-    wc = WordCloud(background_color="white",
+    wc = WordCloud(background_color="black",
                    max_words=200,
                    mask=mask,
                    stopwords=stopwords)
@@ -113,16 +116,19 @@ def word_cloud(query):
     return reply
 
 
-def word_cloud_twitter(query):
+def word_cloud_twitter(query, user=0):
     path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\wc.png'
     try:
         os.remove(path)
     except Exception as e:
         pass
-    text = rihanna_tweet.twitter_search_cloud(query)
+    if user == 1:
+        text = rihanna_tweet.twitter_search_cloud_user(query)
+    else:
+        text = rihanna_tweet.twitter_search_cloud(query)
     create_wordcloud(text)
 
-    reply = {'display': f'<img src="wc.png?{time.time()}" alt="Test image" width="65%" height="65%">',
+    reply = {'display': f'<img src="wc.png?{time.time()}" alt="Test image" width="60%" height="60%">',
              'say': f'find word cloud from twitter for {query}'}
 
     return reply
