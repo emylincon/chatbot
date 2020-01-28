@@ -53,6 +53,7 @@ def man_twitter():
             "show my last tweet",
             "show last twitter status for <b>user_twitter_id</b>",
             "tweet <b>message</b>",
+            "show twitter hash tags associated with <b>query</b>",
             "search twitter <b>search_query</b>"]
     for i in func:
         display += f"<tr>\
@@ -329,7 +330,8 @@ def man_word_cloud():
                         "
     func = ["word cloud <em><b>word</b></em>",
             "word cloud antonyms and synonyms <em><b>word</b></em>",
-            "word cloud twitter <em><b>word</b></em>"
+            "word cloud twitter <em><b>word</b></em>",
+            "word cloud twitter user <em><b>word</b></em>"
             ]
     for i in func:
         display += f"<tr>\
