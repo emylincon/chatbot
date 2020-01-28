@@ -4,7 +4,6 @@ import time
 import ast
 import config
 import re
-from rihanna import google_search
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -13,6 +12,17 @@ api = twitter.Api(consumer_key=config.consumer_key,
                   consumer_secret=config.consumer_secret,
                   access_token_key=config.access_token,
                   access_token_secret=config.access_token_secret)
+
+
+def google_search(query):
+    try:
+        driver = webdriver.Chrome(executable_path=r"C:\Program Files\chrome driver\chromedriver.exe")
+        google = "https://www.google.com/search?q="
+        search = google + query
+        driver.get(search)
+        return driver
+    except Exception as e:
+        return "Web Driver Failed"
 
 
 def twitter(message):
@@ -58,6 +68,11 @@ def twitter(message):
         search = message[15:].strip()
         reply = twitter_search_(search)
         return reply
+
+    elif message[:len('show twitter hash tags associated with')] == 'show twitter hash tags associated with':
+        x = len('show twitter hash tags associated with')
+        query = message[x+1:]
+        return twitter_hash_tags(query)
 
     else:
         display = google_search(message)
@@ -264,9 +279,41 @@ def twitter_search_cloud(query):
     return answer.lower().replace(query, '')
 
 
+def twitter_hash_tags(query):
+    tweet_count = 30
+    result = api.GetSearch(term=query, count=tweet_count)
+    answer = []
+    display = ''
+    for status in result:
+        if len(status.hashtags) > 0:
+            for hash in status.hashtags:
+                answer.append(hash.text)
+    if len(answer) == 0:
+        say = f'no hashtags associated with {query} in top {tweet_count} tweets'
+        display += say
+    else:
+        say = f'<b>Hash Tags Associated with {query} in top {tweet_count} tweets</b>'
+        display += say
+        for hashtag in answer:
+            display += f'<br><font color="blue">#{hashtag}</font>'
+    reply = {'display': display, 'say': say}
+    return reply
+
+
+def twitter_search_cloud_user(query):
+    result = api.GetSearch(term=query, count=50)
+    answer = ''
+    for status in result:
+        answer += f'{status.user.description} '
+
+    return answer
+
+
 #print(twitter_global_trends())
 #print(twitter_search_("drake"))
 #twitter("tweet test in 2")
 #print(twitter_global_trends_graph())
 #plot_tweet({'this is not you and me okay but yes': 20, 'no':50})
 #print(twitter_search_cloud('microsoft'))
+#twitter_search_cloud_user('microsoft')
+#print(twitter_hash_tags('microsoft'))
