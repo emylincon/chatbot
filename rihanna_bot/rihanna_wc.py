@@ -123,6 +123,7 @@ def word_cloud_twitter(query, user=0):
     except Exception as e:
         pass
     if user == 1:
+        # makes a word cloud of the twitter profiles of users that are taking about a given topic
         text = rihanna_tweet.twitter_search_cloud_user(query)
     else:
         text = rihanna_tweet.twitter_search_cloud(query)
