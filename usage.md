@@ -141,3 +141,8 @@ word cloud antonyms and synonyms <word>
 word cloud twitter <word>
 word cloud twitter user <word>
 ```
+
+## Job search
+```html
+#"job search average salary for {job} in {place}"
+```

@@ -342,9 +342,27 @@ def man_word_cloud():
     return reply
 
 
+def man_job_search():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Job Search Usage</th>\
+                            </tr>\
+                            "
+    func = ["job search average salary for <b>job</b> in <b>place</b>"
+            ]
+    for i in func:
+        display += f"<tr>\
+                            <td>{i}</td>\
+                        </tr>"
+    say = "Find below How to use the Job search feature"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
             'man youtube': man_youtube, 'man google': man_google, 'man wikipedia': man_wiki, 'man wiki': man_wiki,
-            'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man word cloud': man_word_cloud}
+            'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot,
+            'man word cloud': man_word_cloud, 'man job search': man_job_search}
 
