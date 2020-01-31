@@ -14,6 +14,11 @@ def selector(message):
         job = query[0].strip()
         place = query[1].strip()
         return min_salary(job, place)
+    elif message[:len("job search max salary for ")] == "job search max salary for ":
+        query = message[len("job search max salary for "):].split(' in ')
+        job = query[0].strip()
+        place = query[1].strip()
+        return max_salary(job, place)
     else:
         return "Rihanna is not in the mood to answer this job search related question"
 
@@ -113,10 +118,10 @@ def min_salary(job, place):
     if len(min_) > 0:
         min_job = min(min_, key=min_.get)
         h = '\n'
-        reply = {'display': f'The Minimum Salary for {job} in {place} is £{add_format(min_[min_job])}. '
+        reply = {'display': f'The Minimum Salary for {job} in {place} from indeed website is £{add_format(min_[min_job])} Annually. '
                             f'<br>This Job is offered by {min_comp[min_job].replace(h, "")}. '
                             f'<a href="https://www.indeed.co.uk{min_job}" target="_blank">view</a>',
-                 'say': f'The Minimum Salary for {job} in {place} is £{add_format(min_[min_job])}. '
+                 'say': f'The Minimum Salary for {job} in {place} from indeed website is £{add_format(min_[min_job])} Annually. '
                             f'This Job is offered by {min_comp[min_job].replace(h, "")}. '
                             f'link is provided'}
         return reply
@@ -124,9 +129,46 @@ def min_salary(job, place):
         return f"Rihanna could not find {job}"
 
 
-def max_salary(job, place):  # TODO
-    # add max salary and job link
-    pass
+def max_salary(job, place):
+    items = search_page(job, place)
+    max_ = {}    # {link: salary}
+    max_comp = {}    # {link: company}
+    for job_post in items:
+        try:
+            salary_raw = job_post.find("span", {"class": "salaryText"}).get_text()
+            try:
+
+                company = job_post.find("a", {"data-tn-element": "companyName"}).get_text()
+            except AttributeError:
+                company = job_post.find("span", {"class": "company"}).get_text()
+                #company = job_post.find("a", {"class": "turnstileLink"}).get_text()
+            link = job_post.find("a", {"class": "jobtitle turnstileLink"}).get('href')
+            if '-' in salary_raw:
+                salary_raw = salary_raw.split('-')
+                con = salary_raw[1].split()[-1].strip()
+                if con == 'year':
+                    multi = 1
+                elif con == 'month':
+                    multi = 12
+                else:
+                    multi = 5 * 4 * 12
+                max_[link] = float(salary_raw[1].split()[0].strip()[1:].replace(',', ''))*multi
+                max_comp[link] = company
+
+        except AttributeError:
+            pass
+    if len(max_) > 0:
+        min_job = max(max_, key=max_.get)
+        h = '\n'
+        reply = {'display': f'The Maximum Salary for {job} in {place} from indeed website is £{add_format(max_[min_job])} Annually. '
+                            f'<br>This Job is offered by {max_comp[min_job].replace(h, "")}. '
+                            f'<a href="https://www.indeed.co.uk{min_job}" target="_blank">view</a>',
+                 'say': f'The Maximum Salary for {job} in {place} from indeed website is £{add_format(max_[min_job])} Annually. '
+                            f'This Job is offered by {max_comp[min_job].replace(h, "")}. '
+                            f'link is provided'}
+        return reply
+    else:
+        return f"Rihanna could not find {job}"
 
 
 def key_skills(job, place):  # TODO
