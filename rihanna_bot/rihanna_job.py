@@ -9,6 +9,13 @@ def selector(message):
         job = query[0].strip()
         place = query[1].strip()
         return average_salary(job,place)
+    elif message[:len("job search min salary for ")] == "job search min salary for ":
+        query = message[len("job search min salary for "):].split(' in ')
+        job = query[0].strip()
+        place = query[1].strip()
+        return min_salary(job, place)
+    else:
+        return "Rihanna is not in the mood to answer this job search related question"
 
 
 def go_to(url):
@@ -28,7 +35,7 @@ def search_page(job, where):
 
 
 def search_job(job, where):
-    items = search_job(job, where)
+    items = search_page(job, where)
     min_ = []
     max_ = []
 
@@ -74,19 +81,21 @@ def average_salary(job, place):
         return reply
 
 
-def min_salary(job, place):  # TODO
+def min_salary(job, place):
     # add min salary and job link
-    items = search_job(job, place)
+    items = search_page(job, place)
     min_ = {}    # {link: salary}
     min_comp = {}    # {link: company}
     for job_post in items:
         try:
             salary_raw = job_post.find("span", {"class": "salaryText"}).get_text()
             try:
-                company = job_post.find("a", {"class": "turnstileLink"}).get_text()
+
+                company = job_post.find("a", {"data-tn-element": "companyName"}).get_text()
             except AttributeError:
                 company = job_post.find("span", {"class": "company"}).get_text()
-            link = job_post.find("a", {"class": "turnstileLink"}).get('href')
+                #company = job_post.find("a", {"class": "turnstileLink"}).get_text()
+            link = job_post.find("a", {"class": "jobtitle turnstileLink"}).get('href')
             if '-' in salary_raw:
                 salary_raw = salary_raw.split('-')
                 con = salary_raw[1].split()[-1].strip()
@@ -103,11 +112,12 @@ def min_salary(job, place):  # TODO
             pass
     if len(min_) > 0:
         min_job = min(min_, key=min_.get)
+        h = '\n'
         reply = {'display': f'The Minimum Salary for {job} in {place} is £{add_format(min_[min_job])}. '
-                            f'<br>This Job is offered by {min_comp[min_job]}. '
-                            f'<a href="{min_job}" target="_blank">view</a>',
+                            f'<br>This Job is offered by {min_comp[min_job].replace(h, "")}. '
+                            f'<a href="https://www.indeed.co.uk{min_job}" target="_blank">view</a>',
                  'say': f'The Minimum Salary for {job} in {place} is £{add_format(min_[min_job])}. '
-                            f'This Job is offered by {min_comp[min_job]}. '
+                            f'This Job is offered by {min_comp[min_job].replace(h, "")}. '
                             f'link is provided'}
         return reply
     else:
@@ -129,6 +139,8 @@ def salary_graph(job, place):  # TODO
     pass
 
 
+
+#print(selector("job search min salary for devops in london"))
 
 
 
