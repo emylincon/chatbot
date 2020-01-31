@@ -348,7 +348,9 @@ def man_job_search():
                                 <th>Job Search Usage</th>\
                             </tr>\
                             "
-    func = ["job search average salary for <b>job</b> in <b>place</b>"
+    func = ["job search average salary for <b>job</b> in <b>place</b>",
+            "job search min salary for <b>job</b> in <b>place</b>",
+            "job search max salary for <b>job</b> in <b>place</b>"
             ]
     for i in func:
         display += f"<tr>\
