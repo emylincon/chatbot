@@ -14,14 +14,21 @@ def selector(message):
 def go_to(url):
     page = requests.get(url, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
+    return soup
 
 
-def search_job(job, where):
+def search_page(job, where):
     url = f"https://www.indeed.co.uk/jobs?q={job}&l={where}"
     page = requests.get(url, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
-    #items = soup.find_all("div", {"class": "jobsearch-jobDescriptionText"})
+    # items = soup.find_all("div", {"class": "jobsearch-jobDescriptionText"})
     items = soup.find_all("div", {"class": "jobsearch-SerpJobCard unifiedRow row result"})
+
+    return items
+
+
+def search_job(job, where):
+    items = search_job(job, where)
     min_ = []
     max_ = []
 
@@ -58,7 +65,7 @@ def add_format(query):
 def average_salary(job, place):
     min_, max_ = search_job(job,place)
     if len(min_) == 0:
-        return f"rihanna could not find {job}"
+        return f"Rihanna could not find {job}"
     else:
         avg_min = add_format(sum(min_)/len(min_))
         avg_max = add_format(sum(max_)/len(max_))
@@ -69,7 +76,42 @@ def average_salary(job, place):
 
 def min_salary(job, place):  # TODO
     # add min salary and job link
-    pass
+    items = search_job(job, place)
+    min_ = {}    # {link: salary}
+    min_comp = {}    # {link: company}
+    for job_post in items:
+        try:
+            salary_raw = job_post.find("span", {"class": "salaryText"}).get_text()
+            try:
+                company = job_post.find("a", {"class": "turnstileLink"}).get_text()
+            except AttributeError:
+                company = job_post.find("span", {"class": "company"}).get_text()
+            link = job_post.find("a", {"class": "turnstileLink"}).get('href')
+            if '-' in salary_raw:
+                salary_raw = salary_raw.split('-')
+                con = salary_raw[1].split()[-1].strip()
+                if con == 'year':
+                    multi = 1
+                elif con == 'month':
+                    multi = 12
+                else:
+                    multi = 5 * 4 * 12
+                min_[link] = float(salary_raw[0].strip()[1:].replace(',', '')) * multi
+                min_comp[link] = company
+
+        except AttributeError:
+            pass
+    if len(min_) > 0:
+        min_job = min(min_, key=min_.get)
+        reply = {'display': f'The Minimum Salary for {job} in {place} is £{add_format(min_[min_job])}. '
+                            f'<br>This Job is offered by {min_comp[min_job]}. '
+                            f'<a href="{min_job}" target="_blank">view</a>',
+                 'say': f'The Minimum Salary for {job} in {place} is £{add_format(min_[min_job])}. '
+                            f'This Job is offered by {min_comp[min_job]}. '
+                            f'link is provided'}
+        return reply
+    else:
+        return f"Rihanna could not find {job}"
 
 
 def max_salary(job, place):  # TODO
@@ -85,4 +127,71 @@ def key_skills(job, place):  # TODO
 def salary_graph(job, place):  # TODO
     # return average salary graph of top cities in uk
     pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
