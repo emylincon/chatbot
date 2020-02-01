@@ -190,11 +190,6 @@ def max_salary(job, place):
         return f"Rihanna could not find {job}"
 
 
-def key_skills(job, place):  # TODO
-    # find job key skills
-    pass
-
-
 def k_format(x):
     return round(x/1000, 1)
 
@@ -216,8 +211,9 @@ def salary_plot(cities_min, cities_max, cities, job):
                 ha="center", va="center", bbox=dict(boxstyle="round", ec=(1., 0.5, 0.5), fc=(1., 0.8, 0.8), ))
     ax.legend((p1[0], p2[0]), ('Minimum Salary', 'Maximum Salary'))
     # ax.set_ylabel('\n'.join(wrap(f'Plot for {no} MECs', 8))).set_rotation(0)
-    ax.set_ylabel("Salary")
-    plt.title(f"Average Annual Salary Range for {job} in UK")
+    ax.set_ylabel("Annual Salary", fontdict={'weight': 'medium', 'size': 12})
+    plt.title(f"Average Annual Salary Range for {job} in UK", fontdict={'weight': 'medium', 'size': 12})
+    plt.xticks(rotation=45)
     plt.savefig(rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\salary.png')
     plt.close()
 
@@ -246,6 +242,11 @@ def average_salary_graph(job):
     reply = {'display': display,
              'say': say}
     return reply
+
+
+def key_skills(job, place):  # TODO
+    # find job key skills
+    pass
 
 
 #print(average_salary_graph(job='devops'))
