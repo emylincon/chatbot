@@ -11,9 +11,10 @@ def selector(msg):
         if msg[:len("dictionary definition")] == "dictionary definition":
             msg = msg[len("dictionary definition") + 1:].strip()
             return find_definition(msg)
-        elif msg[:len("dictionary definition for")] == "dictionary definition for":
-            msg = msg[len("dictionary definition for") + 1:].strip()
-            return find_meaning(msg)
+
+        #elif msg[:len("dictionary definition for")] == "dictionary definition for":
+        #    msg = msg[len("dictionary definition for") + 1:].strip()
+        #    return find_meaning(msg)
         elif msg[:len("dictionary synonym for")] == "dictionary synonym for":
             msg = msg[len("dictionary synonym for") + 1:].strip()
             return find_syn(msg)
@@ -23,6 +24,8 @@ def selector(msg):
         elif msg[:len("dictionary translate")] == "dictionary translate":
             msg = msg[len("dictionary translate") + 1:].strip().split(' to ')
             return translate_sentence(msg[0], msg[1])
+        else:
+            return "I am sorry, the dictionary part of my brain is not working at the moment"
     except Exception as e:
         return f"error in dictionary selector: {e}"
 
