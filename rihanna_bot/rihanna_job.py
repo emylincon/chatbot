@@ -199,13 +199,13 @@ def salary_plot(cities_min, cities_max, cities, job):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ind = np.arange(len(cities_max))
-    p1 = ax.bar(ind, cities_min, width, color='r', alpha=0.4)
-    p2 = ax.bar(ind, cities_max, width, color='g', bottom=cities_min, alpha=0.4)
+    p1 = ax.bar(ind, cities_min, width, color='r', alpha=0.3)
+    p2 = ax.bar(ind, np.array(cities_max) - np.array(cities_min), width, color='g', bottom=cities_min, alpha=0.3)
     ax.set_xticks(ind)
     ax.set_xticklabels(cities)
     for i in cities_max:
         j = cities_max.index(i)
-        ax.text(j, cities_max[j] + cities_min[j], '{}K'.format(k_format(i)), rotation=0,
+        ax.text(j, cities_max[j], '{}K'.format(k_format(i)), rotation=0,
                 ha="center", va="center", bbox=dict(boxstyle="round", ec=(0., 0., 0.), fc=(0.7, 0.9, 1.), ))
         ax.text(j, cities_min[j], '{}K'.format(k_format(cities_min[j])), rotation=0,
                 ha="center", va="center", bbox=dict(boxstyle="round", ec=(1., 0.5, 0.5), fc=(1., 0.8, 0.8), ))
@@ -214,6 +214,7 @@ def salary_plot(cities_min, cities_max, cities, job):
     ax.set_ylabel("Annual Salary", fontdict={'weight': 'medium', 'size': 12})
     plt.title(f"Average Annual Salary Range for {job} in UK", fontdict={'weight': 'medium', 'size': 12})
     plt.xticks(rotation=45)
+    plt.subplots_adjust(bottom=0.16)
     plt.savefig(rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\salary.png')
     plt.close()
 
@@ -235,7 +236,8 @@ def average_salary_graph(job):
             result = city_data[i].get()
             cities_max[i] = result[1]
             cities_min[i] = result[0]
-
+    #print(cities_max)
+    #print(cities_min)
     salary_plot(cities_min, cities_max, cities, job)
     display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
     say = "The displayed graph contains the average salary range for Top cities in UK"
