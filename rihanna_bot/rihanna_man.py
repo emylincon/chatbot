@@ -286,7 +286,7 @@ def man_dictionary():
                             <th>Dictionary Usage</th>\
                         </tr>\
                         "
-    func = ["dictionary definition for <em><b>word</b></em>",
+    func = ["dictionary definition <em><b>word</b></em>",
             "dictionary synonym for <em><b>word</b></em>",
             "dictionary antonym for <em><b>word</b></em>",
             "dictionary translate <em><b>sentence</b></em> to <em><b>language</b></em>"
