@@ -147,5 +147,6 @@ word cloud twitter user <word>
 #"job search average salary for {job} in {place}"
 #"job search min salary for {job} in {place}"
 #"job search max salary for {job} in {place}"
+job search average salary graph for {job}
 
 ```
