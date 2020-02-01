@@ -350,7 +350,8 @@ def man_job_search():
                             "
     func = ["job search average salary for <b>job</b> in <b>place</b>",
             "job search min salary for <b>job</b> in <b>place</b>",
-            "job search max salary for <b>job</b> in <b>place</b>"
+            "job search max salary for <b>job</b> in <b>place</b>",
+            "job search average salary graph for <b>job</b>"
             ]
     for i in func:
         display += f"<tr>\
