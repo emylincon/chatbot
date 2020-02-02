@@ -2,9 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 import config
 from multiprocessing.pool import ThreadPool
+from threading import Thread
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 import time
+import os
+pool = ThreadPool(processes=5)
+cities = ["London", "Manchester", "Edinburgh", "Bristol", "Bath", "Birmingham", "Liverpool", "Glasgow"]
+thread_result = [list(range(len(cities))), list(range(len(cities)))]    # [[min], [max]]
 
 
 def selector(message):
@@ -82,15 +89,24 @@ def add_format(query):
     return f'{int_}.{points}'
 
 
-def average_salary_raw(job, place):
+def average_salary_raw(job, place, th=-1):
     min_, max_ = search_job(job, place)
     if len(min_) == 0:
-        return 0
+        if th != -1:    # getting thread result
+            thread_result[0][th] = 0
+            thread_result[1][th] = 0
+            #print('no')
+        else:
+            return 0
     else:
         avg_min = sum(min_) / len(min_)
         avg_max = sum(max_) / len(max_)
-
-        return avg_min, avg_max
+        if th != -1:    # getting thread result
+            thread_result[0][th] = avg_min
+            thread_result[1][th] = avg_max
+            #print(thread_result)
+        else:
+            return avg_min, avg_max
 
 
 def average_salary(job, place):
@@ -194,7 +210,8 @@ def k_format(x):
     return round(x/1000, 1)
 
 
-def salary_plot(cities_min, cities_max, cities, job):
+def salary_plot(cities_min, cities_max, job):
+    #print(f'values:{cities_min}\n{cities_max}')
     width = 0.35
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -203,26 +220,37 @@ def salary_plot(cities_min, cities_max, cities, job):
     p2 = ax.bar(ind, np.array(cities_max) - np.array(cities_min), width, color='g', bottom=cities_min, alpha=0.3)
     ax.set_xticks(ind)
     ax.set_xticklabels(cities)
-    for i in cities_max:
-        j = cities_max.index(i)
-        ax.text(j, cities_max[j], '{}K'.format(k_format(i)), rotation=0,
-                ha="center", va="center", bbox=dict(boxstyle="round", ec=(0., 0., 0.), fc=(0.7, 0.9, 1.), ))
-        ax.text(j, cities_min[j], '{}K'.format(k_format(cities_min[j])), rotation=0,
-                ha="center", va="center", bbox=dict(boxstyle="round", ec=(1., 0.5, 0.5), fc=(1., 0.8, 0.8), ))
+    for i in range(len(cities_max)):
+        if cities_max[i] - cities_min[i] < 4000:
+            ax.text(i, cities_min[i]+4000, '{}K'.format(k_format(cities_max[i])), rotation=0,
+                    ha="center", va="center", bbox=dict(boxstyle="round", ec=(0., 0., 0.), fc=(0.7, 0.9, 1.), ))
+            ax.text(i, cities_min[i], '{}K'.format(k_format(cities_min[i])), rotation=0,
+                    ha="center", va="center", bbox=dict(boxstyle="round", ec=(1., 0.5, 0.5), fc=(1., 0.8, 0.8), ))
+        else:
+            ax.text(i, cities_max[i], '{}K'.format(k_format(cities_max[i])), rotation=0,
+                    ha="center", va="center", bbox=dict(boxstyle="round", ec=(0., 0., 0.), fc=(0.7, 0.9, 1.), ))
+            ax.text(i, cities_min[i], '{}K'.format(k_format(cities_min[i])), rotation=0,
+                    ha="center", va="center", bbox=dict(boxstyle="round", ec=(1., 0.5, 0.5), fc=(1., 0.8, 0.8), ))
     ax.legend((p1[0], p2[0]), ('Minimum Salary', 'Maximum Salary'))
     # ax.set_ylabel('\n'.join(wrap(f'Plot for {no} MECs', 8))).set_rotation(0)
     ax.set_ylabel("Annual Salary", fontdict={'weight': 'medium', 'size': 12})
-    plt.title(f"Average Annual Salary Range for {job} in UK", fontdict={'weight': 'medium', 'size': 12})
+    ax.set_ylim(top=max(cities_max)+10000)
+    ax.set_ylim(bottom=min(cities_min)//2)
+    plt.title(f"Average Annual Salary Range for {job} in UK Cities", fontdict={'weight': 'medium', 'size': 12})
     plt.xticks(rotation=45)
     plt.subplots_adjust(bottom=0.16)
     plt.savefig(rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\salary.png')
     plt.close()
 
 
-def average_salary_graph(job):
-    pool = ThreadPool(processes=5)
+def average_salary_graph_(job):
+    path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\salary.png'
+    try:
+        os.remove(path)
+    except Exception as e:
+        pass
 
-    cities = ["London", "Manchester", "Edinburgh", "Bristol", "Bath", "Birmingham", "Liverpool", "Glasgow"]
+
     city_data = list(range(len(cities)))
     cities_min = list(range(len(cities)))
     cities_max = list(range(len(cities)))
@@ -238,11 +266,42 @@ def average_salary_graph(job):
             cities_min[i] = result[0]
     #print(cities_max)
     #print(cities_min)
-    salary_plot(cities_min, cities_max, cities, job)
+    salary_plot(cities_min, cities_max, job)
     display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
-    say = "The displayed graph contains the average salary range for Top cities in UK"
+    say = f"The displayed graph contains the average salary range for {job} job in Top cities in UK"
     reply = {'display': display,
              'say': say}
+
+    return reply
+
+
+def average_salary_graph(job):
+    global thread_result
+    path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\salary.png'
+    try:
+        os.remove(path)
+    except Exception as e:
+        pass
+
+    cities = ["London", "Manchester", "Edinburgh", "Bristol", "Bath", "Birmingham", "Liverpool", "Glasgow"]
+    city_data = []
+
+    for i in cities:
+        city_data.append(Thread(target=average_salary_raw, args=(job, i, cities.index(i))))
+        city_data[-1].daemon = True
+        city_data[-1].start()
+    for _thread in city_data:
+        _thread.join()
+    cities_min,cities_max = thread_result
+
+    # print(cities_max)
+    # print(cities_min)
+    salary_plot(cities_min, cities_max, job)
+    display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
+    say = f"The displayed graph contains the average salary range for {job} job in Top cities in UK"
+    reply = {'display': display,
+             'say': say}
+    thread_result = [list(range(len(cities))), list(range(len(cities)))]
     return reply
 
 
