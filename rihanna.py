@@ -5,7 +5,8 @@ import wikipedia
 import pyttsx3
 from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
-    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, rihanna_dict, rihanna_iot, rihanna_wc, \
+    rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
+    rihanna_dict, rihanna_iot, rihanna_wc, \
     rihanna_man, rihanna_job
 import config
 import random as r
@@ -125,12 +126,12 @@ def stop_words():
 
 
 def rihanna(message):
-
-    if (message[:len("dictionary translate")] != "dictionary translate") and (rihanna_dict.detect_lang(message) != 'en'):
+    if (message[:len("dictionary translate")] != "dictionary translate") and (
+            rihanna_dict.detect_lang(message) != 'en'):
         config.lang_code = rihanna_dict.detect_lang(message)
         message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
-        #print(f'trans: {message} \n l_code: {lang_code}')
+        # print(f'trans: {message} \n l_code: {lang_code}')
 
         # Formatting message input
     if email['run'] == 0:
@@ -270,7 +271,7 @@ def rihanna(message):
                   "that's my jam", "someone turn the music up", "you have a terrible song taste"]
         # rihanna_voice('Searching for {}'.format(message.strip()[5:]))
         play_song(message.strip()[5:])
-        reply =  critic[r.randrange(len(critic))]
+        reply = critic[r.randrange(len(critic))]
         if config.lang_code != 'en':
             reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
             config.lang_code = 'en'
@@ -299,7 +300,6 @@ def rihanna(message):
 
 
 def get_response(usrText):
-
     bot = ChatBot('Bot',
                   storage_adapter='chatterbot.storage.SQLStorageAdapter',
                   logic_adapters=[
@@ -325,18 +325,17 @@ def get_response(usrText):
                 result = rihanna(text.strip())
                 result = f"{text};{result}"
                 reply = str(result)
-                #return str({'user_sent': text, 'reply': result, 'voice_check': 0, 'say': ''})
+                # return str({'user_sent': text, 'reply': result, 'voice_check': 0, 'say': ''})
                 return reply
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
-            return reply                   #reply should be string else it wont work
+            return reply  # reply should be string else it wont work
         elif usrText.strip() == 'Bye':
             return 'Bye'
-
 
 # d = google_search("when is the wilder fight date")
 # print('hello')
 # print(rihanna('journey duration from se18 3px to se1 5hp'))
-#print(rihanna("amazon least price for external hard drive 2tb"))
-#print(get_response("jugar drake va mal"))
+# print(rihanna("amazon least price for external hard drive 2tb"))
+# print(get_response("jugar drake va mal"))
