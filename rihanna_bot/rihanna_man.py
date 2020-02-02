@@ -273,6 +273,9 @@ def man_youtube():
     display += f"<tr>\
                     <td onclick='man_complete("+'"play [video_name]"'+")'>play <em>video_name></em></td>\
                 </tr>"
+    display += f"<tr>\
+                        <td onclick='man_complete(" + '"Youtube [video_name]"' + ")'>Youtube <em>video_name></em></td>\
+                    </tr>"
     display += "</table>"
     say = "Find below How to use the Youtube feature"
     reply = {'display': display, 'say': say}
