@@ -7,7 +7,7 @@ from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, \
-    rihanna_man, rihanna_job
+    rihanna_man, rihanna_job, rihanna_youtube
 import config
 import random as r
 
@@ -149,6 +149,8 @@ def rihanna(message):
             return rihanna_man.selector(message)
         elif message[:len('amazon')] == 'amazon':
             return rihanna_amazon.selector(format_string(message).lower().strip())
+        elif message[:len('youtube')] == 'youtube':
+            return rihanna_youtube.search_youtube(message[len("youtube")+1:].strip())
         elif message[:len('dictionary')] == 'dictionary':
             return rihanna_dict.selector(message)
         elif message[:len('job search')] == 'job search':
