@@ -69,7 +69,7 @@ def create_wordcloud(text):
     stopwords = set(STOPWORDS)
 
     # create wordcloud object
-    wc = WordCloud(background_color="black",
+    wc = WordCloud(background_color="white",
                    max_words=200,
                    mask=mask,
                    stopwords=stopwords)
