@@ -16,8 +16,9 @@ def man_help():
     for feature in man_dict:
         reply += f"<tr>\
                         <td><font color='blue'>{feature.replace('man ', '').capitalize()}</font></td>\
-                        <td>{feature}</td>\
+                        <td onclick='man_complete("+f'"{feature}"'+f")'>{feature}</td>\
                     </tr>"
+    reply += "</table>"
     reply_ = {'display': reply, 'say': 'Please find below the features and manual pages'}
     return reply_
 
@@ -31,9 +32,9 @@ def man_maths():
     m = ['+', '*', '-', '/']
     for i in m:
         display += f"<tr>\
-                        <td>calculate 5 {i} 2</td>\
+                        <td onclick='man_complete("+f'"calculate 5 {i} 2"'+f")'>calculate 5 {i} 2</td>\
                     </tr>"
-
+    display += "</table>"
     say = "Find below How to use the Maths feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -56,9 +57,11 @@ def man_twitter():
             "show twitter hash tags associated with <b>query</b>",
             "search twitter <b>search_query</b>"]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Twitter feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -75,9 +78,11 @@ def man_tfl():
             "tfl live arrivals for <b>53</b> at <b>dunton road</b>",
             "tfl live arrivals for <b>northern</b> at <b>bank underground station</b>"]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the TFL feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -90,8 +95,9 @@ def man_news():
                     </tr>\
                             "
     display += f"<tr>\
-                      <td>BBC News</td>\
+                      <td onclick='man_complete("+'"BBC news"'+")'>BBC News</td>\
                 </tr>"
+    display += "</table>"
     say = "Find below How to use the News feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -104,8 +110,9 @@ def man_email():
                     </tr>\
                             "
     display += f"<tr>\
-                      <td>send email</td>\
+                      <td onclick='man_complete("+'"send email"'+")'>send email</td>\
                 </tr>"
+    display += "</table>"
     say = "Find below How to use the Email feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -118,8 +125,9 @@ def man_google():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td>google <b>what_to_google</b></td>\
+                    <td onclick='man_complete("+'"google [query]"'+")'>google <b>what_to_google</b></td>\
                 </tr>"
+    display += "</table>"
     say = "Find below How to use the google feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -136,9 +144,11 @@ def man_skype():
             "birthday for <b>friend_name</b>",
             "skype get last message to <b>friend_name</b>"]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Skype feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -151,8 +161,9 @@ def man_wiki():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td>what is <b>what_to_look_up></b></td>\
+                    <td onclick='man_complete("+'"what is [query]"'+")'>what is <b>what_to_look_up></b></td>\
                 </tr>"
+    display += "</table>"
     say = "Find below How to use the Wikipedia feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -169,8 +180,9 @@ def man_facebook():
             "how many facebook friends do i have"]
     for i in func:
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{i}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Facebook feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -190,9 +202,11 @@ def man_football():
             "football match schedules for match <b>11</b>",
             ]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Football feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -207,8 +221,9 @@ def man_time():
     func = ("what is the time", "time", "what is the current time", "current time")
     for i in func:
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{i}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Time feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -223,8 +238,9 @@ def man_date():
     func = ("what is the date", "what is todays date", "todays date", "current date", "date")
     for i in func:
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{i}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Date feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -236,11 +252,13 @@ def man_weather():
                             <th>Weather Usage</th>\
                         </tr>\
                         "
-    func = ("weather forecast today", "weather forecast Lagos Nigeria")
+    func = ("weather forecast today", "weather forecast <b>Lagos Nigeria</b>")
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Weather feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -253,8 +271,9 @@ def man_youtube():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td>play <em>video_name></em></td>\
+                    <td onclick='man_complete("+'"play [video_name]"'+")'>play <em>video_name></em></td>\
                 </tr>"
+    display += "</table>"
     say = "Find below How to use the Youtube feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -272,9 +291,11 @@ def man_amazon():
             "amazon sort rating for <b>speakers</b> at <b>4.5</b>"
             ]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Amazon feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -292,9 +313,11 @@ def man_dictionary():
             "dictionary translate <em><b>sentence</b></em> to <em><b>language</b></em>"
             ]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']').replace('<em>', '').replace('</em>', '')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                         </tr>"
+    display += "</table>"
     say = "Find below How to use the Dictionary feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -314,9 +337,11 @@ def man_iot():
             "iot memory for <b>ip_address</b>",
             "iot humidity for <b>ip_address</b>"]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the I.o.T feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -334,9 +359,11 @@ def man_word_cloud():
             "word cloud twitter user <em><b>word</b></em>"
             ]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']').replace('<em>', '').replace('</em>', '')
         display += f"<tr>\
-                        <td>{i}</td>\
-                    </tr>"
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                     </tr>"
+    display += "</table>"
     say = "Find below How to use the Word Cloud feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -354,9 +381,11 @@ def man_job_search():
             "job search average salary graph for <b>job</b>"
             ]
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                            <td>{i}</td>\
+                            <td onclick='man_complete("+f'"{j}"'+f")'>{i}</td>\
                         </tr>"
+    display += "</table>"
     say = "Find below How to use the Job search feature"
     reply = {'display': display, 'say': say}
     return reply
