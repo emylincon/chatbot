@@ -149,7 +149,7 @@ def rihanna(message):
             return rihanna_man.selector(message)
         elif message[:len('amazon')] == 'amazon':
             return rihanna_amazon.selector(format_string(message).lower().strip())
-        elif message[:len('youtube')] == 'youtube':
+        elif message.lower()[:len('youtube')] == 'youtube':
             return rihanna_youtube.search_youtube(message[len("youtube")+1:].strip())
         elif message[:len('dictionary')] == 'dictionary':
             return rihanna_dict.selector(message)
