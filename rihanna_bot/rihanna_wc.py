@@ -60,7 +60,7 @@ def get_wiki(query):
 def create_wordcloud(text):
     # create numpy araay for wordcloud mask image
     #img_list = ['cloud', 'pic', 'heart', 'house', 'dv']
-    img_list = ['cloud', 'pic', 'house']
+    img_list = ['cloud', 'house', 'heart']
     an = r.randrange(len(img_list))
     img = img_list[an]
     mask = np.array(Image.open(path.join(currdir, f"{img}.png")))
