@@ -85,7 +85,7 @@ def play_song(song):
 
 
 def format_string(string):
-    d = "!?\|:;@'"
+    d = "!?\|:;@'][<>"
 
     for c in d:
         if c in string:
@@ -135,26 +135,28 @@ def rihanna(message):
 
         # Formatting message input
     if email['run'] == 0:
-        if message[:3] == 'tfl':
+        if message.lower()[:3] == 'tfl':
             message = format_string(message).lower().strip()
-        elif message[:12] == 'show picture':
+        elif message.lower()[:12] == 'show picture':
             return rihanna_skype.show_picture(message[13:].strip())
         elif message[:len('birthday for')] == 'birthday for':
             return rihanna_skype.birthday(message[len('birthday for') + 1:].strip())
-        elif message[:5] == 'skype':
-            return rihanna_skype._skype(message[6:])
-        elif message[:len('iot')] == 'iot':
-            return rihanna_iot.selector(message)
-        elif message[:len('man')] == 'man':
-            return rihanna_man.selector(message)
-        elif message[:len('amazon')] == 'amazon':
+        elif message.lower()[:5] == 'skype':
+            return rihanna_skype._skype(format_string(message[6:]).lower().strip())
+        elif message.lower()[:len('iot')] == 'iot':
+            return rihanna_iot.selector(format_string(message).lower().strip())
+        elif message.lower()[:len('man')] == 'man':
+            return rihanna_man.selector(format_string(message).lower().strip())
+        elif message.lower()[:len('amazon')] == 'amazon':
             return rihanna_amazon.selector(format_string(message).lower().strip())
         elif message.lower()[:len('youtube')] == 'youtube':
-            return rihanna_youtube.search_youtube(message[len("youtube")+1:].strip())
-        elif message[:len('dictionary')] == 'dictionary':
-            return rihanna_dict.selector(message)
-        elif message[:len('job search')] == 'job search':
-            return rihanna_job.selector(message)
+            message_ = message[len("youtube")+1:]
+            msg = format_string(message_).lower().strip()
+            return rihanna_youtube.search_youtube(msg)
+        elif message.lower()[:len('dictionary')] == 'dictionary':
+            return rihanna_dict.selector(format_string(message).lower().strip())
+        elif message.lower()[:len('job search')] == 'job search':
+            return rihanna_job.selector(format_string(message).lower().strip())
         else:
             message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
