@@ -89,3 +89,6 @@ var ws = new WebSocket("ws://localhost:8000");
         }
 
     }
+    function man_complete(word){
+        document.getElementById("chat_input").value = word;
+    }
