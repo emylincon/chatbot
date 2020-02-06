@@ -150,9 +150,8 @@ def rihanna(message):
         elif message.lower()[:len('amazon')] == 'amazon':
             return rihanna_amazon.selector(format_string(message).lower().strip())
         elif message.lower()[:len('youtube')] == 'youtube':
-            message_ = message[len("youtube")+1:]
-            msg = format_string(message_).lower().strip()
-            return rihanna_youtube.search_youtube(msg)
+            msg = format_string(message).lower().strip()
+            return rihanna_youtube.selector(msg)
         elif message.lower()[:len('dictionary')] == 'dictionary':
             return rihanna_dict.selector(format_string(message).lower().strip())
         elif message.lower()[:len('job search')] == 'job search':
