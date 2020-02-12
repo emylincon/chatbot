@@ -268,14 +268,19 @@ def man_youtube():
     display = "<table id='t01'>\
                         <tr>\
                             <th>Youtube Usage</th>\
+                            <th>Description</th>\
                         </tr>\
                                 "
-    display += f"<tr>\
-                    <td onclick='man_complete("+'"play [video_name]"'+")'>play <em>video_name></em></td>\
-                </tr>"
-    display += f"<tr>\
-                        <td onclick='man_complete(" + '"Youtube [video_name]"' + ")'>Youtube <em>video_name></em></td>\
-                    </tr>"
+    func = {"play <b>video_name</b>": "opens a new window to play video",
+            "Youtube <b>video_name</b>": "plays embedded video within chat log",
+            "Youtube loop <b>video_name</b>": "plays embedded video within chat log in a loop",
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                         <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                     </tr>"
     display += "</table>"
     say = "Find below How to use the Youtube feature"
     reply = {'display': display, 'say': say}
