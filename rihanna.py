@@ -7,7 +7,7 @@ from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, \
-    rihanna_man, rihanna_job, rihanna_youtube, rihanna_google_image
+    rihanna_man, rihanna_job, rihanna_youtube, rihanna_google_image, rihanna_windows
 import config
 import random as r
 
@@ -182,6 +182,9 @@ def rihanna(message):
     elif message[:len('google image')] == 'google image':
         return rihanna_google_image.selector(message)
 
+    elif message[:len('windows')] == 'windows':
+        return rihanna_windows.selector(message)
+
     elif ("twitter" in message) or ("tweet" in message):
         return rihanna_tweet.twitter(message)
 
@@ -286,6 +289,10 @@ def rihanna(message):
     elif len([i for i in calc.opp_code if i in message]) > 0:
         reply = calc.calculate(message)
         return reply
+
+    elif message == 'lock screen':
+        import ctypes
+        ctypes.windll.user32.LockWorkStation()
 
     elif message != 'Bye':
         reply = bot.get_response(message)
