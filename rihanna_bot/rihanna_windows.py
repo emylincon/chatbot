@@ -1,10 +1,13 @@
 import os
+import ctypes
 
 
 def selector(message):
     if message == 'windows sort download folder':
         sort_downloads()
         return {'display': 'download files have been sorted', 'say': 'download files have been sorted'}
+    elif message == 'windows lock screen':
+        ctypes.windll.user32.LockWorkStation()
     else:
         return 'windows is currently offline'
 
