@@ -16,7 +16,7 @@ def man_help():
     for feature in man_dict:
         reply += f"<tr>\
                         <td><font color='blue'>{feature.replace('man ', '').capitalize()}</font></td>\
-                        <td onclick='man_complete("+f'"{feature}"'+f")'>{feature}</td>\
+                        <td onclick='man_complete(" + f'"{feature}"' + f")'>{feature}</td>\
                     </tr>"
     reply += "</table>"
     reply_ = {'display': reply, 'say': 'Please find below the features and manual pages'}
@@ -32,7 +32,7 @@ def man_maths():
     m = ['+', '*', '-', '/']
     for i in m:
         display += f"<tr>\
-                        <td onclick='man_complete("+f'"calculate 5 {i} 2"'+f")'>calculate 5 {i} 2</td>\
+                        <td onclick='man_complete(" + f'"calculate 5 {i} 2"' + f")'>calculate 5 {i} 2</td>\
                     </tr>"
     display += "</table>"
     say = "Find below How to use the Maths feature"
@@ -95,7 +95,7 @@ def man_news():
                     </tr>\
                             "
     display += f"<tr>\
-                      <td onclick='man_complete("+'"BBC news"'+")'>BBC News</td>\
+                      <td onclick='man_complete(" + '"BBC news"' + ")'>BBC News</td>\
                 </tr>"
     display += "</table>"
     say = "Find below How to use the News feature"
@@ -110,7 +110,7 @@ def man_email():
                     </tr>\
                             "
     display += f"<tr>\
-                      <td onclick='man_complete("+'"send email"'+")'>send email</td>\
+                      <td onclick='man_complete(" + '"send email"' + ")'>send email</td>\
                 </tr>"
     display += "</table>"
     say = "Find below How to use the Email feature"
@@ -125,7 +125,7 @@ def man_google():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td onclick='man_complete("+'"google [query]"'+")'>google <b>what_to_google</b></td>\
+                    <td onclick='man_complete(" + '"google [query]"' + ")'>google <b>what_to_google</b></td>\
                 </tr>"
     display += "</table>"
     say = "Find below How to use the google feature"
@@ -161,7 +161,7 @@ def man_wiki():
                         </tr>\
                                 "
     display += f"<tr>\
-                    <td onclick='man_complete("+'"what is [query]"'+")'>what is <b>what_to_look_up></b></td>\
+                    <td onclick='man_complete(" + '"what is [query]"' + ")'>what is <b>what_to_look_up></b></td>\
                 </tr>"
     display += "</table>"
     say = "Find below How to use the Wikipedia feature"
@@ -391,7 +391,7 @@ def man_job_search():
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                            <td onclick='man_complete("+f'"{j}"'+f")'>{i}</td>\
+                            <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
                         </tr>"
     display += "</table>"
     say = "Find below How to use the Job search feature"
@@ -413,7 +413,7 @@ def man_google_image():
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                            <td onclick='man_complete("+f'"{j}"'+f")'>{i}</td>\
+                            <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
                             <td onclick='man_complete(" + f'"{j}"' + f")'>{des[func.index(i)]}</td>\
                         </tr>"
     display += "</table>"
@@ -435,7 +435,7 @@ def man_windows():
     des = ["Lock your windows screen", "sort the files in the download folder by file type"]
     for i in func:
         display += f"<tr>\
-                            <td onclick='man_complete("+f'"{i}"'+f")'>{i}</td>\
+                            <td onclick='man_complete(" + f'"{i}"' + f")'>{i}</td>\
                             <td onclick='man_complete(" + f'"{i}"' + f")'>{des[func.index(i)]}</td>\
                         </tr>"
     display += "</table>"
@@ -451,15 +451,25 @@ def man_docker():
                                 <th>Description</th>\
                             </tr>\
                             "
-    func = ["docker container list",
-            "docker image list",
-            ]
-    des = ["list all containers", "list all images"]
+
+    func = {'docker image list': 'list images',
+            'docker container list': 'list all containers',
+            'docker container network': 'list container network setting',
+            'docker container utilization': 'list container utilization',
+            'docker run <b>image</b>': 'runs given image as container',
+            'docker multi run <no of containers> <b>image</b>': 'runs multiple containers from a given image',
+            'docker start <b>container</b>': 'starts given container',
+            'docker stop <b>container</b>': 'stops given container',
+            'docker pull <b>image</b>': 'adds image to repository',
+            'docker image delete <b>image</b>': 'delete given image',
+            'docker container delete <b>container</b>': 'delete given container',
+            }
     for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
-                            <td onclick='man_complete("+f'"{i}"'+f")'>{i}</td>\
-                            <td onclick='man_complete(" + f'"{i}"' + f")'>{des[func.index(i)]}</td>\
-                        </tr>"
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
     display += "</table>"
     say = "Find below How to use the Rihanna docker functionality"
     reply = {'display': display, 'say': say}
@@ -473,4 +483,3 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man windows': man_windows,
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man google image': man_google_image,
             'man docker': man_docker}
-
