@@ -1,5 +1,7 @@
 import os
 import ctypes
+import hashlib
+import datetime
 
 
 def selector(message):
@@ -54,3 +56,47 @@ def sort_downloads():
             else:
                 os.rename(rf'{path}\{file}', rf'{path}\FILES\{file}')
 
+
+def get_hash(file):
+    ha = hashlib.md5(file)
+    hash_no = ha.hexdigest()
+    return hash_no
+
+
+def ft(time_):
+    return datetime.datetime.fromtimestamp(time_)
+
+
+def format_print(dup_dict):
+    header = 'file' + ' ' * (36 - len('file')) + '| Duplicates'
+    print('-' * (len(header) + 35))
+    print(header)
+    print('-' * (len(header) + 35))
+    for i in dup_dict:
+        print(f'{i}' + ' ' * (36 - len(i)) + f'| {", ".join(dup_dict[i])}')
+        print('-' * (len(header) + 35))
+
+
+def check_duplicates():
+    path = r'C:\Users\emyli\Downloads'
+    files = {}
+    dup_dict = {}
+    os.chdir(path)
+    for i in os.listdir('.')[::-1]:
+        if os.path.isfile(i):
+            file = open(i, "rb")
+            hash_ = get_hash(file.read())
+            if hash_ in files:
+                if files[hash_] in dup_dict:
+                    dup_dict[files[hash_]].append(i)
+                else:
+                    dup_dict[files[hash_]] = [i]
+                #print(f"'{i}' is duplicated in this directory. Same content with '{files[hash_]}'")
+                # created time | modified time
+                #print(f"{ft(os.path.getctime(i))}|{ft(os.path.getmtime(i))} vs {ft(os.path.getctime(files[hash_]))}|{ft(os.path.getmtime(files[hash_]))}")
+            else:
+                files[hash_] = i
+    format_print(dup_dict)
+
+
+#check_duplicates()
