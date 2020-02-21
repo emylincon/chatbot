@@ -476,10 +476,35 @@ def man_docker():
     return reply
 
 
+def man_nhs():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>NHS Usage</th>\
+                            </tr>\
+                            "
+    func = ['nhs review on <b>condition</b>',
+            'nhs prevention for <b>condition</b>',
+            'nhs overview for <b>condition</b>',
+            'nhs symptoms for <b>condition</b>',
+            'nhs treatments overview for <b>condition</b>',
+            'nhs self care advice for <b>condition</b>',
+            'nhs other treatments for <b>condition</b>',
+            'nhs causes for <b>condition</b>']
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                            <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                        </tr>"
+    display += "</table>"
+    say = "Find below How to use the NHS feature"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
             'man youtube': man_youtube, 'man google': man_google, 'man wikipedia': man_wiki, 'man wiki': man_wiki,
             'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man windows': man_windows,
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man google image': man_google_image,
-            'man docker': man_docker}
+            'man docker': man_docker, 'man nhs': man_nhs}
