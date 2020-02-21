@@ -32,6 +32,9 @@ def selector(message):
         return HealthData(search=msg, branch="conditions", name="causes").content_attrs()
     elif message[:] == 'nhs health news':
         return HealthData(branch="conditions").display_news_all()
+    elif message[:len('nhs medicine information on')] == 'nhs medicine information on':
+        msg = message[len('nhs medicine information on') + 1:].strip()
+        return HealthData(search=msg, branch='medicines').nhs_medicine()
     else:
         return "NHS server cannot process that request at the moment"
 
@@ -104,10 +107,10 @@ class HealthData:
             return f"cannot find result for {self.search}"
 
     def display_news_all(self):
-        pageURL = f"{self.baseUrl}/?startDate=2020-01-09"
+        pageURL = f"{self.baseUrl}/?page=65"  # /?endDate=2020-01-09"
         request = urllib.request.Request(pageURL, headers=self.request_headers)
         contents = json.loads(urllib.request.urlopen(request).read())
-        data = contents['significantLink'][:5]
+        data = contents['significantLink'][:]
         display = ''
         for element_dict in data:
             display += f"<h3><font color='blue'>{element_dict['name']}</font></h3>"
@@ -118,8 +121,44 @@ class HealthData:
 
         reply = {'display': display,
                  'say': 'Find the displayed recent Health News. This information is brought to you by NHS'}
-        #print(reply)
+        # print(reply)
+        return reply
+
+    def nhs_medicine(self):
+        pageURL = f"{self.baseUrl}/{self.search}"
+        request = urllib.request.Request(pageURL, headers=self.request_headers)
+        contents = json.loads(urllib.request.urlopen(request).read())
+        heading9 = [f"About {self.search}", f"Key facts on {self.search}",
+                    f"Who can and can't take {self.search}", f"How and when to take {self.search}",
+                    f"Side effects of {self.search}", f"How to cope with side effects of {self.search}",
+                    f"Pregnancy and breastfeeding",
+                    f"Cautions with other medicines", f"Common questions"]
+        heading10 = [f"About {self.search}", f"Key facts on {self.search}",
+                     f"Who can and can't take {self.search}", f"How and when to take {self.search}",
+                     f"Taking {self.search} with other painkillers",
+                     f"Side effects of {self.search}", f"How to cope with side effects of {self.search}",
+                     f"Pregnancy and breastfeeding",
+                     f"Cautions with other medicines", f"Common questions"]
+        display = f"<h2><font color='blue'> NHS MEDICINE PAGE FOR {self.search.upper()}</font></h2>"
+        if len(contents['mainEntityOfPage']) > 9:
+            for data_dict in contents['mainEntityOfPage']:
+                ind = data_dict['position']
+                if ind <= 9:
+                    display += f"<h4>{heading10[ind]}</h4>"
+                    display += f"{data_dict['mainEntityOfPage'][0]['text']}"
+                else:
+                    break
+        else:
+            for data_dict in contents['mainEntityOfPage']:
+                ind = data_dict['position']
+                display += f"<h4>{heading9[ind]}</h4>"
+                display += f"{data_dict['mainEntityOfPage'][0]['text']}"
+
+        reply = {'display': display.replace(';', ''),
+                 'say': f'Find the displayed information on {self.search}. This information is brought to you by NHS'}
+        # print(reply)
         return reply
 
 
-#print(HealthData(branch='news', search='', ).display_news_all())
+# print(HealthData(branch='news', search='', ).display_news_all())
+#print(HealthData(branch='medicines', search='codeine', ).nhs_medicine())
