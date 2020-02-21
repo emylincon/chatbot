@@ -489,7 +489,8 @@ def man_nhs():
             'nhs treatments overview for <b>condition</b>',
             'nhs self care advice for <b>condition</b>',
             'nhs other treatments for <b>condition</b>',
-            'nhs causes for <b>condition</b>']
+            'nhs causes for <b>condition</b>',
+            'nhs health news']
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
