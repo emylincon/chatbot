@@ -1,4 +1,4 @@
-# This script is using Python3
+# This script is using Python3  website = https://developer.api.nhs.uk/docs
 import urllib.request
 import urllib.parse
 import config
@@ -35,6 +35,9 @@ def selector(message):
     elif message[:len('nhs medicine information on')] == 'nhs medicine information on':
         msg = message[len('nhs medicine information on') + 1:].strip()
         return HealthData(search=msg, branch='medicines').nhs_medicine()
+    elif message[:len('nhs search')] == 'nhs search':
+        msg = message[len('nhs search') + 1:].strip()
+        return HealthData(search=msg, branch="search").nhs_search()
     else:
         return "NHS server cannot process that request at the moment"
 
@@ -159,6 +162,24 @@ class HealthData:
         # print(reply)
         return reply
 
+    def nhs_search(self):
+        pageURL = f"{self.baseUrl}/?query={self.search}"
+        request = urllib.request.Request(pageURL, headers=self.request_headers)
+        contents = json.loads(urllib.request.urlopen(request).read())
+        #print(contents)
+        title = f"NHS Search Results For {self.search.capitalize()}"
+        display = f"<h2><font color='blue'>{title}</font></h2>"
+        for result in contents['results']:
+            if (result['id'] != '1') and (self.search in f"{result['title']} {result['summary']}"):
+                display += f"<h4><a href={result['url']} target='_blank'>{result['title']}</a></h4>"
+                display += f"{result['summary'].replace(';', '')}"
+                #print(result['id'])
+        reply = {'display': display, 'say': title}
+        return reply
+
+
+
 
 # print(HealthData(branch='news', search='', ).display_news_all())
 #print(HealthData(branch='medicines', search='codeine', ).nhs_medicine())
+#HealthData(branch='search', search='flu').nhs_search()
