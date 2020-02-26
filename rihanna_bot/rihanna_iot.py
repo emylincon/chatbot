@@ -5,7 +5,7 @@ import os
 import time
 
 
-ip = '192.168.43.136'
+ip = '10.1.2.117'
 
 
 def selector(msg):
@@ -77,12 +77,14 @@ def client(host):
             fname = "send image"
             s.sendall(fname.encode())
             data = s.recv(1024)
-            l = data.decode()
-            data_ = str.encode('')
-            while len(data_) < int(l):
-                data_ += s.recv(1024)
-            file_name = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\new.png'
-            fin2(barr=data_, dfile=file_name)
+            data_length = data.decode()
+            if len(data_length) > 0:
+                data_ = str.encode('')
+                while len(data_) < int(data_length):
+                    data_ += s.recv(1024)
+                file_name = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\new.png'
+                fin2(barr=data_, dfile=file_name)
+
             #print('File received')
             s.sendall('exit'.encode())
             s.close()
