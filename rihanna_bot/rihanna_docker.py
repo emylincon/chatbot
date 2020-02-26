@@ -4,6 +4,13 @@ import json
 import ast
 import docker
 
+# docker setup https://www.youtube.com/watch?v=a5td09OWFXA
+# sudo nano /lib/systemd/system/docker.service
+# find ExecStart and add the following on the same line
+# -H=tcp://0.0.0.0:5555
+# sudo systemctl daemon-reload
+# sudo service docker restart
+
 
 def selector(message):
     if message in docker_dict:
@@ -264,3 +271,4 @@ def docker_pull(image):
 docker_dict = {'docker image list': docker_image, 'docker container list': docker_container_list,
                'docker container network': container_network, 'docker container utilization': container_utils,
                'docker prune': prune_containers}
+
