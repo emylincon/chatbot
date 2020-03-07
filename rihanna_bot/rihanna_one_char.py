@@ -1,14 +1,17 @@
 
 
 def _number(x):
-    return x + 1
+    reply = x + 1
+    return {'display': reply, 'say': reply}
 
 
 def _char(ch):
     if ch == 'z':
-        return 'z'
+        reply = 'z'
+        return {'display': reply, 'say': reply}
     else:
-        return chr(ord(ch)+1)
+        reply = chr(ord(ch)+1)
+        return {'display': reply, 'say': reply}
 
 
 def main(msg):
