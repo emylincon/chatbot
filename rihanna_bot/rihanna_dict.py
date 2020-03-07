@@ -78,7 +78,8 @@ def find_meaning(query):
 
         return reply_
     except Exception as e:
-        return f"Error in find_meaning: {e}"
+        reply = f"Error in find_meaning: {e}"
+        return {'display': reply, 'say': reply}
 
 
 def find_definition(query):
@@ -126,7 +127,8 @@ def find_definition(query):
 
         return reply_
     except Exception as e:
-        return f"Error in find_definition: {e}"
+        reply = f"Error in find_definition: {e}"
+        return {'display': reply, 'say': reply}
 
 
 def defin(query):
@@ -254,7 +256,8 @@ def translate_sentence(query, lang):
         #pronunciation = obj.pronunciation
         reply = {'display': response, 'say': pronunciation}
     except Exception as e:
-        return f"Error in translate_sentence: {e} \n request: {query} \n l: {lang}"
+        reply = f"Error in translate_sentence: {e} \n request: {query} \n l: {lang}"
+        return {'display': reply, 'say': reply}
     return reply
 
 def aball(query,lang):
