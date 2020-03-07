@@ -54,7 +54,8 @@ class RSkype:
                 con.lang_code = 'en'
             return reply
         else:
-            return f"Sorry I do not know {self.name}"
+            reply = f"Sorry I do not know {self.name}"
+            return {'display': reply, 'say': reply}
 
     def birthday(self):
         try:
@@ -63,31 +64,39 @@ class RSkype:
                 _birth = self.contacts[p_id].birthday
                 now = dt.date.today().year
 
-                return f"{self.name} was born on {str(_birth)}, so {now - _birth.year} years old"
+                reply = f"{self.name} was born on {str(_birth)}, so {now - _birth.year} years old"
+                return {'display': reply, 'say': reply}
             else:
-                return f"Sorry I do not know {self.name}"
+                reply = f"Sorry I do not know {self.name}"
+                return {'display': reply, 'say': reply}
         except AttributeError:
-            return "Sorry I do not know"
+            reply = "Sorry I do not know"
+            return {'display': reply, 'say': reply}
 
     def send_message(self):
         if self.name.lower() in con.friends:
             chat = self.contacts[con.friends[self.name.lower()]].chat
             self.sk.chats[chat.id].sendMsg(self.message)
-            return f"Message sent to {self.name}"
+            reply = f"Message sent to {self.name}"
+            return {'display': reply, 'say': reply}
         else:
             try:
                 self.group_chat()
-                return f"Message sent to {self.name}"
+                reply = f"Message sent to {self.name}"
+                return {'display': reply, 'say': reply}
             except KeyError:
-                return f"{self.name} is not in your friend list"
+                reply = f"{self.name} is not in your friend list"
+                return {'display': reply, 'say': reply}
 
     def get_last_message(self):
         if self.name.lower() in con.friends:
             chat = self.contacts[con.friends[self.name.lower()]].chat
             mg = self.sk.chats[chat.id].getMsgs()[0].content
-            return f"{mg}"
+            reply = f"Last Sent Message: {mg}"
+            return {'display': reply, 'say': reply}
         else:
-            return f"{self.name} is not in your friend list"
+            reply = f"{self.name} is not in your friend list"
+            return {'display': reply, 'say': reply}
 
     def group_chat(self):
         ski = self.sk.chats.create(members=(self.sk.userId, self.name), admins=(self.sk.userId,))
