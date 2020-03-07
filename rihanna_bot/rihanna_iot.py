@@ -21,7 +21,8 @@ def selector(msg):
             send_client(host_ip, 'light off')
         else:
             send_client(ip, 'light off')
-        return "light switched off"
+        reply = "light switched off"
+        return {'display': reply, 'say': reply}
     elif msg[:len("iot light on for")] == "iot light on for":
         host_ip = msg[len("iot light on for")+1:].strip()
         if host_ip[0].isdigit():
@@ -29,37 +30,43 @@ def selector(msg):
         else:
             send_client(ip, 'light on')
         #send_client(host_ip, 'light on')
-        return "light switched on"
+        reply = "light switched on"
+        return {'display': reply, 'say': reply}
     elif msg[:len("iot temperature for")] == "iot temperature for":
         host_ip = msg[len("iot temperature for") + 1:].strip()
         if host_ip[0].isdigit():
             data = send_recv_client(host_ip, "last temp")
         else:
             data = send_recv_client(ip, "last temp")
-        return "last recorded temperature is "+ data+ ' Celsius' if data[0].isdigit() else data
+        reply = "last recorded temperature is "+ data+ ' Celsius' if data[0].isdigit() else data
+        return {'display': reply, 'say': reply}
     elif msg[:len("iot cpu for")] == "iot cpu for":
         host_ip = msg[len("iot cpu for") + 1:].strip()
         if host_ip[0].isdigit():
             data = send_recv_client(host_ip, "cpu util")
         else:
             data = send_recv_client(ip, "cpu util")
-        return "last cpu utilization is ", data if data[0].isdigit() else data
+        reply = "last cpu utilization is ", data if data[0].isdigit() else data
+        return {'display': reply, 'say': reply}
     elif msg[:len("iot memory for")] == "iot memory for":
         host_ip = msg[len("iot memory for") + 1:].strip()
         if host_ip[0].isdigit():
             data = send_recv_client(host_ip, "mem util")
         else:
             data = send_recv_client(ip, "mem util")
-        return "last memory utilization is ", data if data[0].isdigit() else data
+        reply = "last memory utilization is ", data if data[0].isdigit() else data
+        return {'display': reply, 'say': reply}
     elif msg[:len("iot humidity for")] == "iot humidity for":
         host_ip = msg[len("iot humidity for") + 1:].strip()
         if host_ip[0].isdigit():
             data = send_recv_client(host_ip, "last hum")
         else:
             data = send_recv_client(ip, "last hum")
-        return "Humidity Level is at "+ data+" Percent" if data[0].isdigit() else data
+        reply = "Humidity Level is at "+ data+" Percent" if data[0].isdigit() else data
+        return {'display': reply, 'say': reply}
     else:
-        return "Rihanna is busy at the moment"
+        reply = "Rihanna is busy at the moment"
+        return {'display': reply, 'say': reply}
 
 
 def fin2(barr, dfile):  #this returns a image
@@ -124,7 +131,8 @@ def send_recv_client(host, msg):
             return reply
     except Exception as e:
         print('Error from send_client: ', e)
-        return "server not responding"
+        reply = "server not responding"
+        return {'display': reply, 'say': reply}
 
 
 def iot_graph(query):
