@@ -23,6 +23,7 @@ def multiply(a, b):
 def power(a, b):
     return a ** b
 
+
 def squareroot(a):
     return math.sqrt(a)
 
@@ -57,16 +58,18 @@ def format_maths_string(string):
 
 
 def calculate(string):
-    response = ["No, you calculate that!",
-                "I'm sorry, I am not in the mood for maths",
-                "sorry, I forgot my brain at home today",
-                "I'm sorry, I have forgotten how to solve that. :(",
-                "This looks like a trick question",
-                "You are trying to embarrass me with simple arithmetic",
-                "Calm down.  I am not google",
-                "Hey! Do you think I am some Maths Genius or something?",
-                'Why dont you google that. |<a href="http://www.google.com" target="_blank">Google</a>'
-                ]
+    resp = ["No, you calculate that!",
+            "I'm sorry, I am not in the mood for maths",
+            "sorry, I forgot my brain at home today",
+            "I'm sorry, I have forgotten how to solve that. :(",
+            "This looks like a trick question",
+            "You are trying to embarrass me with simple arithmetic",
+            "Calm down.  I am not google",
+            "Hey! Do you think I am some Maths Genius or something?"
+            ]
+    response = [{'display': i, 'say': i} for i in resp]
+    response += [{'display': 'Why dont you google that. <a href="http://www.google.com" target="_blank">Google</a>',
+                  'say': 'Why dont you google that.'}]
     try:
         data = format_maths_string(string)
         _ops = data[1]
@@ -75,17 +78,18 @@ def calculate(string):
         maths = {'*': multiply, '+': add, '-': subtract, '/': divide, '^': power, '!': factoria}
         k = 1
         if len(nums) == 1:
-            return string + ' = ' + str(maths['!'](data[0][0]))
+            reply = string + ' = ' + str(maths['!'](data[0][0]))
+            return {'display': reply, 'say': reply}
         else:
             for i in _ops:
                 result = maths[i](result, nums[k])
                 k += 1
-
-            return string + ' = ' + str(result)
+            reply = string + ' = ' + str(result)
+            return {'display': reply, 'say': reply.replace('*', 'times').replace('/', 'divide')}
     except Exception as e:
         return response[r.randrange(len(response))]
 
-#print(calculate("10 + 10 * 50"))
+# print(calculate("10 + 10 * 50"))
 
 # http://products.wolframalpha.com/docs/WolframAlpha-API-Reference.pdf
 # http://developer.wolframalpha.com/portal/myapps/index.html
