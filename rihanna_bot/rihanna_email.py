@@ -38,6 +38,8 @@ def send_email(subject, msg, _send_email):
         _message = 'Subject: {}\n\n{}\n\n SENT BY RIHANNA \n\n'.format(subject, msg)
         server.sendmail(config.email_address, _send_email, _message)
         server.quit()
-        return f"Email sent to {_send_email}"
+        reply = f"Email sent to {_send_email}"
+        return {'display': reply, 'say': reply}
     except Exception as e:
-        return f"Could not send email \n {e}"
+        reply = f"Could not send email \n {e}"
+        return {'display': reply, 'say': reply}
