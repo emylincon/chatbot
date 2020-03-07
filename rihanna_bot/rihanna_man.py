@@ -350,7 +350,7 @@ def man_iot():
                          <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
                      </tr>"
     display += "</table>"
-    say = "Find below How to use the I.o.T feature"
+    say = "Find below How to use the Internet of Things feature"
     reply = {'display': display, 'say': say}
     return reply
 
