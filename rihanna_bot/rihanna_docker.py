@@ -38,7 +38,8 @@ def selector(message):
         return delete_container(image)
 
     else:
-        return "docker is offline"
+        reply = "docker is offline"
+        return {'display': reply, 'say': reply}
 
 
 def format_data(msg):
