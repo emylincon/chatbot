@@ -45,7 +45,8 @@ def selector(msg):
         query = msg[len('word cloud twitter user')+1:]
         return word_cloud_twitter(query, user=1)
     else:
-        return "Rihanna is not in the mood for Word cloud at the moment"
+        reply = "Rihanna is not in the mood for Word cloud at the moment"
+        return {'display': reply, 'say': reply}
 
 
 def get_wiki(query):
