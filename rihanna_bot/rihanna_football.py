@@ -52,15 +52,15 @@ def which_league(_key):
               </tr>\
             "
     for i in football_dict:
-        reply += f"<tr>\
+        reply += f"<tr onclick='man_complete(" + f'"{i}"' + f")'>\
                     <td>{i}</td>\
                     <td>{football_dict[i][0]}</td>\
                     <td>{football_dict[i][1]}</td>\
                   </tr>"
-    reply += "</table>~<br> Please Enter a Key"
+    reply += "</table><br> Please Enter a Key"
     football_key['status'] = 1
     football_key['key'] = _key
-    return reply
+    return {'display': reply, 'say': 'Please Enter a Key'}
 
 
 def match_today():
@@ -87,11 +87,13 @@ def match_today_(msg):
     try:
         _id = football_dict[msg][0]
     except KeyError:
-        return "invalid key\n" + which_league(football_key['key'])
+        reply = which_league(football_key['key'])
+        reply['say'] = "invalid key"
+        return {'display': reply, 'say': reply}
 
     req = requests.get("https://api.football-data.org/v2/matches", headers=headers)
     data = req.json()
-    scores = ''
+    scores = f'<font color="blue">Scores for {_id} Football Matches Today</font><br>'
 
     for i in data['matches']:
         if i['competition']['name'] == _id:
@@ -99,18 +101,19 @@ def match_today_(msg):
             team2 = i['awayTeam']['name']
             s_team1 = i['score']['fullTime']['homeTeam']
             s_team2 = i['score']['fullTime']['awayTeam']
-            result = f"{team1} {s_team1} vs {s_team2} {team2}\n"
+            result = f"{team1} {s_team1} vs {s_team2} {team2}<br>"
             scores += result
     if scores != '':
         football_key['status'] = 0
         football_key['key'] = ''
-        # mt_key = 0
-        return scores
+        say = f"Find displayed the Scores for {_id} Football Matches Today"
+        return {'display': scores, 'say': say}
     else:
         # mt_key = 0
         football_key['status'] = 0
         football_key['key'] = ''
-        return f"There is no games today for {_id}"
+        reply = f"There is no games today for {_id}"
+        return {'display': reply, 'say': reply}
 
 
 def match_base(_league_code, match_day):
@@ -159,7 +162,7 @@ def match_schedules(msg):
         football_key['status'] = 0
         football_key['key'] = ''
         match_id = ''
-        scores += "</table>~"
+        scores += "</table>"
         reply = {'display': scores,
                  'say': f'Below is {data["competition"]["name"]} Match Schedules for Game {match_id}'}
         return reply
@@ -167,7 +170,8 @@ def match_schedules(msg):
         football_key['status'] = 0
         football_key['key'] = ''
         match_id = ''
-        return e
+        reply = e
+        return {'display': reply, 'say': reply}
 
 
 # primeier league start
@@ -179,7 +183,8 @@ def league_start(msg):
 
     football_key['status'] = 0
     football_key['key'] = ''
-    return data['matches'][0]['season']['startDate']
+    reply = f"The start date of {football_dict[msg][0]} season was {data['matches'][0]['season']['startDate']}"
+    return {'display': reply, 'say': reply}
 
 
 def season_status(msg):  # 'key_code = ss_key'
@@ -204,7 +209,7 @@ def season_status(msg):  # 'key_code = ss_key'
         return reply_
 
     except Exception as e:
-        return e
+        return {'display': e, 'say': e}
 
 
 def top_scorers_age_graph(l_code):
@@ -249,11 +254,12 @@ def top_scorers_age_graph(l_code):
         _name = data['competition']['name']
         picture = f'<img src="file{l_code}.png?{time.time()}" alt="{_name} Top Football scorers graph" width="65%" height="65%">'
         # time.sleep(1)
-        reply_ = {'display': picture, 'say': f"Find below a graph of {data['competition']['name']} Top Scorers and Their Age"}
+        reply_ = {'display': picture,
+                  'say': f"Find below a graph of {data['competition']['name']} Top Scorers and Their Age"}
         return reply_
 
     except Exception as e:
-        return e
+        return {'display': e, 'say': e}
 
 
 def top_scorers(l_code):
@@ -283,8 +289,9 @@ def top_scorers(l_code):
                             <td>{i['player']['dateOfBirth']}</td>\
                             <td>{i['numberOfGoals']}</td>\
                           </tr>"
-        reply += "</table>~"
-        reply_ = {'display': reply, 'say': f"Find below a table of the Top Goal Scorers in {data['competition']['name']}"}
+        reply += "</table>"
+        reply_ = {'display': reply,
+                  'say': f"Find below a table of the Top Goal Scorers in {data['competition']['name']}"}
         return reply_
     except Exception as e:
         req = requests.get(f"https://api.football-data.org/v2/competitions/{league_code[l_code]}/scorers?limit=5",
@@ -307,7 +314,10 @@ def football_switch(msg):
     try:
         code = int(msg)
     except ValueError:
-        return "invalid key\n" + which_league(football_key['key'])
+        reply = which_league(football_key['key'])
+        reply['say'] = "invalid key"
+        return {'display': reply, 'say': reply}
+
     fc = football_key['key']
     return function_call[fc](code)
 
