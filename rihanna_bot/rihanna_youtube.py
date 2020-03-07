@@ -13,7 +13,8 @@ def selector(message):
         message_ = message[len("youtube") + 1:]
         return search_youtube(message_)
     else:
-        return "Youtube is offline at the moment. refer to man youtube"
+        reply = "Youtube is offline at the moment. refer to man youtube"
+        return {'display': reply, 'say': reply}
 
 
 def search_youtube(query):
