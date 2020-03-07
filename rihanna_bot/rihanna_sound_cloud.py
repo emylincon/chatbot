@@ -8,7 +8,8 @@ def selector(message):
         message_ = message[len("sound cloud play") + 1:]
         return sound_cloud(message_)
     else:
-        return "Sound cloud is offline at the moment. Man sound cloud"
+        reply = "Sound cloud is offline at the moment. Man sound cloud"
+        return {'display': reply, 'say': reply}
 
 
 def sound_cloud(query):
