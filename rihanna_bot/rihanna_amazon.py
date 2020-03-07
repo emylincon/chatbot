@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import config
+import trans_
 
 url = "https://www.amazon.co.uk/s?k="
 out = 0
@@ -81,7 +82,13 @@ def product_min_price(query):
         if len(item_dict) == 0:
             item_dict, item_link = search_amazon(query.split()[0])
         if len(item_dict) == 0:
-            return "I am not in the mood to search for that query"
+            if config.lang_code == 'en':
+                reply = "I am not in the mood to search for that query"
+                return {'display': reply, 'say': reply}
+            else:
+                reply = trans_.translate_sentence_code("I am not in the mood to search for that query", config.lang_code)
+                config.lang_code = 'en'
+                return reply
         min_price = min(item_dict, key=item_dict.get)
         reply = "<table id='t01'>\
                       <tr>\
@@ -97,9 +104,11 @@ def product_min_price(query):
                             <td>£{item_dict[min_price]}</td>\
                             <td>{item_link[min_price][2]}</td>\
                           </tr>"
-        return reply
+        say = f'Find below the item with the least price for {query}'
+        return {'display': reply, 'say': say}
     except Exception as e:
-        return f'Error in product_min_price: {e}'
+        reply = f'Error in product_min_price: {e}'
+        return {'display': reply, 'say': reply}
 
 
 def product_max_price(query):
@@ -108,7 +117,8 @@ def product_max_price(query):
         if len(item_dict) == 0:
             item_dict, item_link = search_amazon(query.split()[0])
         if len(item_dict) == 0:
-            return "I am not in the mood to search for that query"
+            reply = "I am not in the mood to search for that query"
+            return {'display': reply, 'say': reply}
         max_price = max(item_dict, key=item_dict.get)
         reply = "<table id='t01'>\
                           <tr>\
@@ -124,9 +134,11 @@ def product_max_price(query):
                                 <td>£{item_dict[max_price]}</td>\
                                 <td>{item_link[max_price][2]}</td>\
                               </tr>"
-        return reply
+        say = f'Find below the item with the Maximum price for {query}'
+        return {'display': reply, 'say': say}
     except Exception as e:
-        return f'Error in product_max_price: {e}'
+        reply = f'Error in product_min_price: {e}'
+        return {'display': reply, 'say': reply}
 
 
 def search_amazon_sort(query):
@@ -162,7 +174,8 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
             if len(item_dict) == 0:
                 item_dict, item_link, item_rate = search_amazon_sort(query.split()[0])
             if len(item_dict) == 0:
-                return "I am not in the mood to search for that query, ehhhhh."
+                reply = f"I am not in the mood to search for that {query}"
+                return {'display': reply, 'say': reply}
 
             reply = "<table id='t01'>\
                       <tr>\
@@ -184,7 +197,8 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
             if len(item_dict) == 0:
                 item_dict, item_link, item_rate = search_amazon_sort(query.split()[0])
             if len(item_dict) == 0:
-                return "I am not in the mood to search for that query, ehhhhh."
+                reply = f"I am not in the mood to search for that {query}"
+                return {'display': reply, 'say': reply}
             sorted_price = {k: v for k, v in sorted(item_dict.items(), key=lambda item: item[1])}
             '''
             start = 0
@@ -271,11 +285,12 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                                 <td>£{item_dict[i]}</td>\
                                 <td>{item_rate[i]} / 5</td>\
                               </tr>"
-        reply += '~'
+        reply = {'display': reply, 'say': f'find displayed sorted results for {query}'}
         return reply
 
     except Exception as e:
-        return f'Error in amazon sort_product: {e}'
+        reply = f'Error in product_min_price: {e}'
+        return {'display': reply, 'say': reply}
 
 # print(BinarySearch([10,20,30,40,50], 20))
 # s = search_amazon("external hard drive 2tb")
