@@ -161,7 +161,8 @@ def min_salary(job, place):
                             f'link is provided'}
         return reply
     else:
-        return f"Rihanna could not find {job}"
+        reply = f"Rihanna could not find {job}"
+        return {'display': reply, 'say': reply}
 
 
 def max_salary(job, place):
@@ -203,7 +204,8 @@ def max_salary(job, place):
                             f'link is provided'}
         return reply
     else:
-        return f"Rihanna could not find {job}"
+        reply = f"Rihanna could not find {job}"
+        return {'display': reply, 'say': reply}
 
 
 def k_format(x):
