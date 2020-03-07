@@ -18,7 +18,8 @@ def fb(message):
         else:
             return "Please ask me another question"
     except Exception as e:
-        return f"Error in facebook"
+        reply = f"Error in facebook: {e}"
+        return {'display': reply, 'say': reply}
 
 
 def fb_likes():
@@ -26,7 +27,7 @@ def fb_likes():
     reply = 'Top 5 facebook pages you like'
     for i in data['likes']['data'][:5]:
         reply += f"\n{i['name']}"
-    return reply
+    return {'display': reply, 'say': reply}
 
 
 def fb_feed():
@@ -39,12 +40,13 @@ def fb_feed():
             n += 1
             if n == 5:
                 break
-    return reply
+    return {'display': reply, 'say': reply}
 
 
 def friends_num():
     fr = graph.get_object('me', fields=['friends'])
-    return fr['friends']['summary']['total_count']
+    reply = fr['friends']['summary']['total_count']
+    return {'display': reply, 'say': reply}
 
 # https://facebook-sdk.readthedocs.io/en/latest/api.html
 # https://developers.facebook.com/tools/explorer/
