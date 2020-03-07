@@ -138,7 +138,7 @@ def twitter_trend():
         location = ast.literal_eval(str(_location))
         reply += (str(location["name"]) + '<br>')
 
-    return {'display': reply, 'say': "Top UK Trends in Twitter"}
+    return {'display': reply, 'say': "find displayed the Top UK Trends in Twitter"}
 
 
 def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
@@ -207,13 +207,13 @@ def twitter_global_trends():
             try:
                 volume = _trend['tweet_volume']
             except KeyError:
-                volume = "_ number of"
+                volume = 20000
             url = _trend['url']
 
             reply += f'{name} ({volume} Tweets) <a href={url} target="_blank">view</a> <br>'
             say += f'{name} ({volume} Tweets). \n'
 
-        return {'display': reply, 'say': say}
+        return {'display': reply, 'say': say.replace('#', 'hash tag ')}
     except Exception as e:
         reply = 'Twitter is currently withholding this information ' \
                '<a href="https://trends24.in/" target="_blank">view</a>'
