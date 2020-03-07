@@ -39,7 +39,8 @@ def selector(message):
         msg = message[len('nhs search') + 1:].strip()
         return HealthData(search=msg, branch="search").nhs_search()
     else:
-        return "NHS server cannot process that request at the moment"
+        reply = "NHS server cannot process that request at the moment"
+        return {'display': reply, 'say': reply}
 
 
 class HealthData:
@@ -74,7 +75,8 @@ class HealthData:
             return reply_
 
         except Exception:
-            return f"cannot find result for {self.search}"
+            reply = f"cannot find result for {self.search}"
+            return {'display': reply, 'say': reply}
 
     def _get_parts(self, name):
         try:
@@ -107,7 +109,8 @@ class HealthData:
                              f'this information is provided by NHS'}
             return reply_
         else:
-            return f"cannot find result for {self.search}"
+            reply = f"cannot find result for {self.search}"
+            return {'display': reply, 'say': reply}
 
     def display_news_all(self):
         pageURL = f"{self.baseUrl}/?page=65"  # /?endDate=2020-01-09"
