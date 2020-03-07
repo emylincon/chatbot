@@ -10,8 +10,9 @@ def rihanna_time():
     if config.lang_code != 'en':
         reply = trans_.translate_sentence_code(reply, config.lang_code)
         config.lang_code = 'en'
-    return reply
+    return {'display': reply, 'say': reply}
 
 
 def rihanna_date():
-    return time.ctime()
+    reply = time.ctime()
+    return {'display': reply, 'say': reply}
