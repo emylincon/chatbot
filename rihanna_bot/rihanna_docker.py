@@ -105,36 +105,44 @@ def run_container(image):
     do = f"docker run -ti --detach {image}"
     data, err = send_command(do)
     if len(data) == 0 and len(err) > 0:
-        return "Error occurred could not find image"
+        reply = "Error occurred could not find image"
+        return {'display': reply, 'say': reply}
     else:
-        return "container is running"
+        reply = "container is running"
+        return {'display': reply, 'say': reply}
 
 
 def multi_run(image, no):
     try:
         for i in range(int(no)):
             run_container(image)
-        return f"{no} {image} has been deployed on server"
+        reply = f"{no} {image} has been deployed on server"
+        return {'display': reply, 'say': reply}
     except Exception as e:
-        return f"Error in multi_run: {e}"
+        reply = f"Error in multi_run: {e}"
+        return {'display': reply, 'say': reply}
 
 
 def start_container(con_name):
     do = f"docker start {con_name}"
     data, err = send_command(do)
     if len(data) == 0 and len(err) > 0:
-        return "Error occurred could not find image"
+        reply = "Error occurred could not find image"
+        return {'display': reply, 'say': reply}
     else:
-        return "container is running"
+        reply = "container is running"
+        return {'display': reply, 'say': reply}
 
 
 def _stop_container(con_name):
     do = f"docker stop {con_name}"
     data, err = send_command(do)
     if len(data) == 0 and len(err) > 0:
-        return "Error occurred could not find image"
+        reply = "Error occurred could not find image"
+        return {'display': reply, 'say': reply}
     else:
-        return "container is running"
+        reply = "container is running"
+        return {'display': reply, 'say': reply}
 
 
 def stop_container(con_name):
@@ -142,35 +150,40 @@ def stop_container(con_name):
     try:
         con = client.containers.get(con_name)
         con.stop()
-        return f"{con_name} has been stopped"
+        reply = f"{con_name} has been stopped"
+        return {'display': reply, 'say': reply}
     except Exception as e:
-        return f'stop container error: {e}'
+        reply = f'stop container error: {e}'
+        return {'display': reply, 'say': reply}
 
 
 def prune_containers():
     client = docker.DockerClient(base_url=cf.docker_host['connect'])
     client.containers.prune()
-    return "All stopped containers have been deleted"
+    reply = "All stopped containers have been deleted"
+    return {'display': reply, 'say': reply}
 
 
 def delete_container(con_name):
     do = f"docker container rm {con_name}"
     data, err = send_command(do)
     if len(data) == 0 and len(err) > 0:
-        return "Error occurred could not find image"
+        reply = "Error occurred could not find image"
+        return {'display': reply, 'say': reply}
     else:
-        return f"{con_name} container has been deleted"
+        reply = f"{con_name} container has been deleted"
+        return {'display': reply, 'say': reply}
 
 
 def delete_image(image):
     do = f"docker image rm {image}"
-    #print(do)
     data, err = send_command(do)
     if len(data) == 0 and len(err) > 0:
-        return "Error occurred could not find image"
+        reply = "Error occurred could not find image"
+        return {'display': reply, 'say': reply}
     else:
-        return f"{image} Image has been deleted"
-#docker_container()
+        reply = f"{image} Image has been deleted"
+        return {'display': reply, 'say': reply}
 
 
 def docker_container_list():
@@ -262,10 +275,12 @@ def docker_pull(image):
     try:
         client.images.pull(image)
         client.close()
-        return f"{image} created"
+        reply = f"{image} created"
+        return {'display': reply, 'say': reply}
     except Exception:
         client.close()
-        return f"could not find {image}"
+        reply = f"could not find {image}"
+        return {'display': reply, 'say': reply}
 
 
 docker_dict = {'docker image list': docker_image, 'docker container list': docker_container_list,
