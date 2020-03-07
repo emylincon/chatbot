@@ -11,7 +11,8 @@ def selector(message):
     elif message == 'windows lock screen':
         ctypes.windll.user32.LockWorkStation()
     else:
-        return 'windows is currently offline'
+        reply = 'windows is currently offline'
+        return {'display': reply, 'say': reply}
 
 
 def sort_downloads():
