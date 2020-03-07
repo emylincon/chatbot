@@ -84,33 +84,40 @@ def twitter_status_others(user):
     try:
         followers_count = len(api.GetFollowers(screen_name=user))
         friends_count = len(api.GetFriends(screen_name=user))
-        return f"{user} have {followers_count} followers and {friends_count} friends following you on twitter"
+        reply = f"{user} have {followers_count} followers and {friends_count} friends following you on twitter"
+        return {'display': reply, 'say': reply}
     except Exception as e:
-        return "Due to Twitter Restrictions, You have reached your lookup limit. Try again in 15 minutes"
+        reply = "Due to Twitter Restrictions, You have reached your lookup limit. Try again in 15 minutes"
+        return {'display': reply, 'say': reply}
 
 
 def twitter_status():
     followers_count = len(api.GetFollowers())
     friends_count = len(api.GetFriends())
-    return f"You have {followers_count} followers and {friends_count} friends following you on twitter"
+    reply = f"You have {followers_count} followers and {friends_count} friends following you on twitter"
+    return {'display': reply, 'say': reply}
 
 
 def display_last_tweet(user):
     try:
         status = api.GetUserTimeline(screen_name=user)[0].text
-        return status
+        reply = status
+        return {'display': reply, 'say': reply}
     except Exception as e:
-        return "Due to Twitter Restrictions, You have reached your lookup limit. Try again in 15 minutes"
+        reply = "Due to Twitter Restrictions, You have reached your lookup limit. Try again in 15 minutes"
+        return {'display': reply, 'say': reply}
 
 
 def last_tweet():
     status = api.GetUserTimeline()[0].text
-    return status
+    reply = status
+    return {'display': reply, 'say': reply}
 
 
 def post_tweet(tweet):
     api.PostUpdates(tweet)
-    return "Tweet posted"
+    reply = "Tweet posted"
+    return {'display': reply, 'say': reply}
 
 
 def display_twitter():
@@ -125,13 +132,13 @@ def display_twitter():
 def twitter_trend():
     results = api.GetTrendsWoeid(woeid=23424975)
 
-    reply = "Top UK Trends in Twitter: "
+    reply = "Top UK Trends in Twitter: <br>"
 
     for _location in results[:5]:
         location = ast.literal_eval(str(_location))
-        reply += ("\n " + str(location["name"]))
+        reply += (str(location["name"]) + '<br>')
 
-    return reply
+    return {'display': reply, 'say': "Top UK Trends in Twitter"}
 
 
 def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
@@ -184,14 +191,15 @@ def twitter_global_trends_graph():
         return 'Twitter is currently withholding this information | ' \
                '<a href="https://trends24.in/" target="_blank">view</a>'
         '''
-        return f'error in plot_tweet_graph: {e}'
+        reply = f'error in plot_tweet_graph: {e}'
+        return {'display': reply, 'say': reply}
 
 
 def twitter_global_trends():
     try:
         result = api.GetTrendsCurrent()[:5]
-        reply = "Top Global Trends in Twitter: "
-
+        reply = "Top Global Trends in Twitter: <br>"
+        say = "Top Global Trends in Twitter: \n"
         for trend in result:
             _trend = ast.literal_eval(str(trend))
             #print(_trend)
@@ -202,18 +210,20 @@ def twitter_global_trends():
                 volume = "_ number of"
             url = _trend['url']
 
-            reply += f'\n{name} ({volume} Tweets) | <a href={url} target="_blank">view</a>'
+            reply += f'{name} ({volume} Tweets) <a href={url} target="_blank">view</a> <br>'
+            say += f'{name} ({volume} Tweets). \n'
 
-        return reply
+        return {'display': reply, 'say': say}
     except Exception as e:
-        return 'Twitter is currently withholding this information | ' \
+        reply = 'Twitter is currently withholding this information ' \
                '<a href="https://trends24.in/" target="_blank">view</a>'
+        return {'display': reply, 'say': 'Twitter is currently withholding this information'}
 
 
 def twitter_search(query):
     result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
     result = api.GetSearch(term=query, count=5)
-    reply = "Top 5 Search Results :"
+    reply = f"Top 5 Search Results for {query} :"
     for status in result:
         obj = status.split('=')
         tweet = obj[-1]
@@ -221,12 +231,13 @@ def twitter_search(query):
         #print('l:', links)
         if links:
             for i in links:
-                link = f'|<a href={i} target="_blank">link</a>'
+                link = f'<a href={i} target="_blank">link</a>'
                 #print(i, link)
                 tweet = tweet.replace(i, link)
         user = obj[2].split(',')[0]
         reply += f"\n@{user} Tweeted: {tweet}"
-    return reply.replace(';', '')
+    reply = reply.replace(';', '')
+    return {'display': reply, 'say': f'find displayed Top 5 Search Results for {query}'}
 
 
 def twitter_search_(query):
@@ -300,6 +311,7 @@ def twitter_hash_tags(query):
     return reply
 
 
+# this feature is only for word cloud
 def twitter_search_cloud_user(query):
     result = api.GetSearch(term=query, count=50)
     answer = ''
