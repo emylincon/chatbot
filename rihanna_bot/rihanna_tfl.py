@@ -387,7 +387,7 @@ def tfl(message):
 
     elif message[:25] == 'tfl journey duration from':  # e.g tfl journey duration from se1 5hp to se18 3px
         detail = message.strip().lower()[25:].split(' to')
-        #print(detail[0].strip(), detail[1].strip())
+        # print(detail[0].strip(), detail[1].strip())
         reply = journey_duration(detail[0].strip(), detail[1].strip())
         return reply
 
@@ -396,12 +396,13 @@ def tfl(message):
         reply = get_timetable(detail[0].strip(), detail[1].strip())
         return reply
     else:
-        return "Yes I know"
+        reply = "Yes I know"
+        return {'display': reply, 'say': reply}
 
 
 def get_naptan_id(station_id):
     query = f"https://api.tfl.gov.uk/Stoppoint/{station_id}"
-    #print(station_id)
+    # print(station_id)
     json_data = requests.get(query).json()
     nap_ids = []
     for i in json_data["lineGroup"]:
@@ -410,7 +411,7 @@ def get_naptan_id(station_id):
         except KeyError:
             continue
     # return json_data["lineGroup"][0]["naptanIdReference"]
-    #print("id: ", nap_ids)
+    # print("id: ", nap_ids)
     return nap_ids
 
 
@@ -466,8 +467,8 @@ def get_timetable(line, station):
     try:
         if line.strip()[-1].isnumeric():
             station_ids = get_bus_station_id(station)
-            #print(station_ids)
-            reply = f"Time Table for {station}: "
+            # print(station_ids)
+            reply = f"Time Table for {station}: <br>"
 
             for nap_id in station_ids:
                 query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{nap_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
@@ -671,26 +672,27 @@ def get_timetable(line, station):
                     dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
                 min_time = min(dict_time, key=dict_time.get)
 
-                reply += f" \nThe expected arrival Time for {json_data[min_time]['lineName']} " \
+                reply += f"The expected arrival Time for {json_data[min_time]['lineName']} " \
                          f"in bus stop {json_data[min_time]['platformName']} on {json_data[min_time]['stationName']} " \
                          f"travelling towards {json_data[min_time]['destinationName']} " \
-                         f"is {json_data[min_time]['expectedArrival'].split('T')[1][:-1]}"
+                         f"is {json_data[min_time]['expectedArrival'].split('T')[1][:-1]} <br>"
 
             if reply == f"Time Table for {station}: ":
-                return f"{line} does not call at {station}"
+                reply = f"{line} does not call at {station}"
+                return {'display': reply, 'say': reply}
 
-            return reply
+            return {'display': reply, 'say': reply.replace('<br>', '\n')}
         else:
 
             if station.lower().split()[-1] != "station":
                 station += " station"
 
-            #print(station)
+            # print(station)
             station_id = get_train_station_id(station, line)
-            reply = f"Time Table for {station}: "
+            reply = f"Time Table for {station}: <br>"
             query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{station_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
             json_data = requests.get(query).json()
-            #print(json_data)
+            # print(json_data)
             outbound_dict_time = {}
             inbound_dict_time = {}
 
@@ -701,32 +703,32 @@ def get_timetable(line, station):
                     inbound_dict_time[json_data.index(i)] = format_time(i["expectedArrival"].split('T'))
             if outbound_dict_time:
                 out_min_time = min(outbound_dict_time, key=outbound_dict_time.get)
-                reply += f" \nThe expected arrival Time for {json_data[out_min_time]['lineName']} " \
+                reply += f"The expected arrival Time for {json_data[out_min_time]['lineName']} " \
                          f"in {json_data[out_min_time]['platformName']} on {json_data[out_min_time]['stationName']} " \
                          f"travelling towards {json_data[out_min_time]['destinationName']} " \
-                         f"is {json_data[out_min_time]['expectedArrival'].split('T')[1][:-1]}"
+                         f"is {json_data[out_min_time]['expectedArrival'].split('T')[1][:-1]}<br>"
             if inbound_dict_time:
                 in_min_time = min(inbound_dict_time, key=inbound_dict_time.get)
-                reply += f" \nThe expected arrival Time for {json_data[in_min_time]['lineName']} " \
+                reply += f"The expected arrival Time for {json_data[in_min_time]['lineName']} " \
                          f"in {json_data[in_min_time]['platformName']} on {json_data[in_min_time]['stationName']} " \
                          f"travelling towards {json_data[in_min_time]['destinationName']} " \
-                         f"is {json_data[in_min_time]['expectedArrival'].split('T')[1][:-1]}"
+                         f"is {json_data[in_min_time]['expectedArrival'].split('T')[1][:-1]}<br>"
 
-            return reply
+            return {'display': reply, 'say': reply.replace('<br>', '\n')}
 
-    except KeyboardInterrupt:
-        #return "Sorry, I can't find the line or station name"
-        return 'stopped'
+    except Exception as reply:
+        # return "Sorry, I can't find the line or station name"
+        return {'display': reply, 'say': reply}
 
 
 def tfl_tube_status():
     main_api = f"https://api.tfl.gov.uk/Line/Mode/tube/Status?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
     json_data = requests.get(main_api).json()
-    reply = "TFL Tube Service Report"
+    reply = "<font color='blue'>TFL Tube Service Report</font><br>"
     for i in json_data:
-        reply += f"\n{i['name']} : {i['lineStatuses'][0]['statusSeverityDescription']}"
+        reply += f"{i['name']} : {i['lineStatuses'][0]['statusSeverityDescription']}<br>"
 
-    return reply
+    return {'display': reply, 'say': 'find displayed the TFL Tube Service Report'}
 
 
 def journey_duration(start, stop):
@@ -736,14 +738,15 @@ def journey_duration(start, stop):
         start_time = json_data["journeys"][0]["startDateTime"].split('T')[1][:-1]  # "2019-11-16T16:14:00"
         arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[1][:-1]  # "2019-11-16T16:45:00"
         duration = json_data["journeys"][0]["duration"]
-        return f"If you leave by {start_time}, you will arrive at {stop} by {arrival_time}" \
-               f"\nTherefore, It will take {duration}mins"
-    except Exception as e:
-        return "Ask me another question"
+        reply = f"If you leave by {start_time}, you will arrive at {stop} by {arrival_time}<br>" \
+                f"Therefore, It will take {duration} minutes"
+        return {'display': reply, 'say': reply.replace('<br>', '\n')}
+    except Exception as reply:
+        return {'display': reply, 'say': reply}
 
 # get_station_id("victoria station")
-#print(get_timetable("115", "aldgate underground station"))
+# print(get_timetable("115", "aldgate underground station"))
 # print(get_timetable("northern", "elephant & castle underground station"))
-#print(get_timetable("northern", "bank underground station"))
+# print(get_timetable("northern", "bank underground station"))
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
-#print(journey_duration(start="se18 3px", stop="se1 5hp"))
+# print(journey_duration(start="se18 3px", stop="se1 5hp"))
