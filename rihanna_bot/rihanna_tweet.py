@@ -74,10 +74,11 @@ def twitter(message):
         try:
             tweet = message.strip()[6:]
             reply = post_tweet(tweet)
-            display_twitter()
+            #display_twitter()
             return reply
         except Exception as e:
-            return "Error occurred in twitter"
+            reply = "Error occurred in twitter"
+            return {'display': reply, 'say': reply}
 
     elif message[:14] == 'search twitter':
         search = message[15:].strip()
@@ -132,8 +133,11 @@ def last_tweet():
 
 def post_tweet(tweet):
     api.PostUpdates(tweet)
-    reply = "Tweet posted"
-    return {'display': reply, 'say': reply}
+    status = api.GetUserTimeline(screen_name='jamesemyking')[0].id
+    url = f"https://twitter.com/jamesemyking/status/{status}"
+    display = embed_tweet(query=url)
+    say = "Tweet posted"
+    return {'display': display, 'say': say}
 
 
 def display_twitter():
