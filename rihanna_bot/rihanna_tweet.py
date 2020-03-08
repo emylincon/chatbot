@@ -6,6 +6,21 @@ import config
 import re
 import matplotlib.pyplot as plt
 import numpy as np
+import urllib.request
+import urllib.parse
+import json
+
+
+def embed_tweet(query):
+    request_headers = {
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"
+    }
+
+    url = f"https://publish.twitter.com/oembed?url={query}"
+    request = urllib.request.Request(url, headers=request_headers)
+    contents = json.loads(urllib.request.urlopen(request).read())
+    return contents['html']
 
 
 api = twitter.Api(consumer_key=config.consumer_key,
@@ -66,7 +81,8 @@ def twitter(message):
 
     elif message[:14] == 'search twitter':
         search = message[15:].strip()
-        reply = twitter_search_(search)
+        #reply = twitter_search_(search)
+        reply = search_twitter(query=search)
         return reply
 
     elif message[:len('show twitter hash tags associated with')] == 'show twitter hash tags associated with':
@@ -77,7 +93,7 @@ def twitter(message):
     else:
         display = google_search(message)
         reply = "Googling . . ."
-        return reply
+        return {'display': reply, 'say': reply}
 
 
 def twitter_status_others(user):
@@ -133,12 +149,12 @@ def twitter_trend():
     results = api.GetTrendsWoeid(woeid=23424975)
 
     reply = "Top UK Trends in Twitter: <br>"
-
+    say = "Top UK Trends in Twitter \n"
     for _location in results[:5]:
-        location = ast.literal_eval(str(_location))
-        reply += (str(location["name"]) + '<br>')
-
-    return {'display': reply, 'say': "find displayed the Top UK Trends in Twitter"}
+        reply += f"<a href='{_location.url}' target='_blank'><font color='blue'>{_location.name}</font></a><br>"
+        say += f"{_location.name}\n"
+    #print(results)
+    return {'display': reply, 'say': say.replace('#', 'hash tag ')}
 
 
 def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
@@ -220,26 +236,6 @@ def twitter_global_trends():
         return {'display': reply, 'say': 'Twitter is currently withholding this information'}
 
 
-def twitter_search(query):
-    result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
-    result = api.GetSearch(term=query, count=5)
-    reply = f"Top 5 Search Results for {query} :"
-    for status in result:
-        obj = status.split('=')
-        tweet = obj[-1]
-        links = re.findall(r'(https?://\S+)', tweet)
-        #print('l:', links)
-        if links:
-            for i in links:
-                link = f'<a href={i} target="_blank">link</a>'
-                #print(i, link)
-                tweet = tweet.replace(i, link)
-        user = obj[2].split(',')[0]
-        reply += f"\n@{user} Tweeted: {tweet}"
-    reply = reply.replace(';', '')
-    return {'display': reply, 'say': f'find displayed Top 5 Search Results for {query}'}
-
-
 def twitter_search_(query):
     #result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
     result = api.GetSearch(term=query, count=5)
@@ -253,12 +249,13 @@ def twitter_search_(query):
                                     "
 
     for status in result:
-        user = status.user.screen_name
+        user = status.user.screen_name  #use
         name = status.user.name
         pic = status.user.profile_image_url
         retweet_count = status.retweet_count
         tweet = status.text
         links = re.findall(r'(https?://\S+)', tweet)
+        #print(status.media[0].display_url)
         #print('l:', links)
         if links:
             for i in links:
@@ -272,6 +269,19 @@ def twitter_search_(query):
                         <td style='text-align:center'>{retweet_count}</td>\
                     </tr>"
     reply = {'display': display.replace(';', ''), 'say': say}
+    return reply
+
+
+def search_twitter(query):
+    result = api.GetSearch(term=query, count=5)
+    say = f"Find displayed the Top 5 Search Results for {query}"
+    display = ''
+    for status in result:
+        user = status.user.screen_name  #use
+        _id_ = status.id
+        url = f"https://twitter.com/{user}/status/{_id_}"
+        display += embed_tweet(query=url)
+    reply = {'display': display, 'say': say}
     return reply
 
 
@@ -329,3 +339,7 @@ def twitter_search_cloud_user(query):
 #print(twitter_search_cloud('microsoft'))
 #twitter_search_cloud_user('microsoft')
 #print(twitter_hash_tags('microsoft'))
+#print(twitter_trend())
+# a = "https://twitter.com/BleacherReport/status/1236526501073281029"
+# print(embed_tweet(a))
+# print(search_twitter(query='drake'))
