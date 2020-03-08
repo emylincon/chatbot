@@ -20,7 +20,8 @@ def selector(message):
         name_ = message[len('birthday for') + 1:].strip()
         return RSkype(name=name_).birthday()
     else:
-        return "Thou shall not answer the phrased question"
+        reply = "Thou shall not answer the phrased question"
+        return {'display': reply, 'say': reply}
 
 
 class RSkype:
@@ -41,7 +42,8 @@ class RSkype:
         if self.name.lower() in con.friends:
             p_id = con.friends[self.name.lower()]
             picture = f'<img src="https://avatar.skype.com/v1/avatars/{p_id}/public">'
-            return picture
+            say = f'find picture of {self.name}'
+            return {'display': picture, 'say': say}
         elif self.name == 'me':
             path = "C:/Users/emyli/PycharmProjects/Chatbot_Project/img/me.png"
             # path = r"E:/deadlock files/img/public.png"
@@ -91,9 +93,13 @@ class RSkype:
     def get_last_message(self):
         if self.name.lower() in con.friends:
             chat = self.contacts[con.friends[self.name.lower()]].chat
-            mg = self.sk.chats[chat.id].getMsgs()[0].content
-            reply = f"Last Sent Message: {mg}"
-            return {'display': reply, 'say': reply}
+            try:
+                mg = self.sk.chats[chat.id].getMsgs()[0].content
+                reply = f"Last Sent Message: {mg}"
+                return {'display': reply, 'say': reply}
+            except IndexError:
+                reply = f'I am sorry, I cannot remember your last message to {self.name}'
+                return {'display': reply, 'say': reply}
         else:
             reply = f"{self.name} is not in your friend list"
             return {'display': reply, 'say': reply}
@@ -112,4 +118,5 @@ class RSkype:
 # https://github.com/Terrance/SkPy.docs
 # https://pypi.org/project/SkPy/
 #print(birthday('jess'))
-
+# a = RSkype(name='jess').get_last_message()
+# print(a)
