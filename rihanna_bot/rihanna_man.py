@@ -2,7 +2,8 @@ def selector(query):
     if query in man_dict:
         return man_dict[query]()
     else:
-        return "I am sorry. I do not know which man page you want. \nUse 'man help' to view your options"
+        reply = "I am sorry. I do not know which man page you want. \nUse 'man help' to view your options"
+        return {'display': reply, 'say': reply}
 
 
 def man_help():
