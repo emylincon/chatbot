@@ -738,7 +738,7 @@ def journey_duration(start, stop):
         start_time = json_data["journeys"][0]["startDateTime"].split('T')[1][:-1]  # "2019-11-16T16:14:00"
         arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[1][:-1]  # "2019-11-16T16:45:00"
         duration = json_data["journeys"][0]["duration"]
-        reply = f"If you leave by {start_time}, you will arrive at {stop} by {arrival_time}<br>" \
+        reply = f"If you leave at {start_time}, you will arrive at {stop} at {arrival_time}<br>" \
                 f"Therefore, It will take {duration} minutes"
         return {'display': reply, 'say': reply.replace('<br>', '\n')}
     except Exception as reply:
