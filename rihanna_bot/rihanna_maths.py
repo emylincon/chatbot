@@ -85,7 +85,7 @@ def calculate(string):
                 result = maths[i](result, nums[k])
                 k += 1
             reply = string + ' = ' + str(result)
-            return {'display': reply, 'say': reply.replace('*', 'times').replace('/', 'divide')}
+            return {'display': reply, 'say': reply.replace('*', 'times').replace('/', 'divide').replace('-', 'minus')}
     except Exception as e:
         return response[r.randrange(len(response))]
 
