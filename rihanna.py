@@ -300,7 +300,8 @@ def rihanna(message):
         if config.lang_code != 'en':
             reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
             config.lang_code = 'en'
-        return reply
+            return reply
+        return {'display': reply, 'say': reply}
 
     elif len([i for i in calc.opp_code if i in message]) > 0:
         reply = calc.calculate(message)
