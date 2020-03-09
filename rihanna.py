@@ -342,7 +342,7 @@ def get_response(usrText):
             print(f'speech: {text.strip()}')
             if text == 'sorry, could not recognize your voice':
                 reply = str(text)
-                return {'display': reply, 'say': reply}
+                return str({'display': reply, 'say': reply})
             else:
                 result = rihanna(text.strip())
                 if type(result).__name__ == 'dict':
