@@ -16,7 +16,7 @@ bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
                   {'import_path': 'chatterbot.logic.BestMatch'},
                   {'import_path': 'chatterbot.logic.LowConfidenceAdapter',
                    'threshold': 0.50,
-                   'default_response': 'I am sorry. I am not allowed to give an answer to that question.'
+                   'default_response': 'That is an interesting question!'
                    }
               ],
               trainer='chatterbot.trainers.ListTrainer')
@@ -42,21 +42,26 @@ def email_thread(message):
 
     elif email['run'] == 3:
         email['subject'] = message
-        return run_email[3] + email['address']
+        reply = run_email[3] + email['address']
+        return {'display': reply, 'say': reply}
 
     elif email['run'] == 1:
-        return run_email[1]
+        reply = run_email[1]
+        return {'display': reply, 'say': reply}
 
     elif email['run'] == 2:
         if rihanna_email.check(message) == 'valid':
             email['address'] = message
-            return run_email[2]
+            reply = run_email[2]
+            return {'display': reply, 'say': reply}
         elif message in rihanna_email.contact:
             email['address'] = rihanna_email.contact[message]
-            return run_email[2]
+            reply = run_email[2]
+            return {'display': reply, 'say': reply}
         else:
             email['run'] -= 1
-            return f"{message} is an invalid email, please give a valid mail"
+            reply = f"{message} is an invalid email, please give a valid mail"
+            return {'display': reply, 'say': reply}
 
 
 def rihanna_voice(word_speech):
@@ -122,7 +127,8 @@ def weather(place):
 def stop_words():
     response = ["okay", "ok", "alright", "great", "Thought as much", "Good"]
 
-    return response[r.randrange(len(response))]
+    reply = response[r.randrange(len(response))]
+    return {'display': reply, 'say': reply}
 
 
 def rihanna(message):
@@ -212,7 +218,8 @@ def rihanna(message):
         if config.lang_code != 'en':
             reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
             config.lang_code = 'en'
-        return reply
+            return reply
+        return {'display': reply, 'say': reply}
 
     elif message in _date:
         reply = rihanna_time.rihanna_date()
@@ -228,14 +235,16 @@ def rihanna(message):
             if config.lang_code != 'en':
                 reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
                 config.lang_code = 'en'
-            return reply
+                return reply
+            return {'display': reply, 'say': reply}
 
         except:
             reply = "{}? hmm.. I know what it is but I can not tell you".format(message.strip()[7:])
             if config.lang_code != 'en':
                 reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
                 config.lang_code = 'en'
-            return reply
+                return reply
+            return {'display': reply, 'say': reply}
 
     elif {"bbc", "news"} - set(message.split()) == set():
         reply = rihanna_news.bbc()
@@ -247,7 +256,8 @@ def rihanna(message):
         if config.lang_code != 'en':
             reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
             config.lang_code = 'en'
-        return reply
+            return reply
+        return {'display': reply, 'say': reply}
 
     elif "facebook" in message:
         return rihanna_facebook.fb(message)
@@ -278,7 +288,8 @@ def rihanna(message):
         if config.lang_code != 'en':
             reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
             config.lang_code = 'en'
-        return reply
+            return reply
+        return {'display': reply, 'say': reply}
 
     elif message[0:4] == 'play':
         critic = ['that is a lovely song', 'that is a terrible song', "don't like that song",
@@ -300,21 +311,13 @@ def rihanna(message):
         ctypes.windll.user32.LockWorkStation()
 
     elif message != 'Bye':
-        reply = bot.get_response(message)
+        reply = str(bot.get_response(message)).replace('-', '')
 
-        if str(reply)[:3] == '- -':
-            # rihanna_voice(str(reply)[3:])
-            reply = str(reply)[3:]
-        elif str(reply)[0] == '-':
-            # rihanna_voice(str(reply)[1:])
-            reply = str(reply)[1:]
-        else:
-            # rihanna_voice(reply)
-            pass
         if config.lang_code != 'en':
             reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
             config.lang_code = 'en'
-        return reply
+            return reply
+        return {'display': reply, 'say': reply}
 
 
 def get_response(usrText):
@@ -336,21 +339,30 @@ def get_response(usrText):
         if usrText.strip() == 'click':
             text = rihanna_speak.speech_recog()
             print(f'speech: {text.strip()}')
-            if text == 'sorry could not recognize your voice':
+            if text == 'sorry, could not recognize your voice':
                 reply = str(text)
-                return reply
+                return {'display': reply, 'say': reply}
             else:
                 result = rihanna(text.strip())
-                result = f"{text};{result}"
-                reply = str(result)
-                # return str({'user_sent': text, 'reply': result, 'voice_check': 0, 'say': ''})
-                return reply
+                if type(result).__name__ == 'dict':
+                    result['user_said'] = text.strip()
+                    reply = str(result)
+                    return reply
+                else:
+                    print('Not dict', result)
+                    result = f"{text};{result}"
+                    reply = str(result)
+                    return reply
+                # return str({'user_said': text, 'reply': result, 'voice_check': 0, 'say': ''})
+
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
+            #print(result)
             return reply  # reply should be string else it wont work
         elif usrText.strip() == 'Bye':
-            return 'Bye'
+            reply = 'Bye'
+            return str({'display': reply, 'say': reply})
 
 # d = google_search("when is the wilder fight date")
 # print('hello')
