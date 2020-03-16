@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Chat Bot</title>
+<meta charset="utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<style>
+    :root {
+      --mainColor: #00bbff;
+    }
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+    body {
+        font-family: Helvetica;
+    }
+    #chat_container {
+        overflow: hidden;
+        border-radius: 15px;
+        border: 1px solid #111112; /* #92d2f5; */
+        margin: 0px 80px 0px 80px;
+        height: 95vh;
+    }
+
+
+    #chat_log {
+        background-color: #111112;
+        padding: 10px;
+        border-bottom: 1px solid white;
+        overflow-y: scroll;
+        height: 73vh;
+        font-size: 20px;
+    }
+    #chat_input_container {
+        padding: 10px;
+
+    }
+    #chat_input {
+        border: 1px solid transparent;
+        padding: 7px;
+        font-size: 18px;
+        background-color: #E6E9EC;
+        width: 100%;
+    }
+    .chat_line {
+        overflow: hidden;
+        width: 100%;
+        margin: 2px 0 12px 0;
+    }
+    .chat_triangle, .chat_triangle_user {
+        position: absolute;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        left: -18px;
+        border-width: 0 18px 13px 0;
+        border-color: transparent #ffffff transparent transparent;
+    }
+    .chat_triangle_user {
+        left: auto;
+        right: -18px;
+        border-width: 13px 18px 0 0;
+        border-color: #fafa91 transparent transparent transparent;
+    }
+    .chat_bubble, .chat_bubble_user {
+        position: relative;
+        float: left;
+        background-color: #FFF;
+        margin-top: 10px;
+        line-height: 35px;
+        padding: 10px 25px 10px 25px;
+        margin-left: 20px;
+        font-size: 20px;
+    }
+    .chat_bubble_user {
+        float: right;
+        margin-left: 0px;
+        margin-right: 20px;
+        background-color: #fafa91;
+        color: #000000;
+    }
+    .banner {
+        width: 100%;
+        height: 100px;
+        display: block;
+        background-image: url(img/bannerr.png);
+        /*background-size: contain;*/
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .banner > .banner-image {
+        width: 100%;
+        height: 100px;
+
+    }
+    #button {
+      background-color: #338EFF; /* sky blue */
+      /*float: right;*/
+      border: none;
+      color: white;
+      border: none;
+      padding: 9px 25px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+    a {
+      background:
+         linear-gradient(
+           to right,
+           var(--mainColor) 0%,
+           var(--mainColor) 5px,
+           transparent 5px
+         );
+        background-repeat: repeat-x;
+        background-size: 100%;
+      color: #000;
+      padding-left: 10px;
+      text-decoration: none;
+    }
+
+    a:hover {
+      background:
+         linear-gradient(
+           to right,
+           var(--mainColor) 0%,
+           var(--mainColor) 5px,
+           transparent
+         );
+    }
+    /*the container must be positioned relative:*/
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+    }
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+
+
+    table#t01 td, th{
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px
+    }
+    table#t01 tr:hover {background-color:#f5f5f5;}
+</style>
+</head>
+
+<body>
+<div id="chat_container">
+    <div class="banner">
+        <!--<img class="banner-image" src="img/chatbot-banner.jpg" alt="CHAT BANNER"/>-->
+        <!--<img class="banner-image" src="img/img_banner.png" alt="CHAT BANNER"/>-->
+    </div>
+    <div id="chat_log">
+    </div>
+    <div id="chat_input_container">
+        <div class="autocomplete" style="width:92%">
+            <input id="chat_input" onKeyPress="javascript:check" placeholder="Ask me anything, don't be shy..."/>
+        </div>
+        <button id="button" onclick="myFunction()">Speak</button>
+    </div>
+</div>
+<script src="javascript/2script.js"></script>
+</body>
+</html>
