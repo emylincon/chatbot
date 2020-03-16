@@ -4,6 +4,7 @@ from rihanna import get_response
 from rihanna import rihanna_voice
 from threading import Thread
 import ast
+import json
 
 
 class ChatServer(WebSocket):
@@ -13,6 +14,7 @@ class ChatServer(WebSocket):
         message = self.data
         response = get_response(message)
         # self.sendMessage(response)  f"{text};{result}"
+
         if ";" in response:                               # handling speak button clicked and the response
             result = response.split(';')
             response = result[1]
@@ -94,11 +96,12 @@ class ChatServer(WebSocket):
 
         elif response[0] == '{':
             response = ast.literal_eval(response)
-            h1 = Thread(target=self.sendMessage, args=(response['display'],))
+            #h1 = Thread(target=self.sendMessage, args=(response['display'],))
+            h1 = Thread(target=self.sendMessage, args=(json.dumps(response),))
             if response['say'] != '':
-                h2 = Thread(target=rihanna_voice, args=(response['say'],))
+                #h2 = Thread(target=rihanna_voice, args=(response['say'],))
                 h1.start()
-                h2.start()
+                #h2.start()
             else:
                 h1.start()
         elif (response[0] == '<') and ('~' in response):
