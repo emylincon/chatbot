@@ -117,18 +117,22 @@ def twitter_status():
 
 def display_last_tweet(user):
     try:
-        status = api.GetUserTimeline(screen_name=user)[0].text
-        reply = status
-        return {'display': reply, 'say': reply}
+        reply = api.GetUserTimeline(screen_name=user)[0].text
+        status = api.GetUserTimeline(screen_name=user)[0].id
+        url = f"https://twitter.com/{user}/status/{status}"
+        display = embed_tweet(query=url)
+        return {'display': display, 'say': reply}
     except Exception as e:
         reply = "Due to Twitter Restrictions, You have reached your lookup limit. Try again in 15 minutes"
         return {'display': reply, 'say': reply}
 
 
 def last_tweet():
-    status = api.GetUserTimeline()[0].text
-    reply = status
-    return {'display': reply, 'say': reply}
+    reply = api.GetUserTimeline()[0].text
+    status = api.GetUserTimeline(screen_name='jamesemyking')[0].id
+    url = f"https://twitter.com/jamesemyking/status/{status}"
+    display = embed_tweet(query=url)
+    return {'display': display, 'say': reply}
 
 
 def post_tweet(tweet):
