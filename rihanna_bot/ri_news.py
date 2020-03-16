@@ -25,6 +25,7 @@ def selector(query):
         return News().headlines()
     else:
         reply = 'the requested query cannot be processed by rihanna news'
+        return {'display': reply, 'say': reply}
 
 
 class News:
@@ -61,7 +62,10 @@ class News:
                                                            category=self.category,
                                                            language='en',
                                                            country=self.countries[self.country])
-            display = f'<h1><font color="red">Top News in {self.country.capitalize()}</font></h1>'
+            if self.category == 'general':
+                display = f'<h1><font color="red">Top News in {self.country.upper()}</font></h1>'
+            else:
+                display = f'<h1><font color="red">Top {self.category.capitalize()} News in {self.country.upper()}</font></h1>'
             for article in top_headlines['articles'][:10]:
                 image = article['urlToImage']
                 source = article['source']['name']
