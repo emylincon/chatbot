@@ -58,9 +58,11 @@ def search_amazon(query):
     req = url + query
     page = requests.get(req, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
-    items = soup.find_all("div", {"class": "s-include-content-margin s-border-bottom"})
+    # print(soup)
+    items = soup.find_all("div", {"class": "s-include-content-margin s-border-bottom s-latency-cf-section"})
     item_dict = {}
     item_link = {}  # item_link = {item: [item_link, image_link, rating]}
+    # print(items)
     for i in items:
         try:
             _name = i.find("span", {"class": "a-size-medium a-color-base a-text-normal"}).get_text()
@@ -296,3 +298,4 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
 # s = search_amazon("external hard drive 2tb")
 # print(s)
 # print(selector("amazon least price for external hard drive 2tb"))
+
