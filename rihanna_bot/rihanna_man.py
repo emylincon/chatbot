@@ -400,15 +400,15 @@ def man_job_search():
     return reply
 
 
-def man_google_image():
+def man_image():
     display = "<table id='t01'>\
                             <tr>\
-                                <th>Google Image Usage</th>\
+                                <th>Image Usage</th>\
                                 <th>Description</th>\
                             </tr>\
                             "
-    func = ["Google image <b>image_query</b>",
-            "Google images <b>image_query</b>",
+    func = ["show image <b>image_query</b>",
+            "show images <b>image_query</b>",
             ]
     des = ["returns a single image to match search query", "returns at least 10 images to match search query"]
     for i in func:
@@ -418,7 +418,7 @@ def man_google_image():
                             <td onclick='man_complete(" + f'"{j}"' + f")'>{des[func.index(i)]}</td>\
                         </tr>"
     display += "</table>"
-    say = "Find below How to use the google image feature"
+    say = "Find below How to use the image feature"
     reply = {'display': display, 'say': say}
     return reply
 
@@ -554,11 +554,40 @@ def man_news_():
     return reply
 
 
+def man_alpha():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>feature</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'solve <b>x + 5 = 10</b>': 'solves equation',
+            'solve <b>x + 5 = 10</b> show working': 'solves equation with workings',
+            'rihanna tell me a dirty joke': 'says a joke',
+            'rihanna tell me a computer science joke': 'says a joke',
+            'rihanna tell me a physics joke': 'says a joke',
+            'solve x^4 - 4x^3 + 8x + 1': 'solves equation',
+            'solve 1/(1+sqrt(2))': 'solves equation',  # truth table p xor q xor r xor s
+            'solve truth table p xor q xor r xor s': 'solves equation',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the rihanna alpha functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
             'man youtube': man_youtube, 'man google': man_google, 'man wikipedia': man_wiki, 'man wiki': man_wiki,
             'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man windows': man_windows,
-            'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man google image': man_google_image,
+            'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man image': man_image,
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
-            'man rihanna news': man_news_}
+            'man rihanna news': man_news_, 'man rihanna': man_alpha}
