@@ -16,14 +16,21 @@ class ChatServer(WebSocket):
         # self.sendMessage(response)  f"{text};{result}"
 
         if response[0] == '{':
-            response = ast.literal_eval(response)
-            h1 = Thread(target=self.sendMessage, args=(json.dumps(response),))
-            h1.start()
+            try:
+                response = ast.literal_eval(response)
+                h1 = Thread(target=self.sendMessage, args=(json.dumps(response),))
+                h1.start()
+            except Exception as e:
+                print(response)
+                print('server 1: ',e)
         else:
-            h1 = Thread(target=self.sendMessage, args=(response,))
-            h2 = Thread(target=rihanna_voice, args=(response,))
-            h1.start()
-            h2.start()
+            try:
+                h1 = Thread(target=self.sendMessage, args=(response,))
+                h2 = Thread(target=rihanna_voice, args=(response,))
+                h1.start()
+                h2.start()
+            except Exception as e:
+                print('server 2: ',e)
 
     def handleConnected(self):
         print(self.address, 'connected')
