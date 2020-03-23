@@ -1,6 +1,8 @@
 import wolframalpha
 import config
 
+# https://www.wolframalpha.com/
+
 
 def selector(query):
     if query[:len('solve ')] == 'solve ':
@@ -13,7 +15,7 @@ def selector(query):
     elif 'joke' in query:
         return Science(query).joke()
     else:
-        return Science(query).answer_text()
+        return Science(query).answer_format()
 
 
 class Science:
@@ -30,7 +32,7 @@ class Science:
                     reply += step['subpod']['plaintext'] + '\n'
             return {'display': reply.replace('\n', '<br>'), 'say': reply.replace('-', 'minus')}
         except Exception as e:
-            return {'display': str(e), 'say': str(e)}
+            return {'display': help()+str(e), 'say': str(e)}
 
     def answer_format(self):
         try:
