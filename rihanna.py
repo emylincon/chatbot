@@ -6,8 +6,8 @@ import pyttsx3
 from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
-    rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, \
-    rihanna_man, rihanna_job, rihanna_youtube, rihanna_google_image, rihanna_windows, rihanna_docker, rihanna_nhs
+    rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, \
+    rihanna_man, rihanna_job, rihanna_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs
 import config
 import random as r
 
@@ -146,6 +146,8 @@ def rihanna(message):
 
         elif message.lower()[:5] == 'skype':
             return rihanna_skype.selector(format_string(message[6:]).lower().strip())
+        elif message.lower()[:len('solve')] == 'solve':
+            return rihanna_science.selector(message)
         elif message.lower()[:len('iot')] == 'iot':
             return rihanna_iot.selector(format_string(message).lower().strip())
         elif message.lower()[:len('man')] == 'man':
@@ -190,8 +192,12 @@ def rihanna(message):
     elif message[:len('nhs')] == 'nhs':
         return rihanna_nhs.selector(message)
 
-    elif message[:len('google image')] == 'google image':
-        return rihanna_google_image.selector(message)
+    elif message[:len('rihanna ')] == 'rihanna ':
+        msg = message[len('rihanna '):]
+        return rihanna_science.selector(msg)
+
+    elif message[:len('show image')] == 'show image':
+        return ri_image.selector(message)
 
     elif message[:len('windows')] == 'windows':
         return rihanna_windows.selector(message)
@@ -340,33 +346,36 @@ def get_response(usrText):
                   trainer='chatterbot.trainers.ListTrainer')
     bot.set_trainer(ListTrainer)
     while True:
-        if usrText.strip() == 'click':
-            text = rihanna_speak.speech_recog()
-            print(f'speech: {text.strip()}')
-            if text == 'sorry, could not recognize your voice':
-                reply = str(text)
-                return str({'display': reply, 'say': reply})
-            else:
-                result = rihanna(text.strip())
-                if type(result).__name__ == 'dict':
-                    result['user_said'] = text.strip()
-                    reply = str(result)
-                    return reply
+        try:
+            if usrText.strip() == 'click':
+                text = rihanna_speak.speech_recog()
+                print(f'speech: {text.strip()}')
+                if text == 'sorry, could not recognize your voice':
+                    reply = str(text)
+                    return str({'display': reply, 'say': reply})
                 else:
-                    print('Not dict', result)
-                    result = f"{text};{result}"
-                    reply = str(result)
-                    return reply
-                # return str({'user_said': text, 'reply': result, 'voice_check': 0, 'say': ''})
+                    result = rihanna(text.strip())
+                    if type(result).__name__ == 'dict':
+                        result['user_said'] = text.strip()
+                        reply = str(result)
+                        return reply
+                    else:
+                        print('Not dict', result)
+                        result = f"{text};{result}"
+                        reply = str(result)
+                        return reply
+                    # return str({'user_said': text, 'reply': result, 'voice_check': 0, 'say': ''})
 
-        elif usrText.strip() != 'Bye':
-            result = rihanna(usrText)
-            reply = str(result)
-            #print(result)
-            return reply  # reply should be string else it wont work
-        elif usrText.strip() == 'Bye':
-            reply = 'Bye'
-            return str({'display': reply, 'say': reply})
+            elif usrText.strip() != 'Bye':
+                result = rihanna(usrText)
+                reply = str(result)
+                #print(result)
+                return reply  # reply should be string else it wont work
+            elif usrText.strip() == 'Bye':
+                reply = 'Bye'
+                return str({'display': reply, 'say': reply})
+        except Exception as e:
+            print('error in main', e)
 
 # d = google_search("when is the wilder fight date")
 # print('hello')
