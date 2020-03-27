@@ -1,6 +1,7 @@
 import wolframalpha
 import config
 
+
 # https://www.wolframalpha.com/
 
 
@@ -15,13 +16,24 @@ def selector(query):
     elif 'joke' in query:
         return Science(query).joke()
     else:
-        return Science(query).answer_format()
+        return Science(query).universal()
+
+
+def default_response(chat):
+    if chat == '':
+        return 'I am sorry. I am not allowed to answer that question'
+    else:
+        try:
+            return Science(chat).default()
+        except Exception:
+            return 'I am sorry. I am not allowed to answer that question'
 
 
 class Science:
     def __init__(self, query):
         self.client = wolframalpha.Client(config.wolf_id)
         self.result = self.client.query(query)
+        self.query = query
 
     def answer_text(self):
         try:
@@ -32,7 +44,7 @@ class Science:
                     reply += step['subpod']['plaintext'] + '\n'
             return {'display': reply.replace('\n', '<br>'), 'say': reply.replace('-', 'minus')}
         except Exception as e:
-            return {'display': help()+str(e), 'say': str(e)}
+            return {'display': str(e), 'say': str(e)}
 
     def answer_format(self):
         try:
@@ -74,6 +86,39 @@ class Science:
         else:
             return {'display': _ans.replace('\n', '<br>'), 'say': _ans}
 
+    def universal(self):
+        result_list = self.result['pod']
+        reply = "<table width='250px'>"
 
-# a =Science('tell me a dirty joke').joke()
+        for pod in result_list:
+            if pod['@numsubpods'] == '1':
+                reply += f"<tr bgcolor='#FDF0ED'>" \
+                f"<th align='center'><font color='black'>{pod['@title']}</font></th>" \
+                "</tr>" \
+                "<tr>" \
+                f"<td align='center'><img src='{pod['subpod']['img']['@src']}' alt='{pod['subpod']['plaintext']}'></td>" \
+                "</tr>"
+            else:
+                reply += f"<tr bgcolor='#FDF0ED'>" \
+                         f"<th align='center'><font color='black'>{pod['@title']}</font></th>" \
+                         f"</tr>"
+                for subpod in pod['subpod']:
+                    reply += "<tr><td>"
+                    reply += "<div style = 'width:250px; word-wrap: break-word'>" \
+                             f"<b><font color='blue'>{subpod['@title']}</font></b>" \
+                             f"<br><img src='{subpod['img']['@src']}' alt='{subpod['plaintext']}'>" \
+                             "</div></td>" \
+                             "</tr>"
+        reply += "</table>"
+
+        return {'display': reply, 'say': f'Find displayed the requested result for {self.query}: '}
+    # f'{self.default()["say"]}'
+
+    def default(self):
+        # this does not work if there is no result or solution title in result
+        reply = next(self.result.results).text
+        return {'display': reply, 'say': reply}
+
+
+# a = Science('carbon').universal()
 # print(a)
