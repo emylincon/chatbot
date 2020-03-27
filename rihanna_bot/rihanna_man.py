@@ -570,6 +570,23 @@ def man_alpha():
             'solve x^4 - 4x^3 + 8x + 1': 'solves equation',
             'solve 1/(1+sqrt(2))': 'solves equation',  # truth table p xor q xor r xor s
             'solve truth table p xor q xor r xor s': 'solves equation',
+            'solve area of a circle with radius 2': 'finds area',
+            'rihanna polar plot r=1+cos theta': 'plots graph',
+            'rihanna plot 1,2,3,4,5,6,7': 'plots graph',
+            'rihanna {25, 35, 10, 17, 29, 14, 21, 31}': 'data analysis',
+            'rihanna 5, 12, 13 triangle': 'triangle details',
+            'rihanna sequence of Fibonacci numbers': 'details',
+            'rihanna integrate x^2': 'displays solution',
+            'rihanna 1, 4, 9, 16, 25, ...': 'computes',
+            'rihanna H2SO4': 'chemistry knowledge',
+            'rihanna how many elements in the periodic table': 'chemistry knowledge',
+            'rihanna carbon': 'chemistry knowledge',
+            'rihanna 10 densest elements': 'chemistry knowledge',
+            "rihanna Newton's laws": 'physics knowledge',
+            'rihanna Brownian motion': 'physics knowledge',
+            'rihanna speed of light': 'physics knowledge',
+            'rihanna Oscar for best actress 1982': 'entertainment knowledge',
+            'rihanna bible john 3:16': 'bible verses',
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
