@@ -78,12 +78,12 @@ class News:
                       <tr>\
                         <th onclick='open_link(" + f'"{url}"' + f")'>" \
                         f"<img src='{image}' alt='{source} image' width='700px'>" \
-                           f"<br><b><font color='blue'>{title}</font></b></div></th>\
+                           f"<br><b><font color='blue'>{title}</font></b></th>\
                       </tr>\
                     "
                 display += f"<tr>\
                                 <td onclick='open_link(" + f'"{url}"' + f")'>" \
-                        f"<div style = 'width:700px; word-wrap: break-word'> {description} {article['content']}</div></span>" \
+                        f"<div style = 'width:700px; word-wrap: break-word'> {description} {article['content']}</div>" \
                            f"<br><font color='grey' size='2'>Published at {source} on {date[1][:-1]}, {date[0]}</font>" \
                            f"</td>\
                             </tr>"
