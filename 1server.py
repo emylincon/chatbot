@@ -36,6 +36,9 @@ class ChatServer(WebSocket):
         print(self.address, 'connected')
 
     def handleClose(self):
+        response = {'display': 'server has crashed', 'say': 'server has crashed'}
+        h1 = Thread(target=self.sendMessage, args=(json.dumps(response),))
+        h1.start()
         print(self.address, 'closed')
 
 
