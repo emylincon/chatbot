@@ -345,36 +345,34 @@ def get_response(usrText):
                   trainer='chatterbot.trainers.ListTrainer')
     bot.set_trainer(ListTrainer)
     while True:
-        try:
-            if usrText.strip() == 'click':
-                text = rihanna_speak.speech_recog()
-                print(f'speech: {text.strip()}')
-                if text == 'sorry, could not recognize your voice':
-                    reply = str(text)
-                    return str({'display': reply, 'say': reply})
-                else:
-                    result = rihanna(text.strip())
-                    if type(result).__name__ == 'dict':
-                        result['user_said'] = text.strip()
-                        reply = str(result)
-                        return reply
-                    else:
-                        print('Not dict', result)
-                        result = f"{text};{result}"
-                        reply = str(result)
-                        return reply
-                    # return str({'user_said': text, 'reply': result, 'voice_check': 0, 'say': ''})
-
-            elif usrText.strip() != 'Bye':
-                result = rihanna(usrText)
-                reply = str(result)
-                #print(result)
-                return reply  # reply should be string else it wont work
-            elif usrText.strip() == 'Bye':
-                reply = 'Bye'
+        if usrText.strip() == 'click':
+            text = rihanna_speak.speech_recog()
+            print(f'speech: {text.strip()}')
+            if text == 'sorry, could not recognize your voice':
+                reply = str(text)
                 return str({'display': reply, 'say': reply})
-        except Exception as e:
-            print('error in main', e)
+            else:
+                result = rihanna(text.strip())
+                if type(result).__name__ == 'dict':
+                    result['user_said'] = text.strip()
+                    reply = str(result)
+                    return reply
+                else:
+                    print('Not dict', result)
+                    result = f"{text};{result}"
+                    reply = str(result)
+                    return reply
+                # return str({'user_said': text, 'reply': result, 'voice_check': 0, 'say': ''})
+
+        elif usrText.strip() != 'Bye':
+            result = rihanna(usrText)
+            reply = str(result)
+            #print(result)
+            return reply  # reply should be string else it wont work
+        elif usrText.strip() == 'Bye':
+            reply = 'Bye'
+            return str({'display': reply, 'say': reply})
+
 
 # d = google_search("when is the wilder fight date")
 # print('hello')
