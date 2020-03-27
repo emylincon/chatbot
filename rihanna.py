@@ -16,7 +16,7 @@ bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
                   {'import_path': 'chatterbot.logic.BestMatch'},
                   {'import_path': 'chatterbot.logic.LowConfidenceAdapter',
                    'threshold': 0.50,
-                   'default_response': 'That is an interesting question!'
+                   'default_response': 'I am sorry. I am not allowed to answer that question'
                    }
               ],
               trainer='chatterbot.trainers.ListTrainer')
@@ -148,6 +148,9 @@ def rihanna(message):
             return rihanna_skype.selector(format_string(message[6:]).lower().strip())
         elif message.lower()[:len('solve')] == 'solve':
             return rihanna_science.selector(message)
+        elif message.lower()[:len('rihanna ')] == 'rihanna ':
+            msg = message.lower()[len('rihanna '):]
+            return rihanna_science.selector(msg)
         elif message.lower()[:len('iot')] == 'iot':
             return rihanna_iot.selector(format_string(message).lower().strip())
         elif message.lower()[:len('man')] == 'man':
@@ -191,10 +194,6 @@ def rihanna(message):
 
     elif message[:len('nhs')] == 'nhs':
         return rihanna_nhs.selector(message)
-
-    elif message[:len('rihanna ')] == 'rihanna ':
-        msg = message[len('rihanna '):]
-        return rihanna_science.selector(msg)
 
     elif message[:len('show image')] == 'show image':
         return ri_image.selector(message)
