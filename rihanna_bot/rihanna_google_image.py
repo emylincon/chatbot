@@ -21,8 +21,9 @@ def search_google_image(query):
     req = url_ + query + tail
     page = requests.get(req, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
-    load = soup.find("img", {"class": "rg_i Q4LuWd tx8vtf"}).get('data-iurl')
-    reply = {'display': f'<img src="{load}" alt="google image" width="60%" height="60%">',
+    #load = soup.find("img", {"class": "rg_i Q4LuWd tx8vtf"}).get('data-iurl')
+    load = soup.find("img", {"class": "rg_i Q4LuWd tx8vtf"}).get('src')
+    reply = {'display': f'<img src="{load}" alt=f"{query} image " width="60%" height="60%">',
              'say': f'find google image for {query}'}
     return reply
 
@@ -36,9 +37,11 @@ def search_google_image_lot(query):
     load = soup.find_all("img", {"class": "rg_i Q4LuWd tx8vtf"})
     display = ""
     for i in load:
-        display += f'<img src="{i.get("data-iurl")}" alt="google images" width="30%" height="30%">'
+        display += f'<img src="{i.get("src")}" alt=f"{query} image " width="30%" height="30%">'
     reply = {'display': f'{display}',
              'say': f'find google images for all {query}'}
     return reply
 
 
+# a = search_google_image('dog')
+# print(a)
