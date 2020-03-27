@@ -49,7 +49,8 @@ class Picture:
         load = self.many_image()
         display = ""
         for image in load:
-            display += f'<img src="{image}" alt=f"{self.pic} image " width="30%" height="30%">'
+            display += f"<div style = 'width:300px; word-wrap: break-word'> " \
+                       f'<img src="{image}" alt=f"{self.pic} image " width="300px" ></div>'
         reply = {'display': f'{display}',
                  'say': f'find displayed images of {self.pic}'}
         return reply
