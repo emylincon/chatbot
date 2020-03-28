@@ -38,8 +38,11 @@ class Music:
         return songs
 
     def random_song(self):
-        songs = self.get_songs
-        return r.choice(list(songs))[:-22]
+        try:
+            songs = self.get_songs
+            return r.choice(list(songs))[:-22]
+        except Exception:
+            return r.choice(list(dict_songs))[:-22]
 
 
 a = Music()
