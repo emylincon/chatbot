@@ -278,6 +278,9 @@ def man_youtube():
             "Youtube playlist <b>artist_name</b>": "plays embedded playlist video within chat log",
             "youtube choose playlist <b>omg usher, anaconda, going bad</b>":
                 "plays embedded playlist video within chat log",
+            'youtube a random song': 'plays a random song on billboard hot 100 from youtube',
+            "youtube popular songs playlist": "plays top 10 popular songs",
+            "youtube popular songs playlist top <b>20</b>": "plays top 20 popular songs"
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
