@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import config
+from rihanna_bot import hot100
+import re
+import json
 
 url = "https://www.youtube.com/results?search_query="
 
@@ -12,9 +15,16 @@ def selector(message):
     elif message[:len('youtube playlist')] == "youtube playlist":
         message_ = message[len("youtube playlist") + 1:]
         return artist_playlist(message_)
+    elif message == 'youtube a random song':
+        return random_song()
     elif message[:len('youtube choose playlist')] == "youtube choose playlist":
         message_ = message[len("youtube choose playlist") + 1:]
         return choose_playlist(message_)
+    elif message == 'youtube popular songs playlist':
+        return hot_100_playlist()
+    elif message[:len('youtube popular songs playlist')] == "youtube popular songs playlist":
+        no = message.split()[-1]
+        return hot_100_playlist(no)
     elif message[:len('youtube')] == "youtube":
         message_ = message[len("youtube") + 1:]
         return search_youtube(message_)
@@ -58,7 +68,7 @@ def search_youtube_loop(query):
         reply = {'display': display, 'say': say}
         return reply
     except Exception as e:
-        return {'display': e, 'say': e}
+        return {'display': str(e), 'say': str(e)}
 
 
 def artist_playlist(query):
@@ -87,7 +97,7 @@ def artist_playlist(query):
         # print(reply['display'])
         return reply
     except Exception as e:
-        return {'display': e, 'say': e}
+        return {'display': str(e), 'say': str(e)}
 
 
 def find(search):
@@ -95,8 +105,14 @@ def find(search):
     page = requests.get(req, headers=config.header)
     soup = BeautifulSoup(page.content, 'html.parser')
     load = soup.find("div", {"id": "img-preload"})
-    li = load.find_all("img")
-    return li[0].get("src").split('/')[4]
+    if load:
+        li = load.find_all("img")
+        try:
+            return li[0].get("src").split('/')[4]
+        except IndexError:
+            return None
+    else:
+        return None
 
 
 def choose_playlist(query):
@@ -104,7 +120,9 @@ def choose_playlist(query):
         query_list = query.split(',')
         playlist = ''
         for i in query_list:
-            playlist += find(i)+','
+            item = find(i)
+            if item:
+                playlist += item+','
         display = f'<iframe width="560" height="315"\
                         src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
                   f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
@@ -113,8 +131,58 @@ def choose_playlist(query):
         reply = {'display': display, 'say': say}
         return reply
     except Exception as e:
-        return {'display': e, 'say': e}
+        return {'display': str(e), 'say': str(e)}
+
+
+def random_song():
+    song = hot100.Music().random_song()
+    return search_youtube(song)
+
+
+def hot_100_playlist(no=None):
+    if no:
+        try:
+            no = int(no)
+            playlist = hot100.Music().playlist(no)
+            # print(playlist)
+            return choose_playlist(playlist)
+        except ValueError:
+            playlist = hot100.Music().playlist()
+            return choose_playlist(playlist)
+    else:
+        playlist = hot100.Music().playlist()
+        # print(playlist)
+        return choose_playlist(playlist)
+
+
+def youtube_playlist():
+    req = url + 'chart'
+    page = requests.get(req, headers=config.header)
+    soup = BeautifulSoup(page.content, 'lxml')
+
+    load = soup.find_all("script")
+
+    script = load[-2].string
+    lscript = script.split(';')
+    variable = lscript[0].strip().split(' = ')[1]
+
+    obj = json.loads(variable)
+    first_content = obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRend' \
+                                                                                         'erer']['contents'][0]
+    playlist_id = first_content['itemSectionRenderer']['contents'][0]['playlistRenderer']['playlistId']
+    title = first_content['itemSectionRenderer']['contents'][0]['playlistRenderer']['title']['simpleText']
+    print(playlist_id, title)
+
+    display = f'<iframe width="560" height="315" ' \
+              f'src="https://www.youtube.com/embed/videoseries?list={playlist_id}&loop=1 ' \
+              f'frameborder="0" allowfullscreen"></iframe>'
+    say = f'Now playing {title}'
+    return {'display': display, 'say': say}
 
 
 # https://www.w3schools.com/html/html_youtube.asp
 # artist_playlist('drake')
+# g = "Future Featuring Drake Life Is Good,Post Malone Circles,Arizona Zervas Roxanne,Harry Styles Adore You,Justin Bieber Featuring Quavo Intentions,Lewis Capaldi Someone You Loved,Billie Eilish everything i wanted,blackbear Hot Girl Bummer,Maroon 5 Memories,Lil Uzi Vert Myron"
+# a = choose_playlist(g)
+# print(a)
+# youtube_playlist()
