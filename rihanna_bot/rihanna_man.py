@@ -276,6 +276,8 @@ def man_youtube():
             "Youtube <b>video_name</b>": "plays embedded video within chat log",
             "Youtube loop <b>video_name</b>": "plays embedded video within chat log in a loop",
             "Youtube playlist <b>artist_name</b>": "plays embedded playlist video within chat log",
+            "youtube choose playlist <b>omg usher, anaconda, going bad</b>":
+                "plays embedded playlist video within chat log",
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
