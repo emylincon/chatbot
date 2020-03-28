@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import config
 from rihanna_bot import hot100
-import re
 import json
+from multiprocessing.pool import ThreadPool
 
 url = "https://www.youtube.com/results?search_query="
 
@@ -118,11 +118,15 @@ def find(search):
 def choose_playlist(query):
     try:
         query_list = query.split(',')
-        playlist = ''
+        result_list = []
+        pool = ThreadPool(processes=len(query_list))
         for i in query_list:
-            item = find(i)
+            result_list.append(pool.apply_async(find, (i,)))
+        playlist = ''
+        for i in result_list:
+            item = i.get()
             if item:
-                playlist += item+','
+                playlist += item + ','
         display = f'<iframe width="560" height="315"\
                         src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
                   f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
@@ -161,23 +165,35 @@ def youtube_playlist():
     soup = BeautifulSoup(page.content, 'lxml')
 
     load = soup.find_all("script")
+    script = None
+    for i in load:
+        scr = i.string
+        if scr:
+            if 'window["ytInitialData"]' in scr:
+                script = i
+                break
+    # script = load[-2].string
+    if script:
+        lscript = script.string.split(';')
+        variable = lscript[0].strip().split(' = ')[1]
 
-    script = load[-2].string
-    lscript = script.split(';')
-    variable = lscript[0].strip().split(' = ')[1]
+        obj = json.loads(variable)
+        first_content = obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRend' \
+                                                                                             'erer']['contents'][0]
+        playlist_id = first_content['itemSectionRenderer']['contents'][0]['playlistRenderer']['playlistId']
+        title = first_content['itemSectionRenderer']['contents'][0]['playlistRenderer']['title']['simpleText']
+        # print(playlist_id, title)
 
-    obj = json.loads(variable)
-    first_content = obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRend' \
-                                                                                         'erer']['contents'][0]
-    playlist_id = first_content['itemSectionRenderer']['contents'][0]['playlistRenderer']['playlistId']
-    title = first_content['itemSectionRenderer']['contents'][0]['playlistRenderer']['title']['simpleText']
-    print(playlist_id, title)
-
-    display = f'<iframe width="560" height="315" ' \
-              f'src="https://www.youtube.com/embed/videoseries?list={playlist_id}&loop=1 ' \
-              f'frameborder="0" allowfullscreen"></iframe>'
-    say = f'Now playing {title}'
-    return {'display': display, 'say': say}
+        display = f'<iframe width="560" height="315" ' \
+                  f'src="https://www.youtube.com/embed/videoseries?list={playlist_id}&loop=1 ' \
+                  f'frameborder="0" allowfullscreen"></iframe>'
+        say = f'Now playing {title}'
+        return {'display': display, 'say': say}
+    else:
+        return {'display': '<iframe width="560" height="315" '
+                           'src="https://www.youtube.com/embed/videoseries?'
+                           'list=PLywWGW4ILrvpqqkgKRV8jpZMaUPohQipP&loop=1 frameborder="0" allowfullscreen"></iframe>',
+                'say': 'Now playing Official UK Top 100 Singles Chart (Top 40 Songs) Week Ending 2nd April 2020'}
 
 
 # https://www.w3schools.com/html/html_youtube.asp
@@ -185,4 +201,5 @@ def youtube_playlist():
 # g = "Future Featuring Drake Life Is Good,Post Malone Circles,Arizona Zervas Roxanne,Harry Styles Adore You,Justin Bieber Featuring Quavo Intentions,Lewis Capaldi Someone You Loved,Billie Eilish everything i wanted,blackbear Hot Girl Bummer,Maroon 5 Memories,Lil Uzi Vert Myron"
 # a = choose_playlist(g)
 # print(a)
-# youtube_playlist()
+# a = youtube_playlist()
+# print(a)
