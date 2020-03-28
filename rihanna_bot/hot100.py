@@ -44,6 +44,19 @@ class Music:
         except Exception:
             return r.choice(list(dict_songs))[:-22]
 
-
-a = Music()
-print(a)
+    def playlist(self, no=5):
+        if no > 10:
+            no = 10
+        try:
+            songs = self.get_songs
+            items = list(songs)[:no]
+            plays = ''
+            for item in items:
+                plays+=item[:-22]+','
+            return plays[:-1]
+        except Exception:
+            items = list(dict_songs)[:no]
+            plays = ''
+            for item in items:
+                plays += item + ','
+            return plays[:-1]
