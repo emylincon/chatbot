@@ -521,6 +521,8 @@ def man_sound_cloud():
                             "
 
     func = {'sound cloud play <b>song</b>': 'plays sound from sound cloud',
+            'sound cloud play song cloud playlist': 'plays a playlist',
+            'sound cloud play a random song': 'plays a random song'
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
