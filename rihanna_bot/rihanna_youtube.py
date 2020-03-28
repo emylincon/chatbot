@@ -22,6 +22,8 @@ def selector(message):
         return choose_playlist(message_)
     elif message == 'youtube popular songs playlist':
         return hot_100_playlist()
+    elif message == 'youtube songs chart':
+        return youtube_playlist()
     elif message[:len('youtube popular songs playlist')] == "youtube popular songs playlist":
         no = message.split()[-1]
         return hot_100_playlist(no)
