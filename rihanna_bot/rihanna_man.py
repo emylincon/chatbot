@@ -452,6 +452,27 @@ def man_windows():
     return reply
 
 
+def man_hot100():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Feature</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+    func = ["hot 100 chart",
+            ]
+    des = ["displays chart",]
+    for i in func:
+        display += f"<tr>\
+                            <td onclick='man_complete(" + f'"{i}"' + f")'>{i}</td>\
+                            <td onclick='man_complete(" + f'"{i}"' + f")'>{des[func.index(i)]}</td>\
+                        </tr>"
+    display += "</table>"
+    say = "Find hot 100 functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 def man_docker():
     display = "<table id='t01'>\
                             <tr>\
@@ -616,4 +637,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man windows': man_windows,
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man image': man_image,
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
-            'man rihanna news': man_news_, 'man rihanna': man_alpha}
+            'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100}
