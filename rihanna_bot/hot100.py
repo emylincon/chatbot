@@ -338,27 +338,29 @@ class Music:
             return plays[:-1]
 
     def chart(self):
+        songs = self.get_songs
         display = "<table id='t01'>\
                       <tr>\
-                        <th><p style='font-size:30px; color:#5985E9; font-family:verdana;'>Rank</p></th>\
-                        <th><p style='font-size:30px; color:#5985E9; font-family:verdana;'>Song</p></th>\
-                        <th><p style='font-size:30px; color:#5985E9; font-family:verdana;'>Artist</p></th>\
-                        <th><p style='font-size:30px; color:#5985E9; font-family:verdana;'>Last Week</p></th>\
-                        <th><p style='font-size:30px; color:#5985E9; font-family:verdana;'>Peak</p></th>\
-                        <th><p style='font-size:30px; color:#5985E9; font-family:verdana;'>Duration</p></th>\
+                        <th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Rank</p></th>\
+                        <th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Song</p></th>\
+                        <th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Artist</p></th>\
+                        <th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Last Week</p></th>\
+                        <th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Peak</p></th>\
+                        <th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Duration</p></th>\
                         <th></th>\
                       </tr>\
                     "
-        for song in self.get_songs:
+        for song in songs.values():
             display += f"<tr>\
-                            <td><p style='font-size:40px; color:#3C6BD3; font-family:verdana;'>{song['rank']}</p></td>\
-                            <td><p style='font-size:25px; color:#3C6BD3; font-family:verdana;'>{song['song']}</p></td>\
-                            <td><p style='font-size:25px; color:#769EF8; font-family:verdana;'>{song['artist']}</p></td>\
-                            <td><p style='font-size:25px; color:#769EF8; font-family:verdana;'>{song['last_week']}</p></td>\
-                            <td><p style='font-size:25px; color:#769EF8; font-family:verdana;'>{song['peak']}</p></td>\
-                            <td><p style='font-size:25px; color:#769EF8; font-family:verdana;'>{song['duration']}</p></td>\
-                            <td><img src='{song['img']}' alt='{song['artist']} image' width='40px'></td>\
-                        </tr>"
+                            <td><p style='font-size:12px; color:#3C6BD3; font-family:verdana;'>{song['rank']}</p></td>\
+                            <td><p style='font-size:12px; color:#3C6BD3; font-family:verdana;'>{song['song']}</p></td>\
+                            <td><p style='font-size:12px; color:#769EF8; font-family:verdana;'>{song['artist']}</p></td>\
+                            <td><p style='font-size:12px; color:#769EF8; font-family:verdana;'>{song['last_week']}</p></td>\
+                            <td><p style='font-size:12px; color:#769EF8; font-family:verdana;'>{song['peak']}</p></td>\
+                            <td><p style='font-size:12px; color:#769EF8; font-family:verdana;'>{song['duration']}</p></td>\
+                            <td><img src='{song['img']}' alt='{song['artist']} image' width='60px'></td>\
+                        </tr> \
+                       "
         display += '</table>'
         return {'display': display, 'say': 'find displayed the hot 100 chart list'}
 
@@ -418,3 +420,6 @@ class Music2:
             for item in items:
                 plays += item + ','
             return plays[:-1]
+
+# a = Music().chart()
+# print(a)
