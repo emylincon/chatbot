@@ -7,7 +7,7 @@ from selenium import webdriver
 from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_news, rihanna_skype, rihanna_one_char, \
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, \
-    rihanna_man, rihanna_job, rihanna_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs
+    rihanna_man, rihanna_job, rihanna_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs, hot100
 import config
 import random as r
 
@@ -194,6 +194,9 @@ def rihanna(message):
 
     elif message[:len('nhs')] == 'nhs':
         return rihanna_nhs.selector(message)
+
+    elif message[:len('hot 100')] == 'hot 100':
+        return hot100.selector(message)
 
     elif message[:len('show image')] == 'show image':
         return ri_image.selector(message)
