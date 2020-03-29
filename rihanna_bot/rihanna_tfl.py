@@ -2,6 +2,7 @@ import urllib.parse
 import requests
 import config
 import datetime as dt
+from selenium import webdriver
 
 '''
 main_api = "https://api.tfl.gov.uk/"
@@ -395,6 +396,8 @@ def tfl(message):
         detail = message.strip().lower()[21:].split(' at')
         reply = get_timetable(detail[0].strip(), detail[1].strip())
         return reply
+    elif message == 'tfl find tube station on map':
+        return tfl_find_station()
     else:
         reply = "Yes I know"
         return {'display': reply, 'say': reply}
@@ -722,13 +725,40 @@ def get_timetable(line, station):
 
 
 def tfl_tube_status():
+    color_code = {'Good Service': 'green', 'Planned Closure': 'red', 'Special Service': 'purple',
+                  'Part Suspended': 'black', 'Service Closed': 'red'}
+    line_color = {'Bakerloo': {'background-color': '#894e24', 'color': 'white'},
+                  'Central': {'background-color': 'red', 'color': 'white'},
+                  'Circle': {'background-color': 'yellow', 'color': 'black'},
+                  'District': {'background-color': 'green', 'color': 'white'},
+                  'Hammersmith & City': {'background-color': 'pink', 'color': 'black'},
+                  'Jubilee': {'background-color': 'grey', 'color': 'white'},
+                  'Metropolitan': {'background-color': 'purple', 'color': 'white'},
+                  'Northern': {'background-color': 'black', 'color': 'white'},
+                  'Piccadilly': {'background-color': 'blue', 'color': 'white'},
+                  'Victoria': {'background-color': '#009ee2', 'color': 'white'},
+                  'Waterloo & City': {'background-color': '#76d0bd', 'color': 'white'}}
+    display = '<font color="blue">TFL Tube Service Report</font><br><table style="width:450px;" border="0">'
     main_api = f"https://api.tfl.gov.uk/Line/Mode/tube/Status?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
     json_data = requests.get(main_api).json()
-    reply = "<font color='blue'>TFL Tube Service Report</font><br>"
+    reply = "TFL Tube Service Report\n"
     for i in json_data:
-        reply += f"{i['name']} : {i['lineStatuses'][0]['statusSeverityDescription']}<br>"
+        reply += f"{i['name']} : {i['lineStatuses'][0]['statusSeverityDescription']}\n"
+        display += f'<tr>\
+                    <td style="background-color: {line_color[i["name"]]["background-color"]}; ' \
+                   f'color: {line_color[i["name"]]["color"]};">{i["name"]}</td>'
+        service = i["lineStatuses"][0]["statusSeverityDescription"]
+        if service in color_code:
+            display += f'\
+                        <td style="background-color: #f6efcd; color: {color_code[service]};">{service}</td>\
+                        </tr>'
+        else:
+            display += f'\
+                        <td style="background-color: #f6efcd; color: red;">{service}</td>\
+                        </tr>'
+    display += '</table>'
 
-    return {'display': reply, 'say': 'find displayed the TFL Tube Service Report'}
+    return {'display': display, 'say': 'find displayed the TFL Tube Service Report', 'reply': reply}
 
 
 def journey_duration(start, stop):
@@ -744,9 +774,20 @@ def journey_duration(start, stop):
     except Exception as reply:
         return {'display': reply, 'say': reply}
 
+
+def tfl_find_station():
+    driver = webdriver.Chrome(executable_path=r"C:\Program Files\chrome driver\chromedriver.exe")
+    query = "file:///C:/Users/emyli/PycharmProjects/Chatbot_Project/tfl.html"
+    driver.get(query)
+    driver.maximize_window()
+    say = 'Use the search entry to search for station'
+    return {'display': say, 'say': say, }
+
+
 # get_station_id("victoria station")
 # print(get_timetable("115", "aldgate underground station"))
 # print(get_timetable("northern", "elephant & castle underground station"))
 # print(get_timetable("northern", "bank underground station"))
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
 # print(journey_duration(start="se18 3px", stop="se1 5hp"))
+# tfl_find_station()
