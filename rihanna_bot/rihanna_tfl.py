@@ -472,6 +472,7 @@ def get_timetable(line, station):
             station_ids = get_bus_station_id(station)
             # print(station_ids)
             reply = f"Time Table for {station}: <br>"
+            display = ""
 
             for nap_id in station_ids:
                 query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{nap_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
@@ -679,12 +680,32 @@ def get_timetable(line, station):
                          f"in bus stop {json_data[min_time]['platformName']} on {json_data[min_time]['stationName']} " \
                          f"travelling towards {json_data[min_time]['destinationName']} " \
                          f"is {json_data[min_time]['expectedArrival'].split('T')[1][:-1]} <br>"
+                display += f'<table style="width:800px;" border="0">\
+                            <tr>\
+                                <th style="background-color: #EAE6E5;"></th>\
+                                <th style="background-color: #EAE6E5; color: black;">\
+                                <div style="text-align:center">\
+                                <font color="black" size="4" face="verdana">{station.title()}</font>\
+                                <font color="red"> [{json_data[min_time]["platformName"]}] </font>\
+                                </div>\
+                                </th>\
+                                <th style="background-color: #EAE6E5;"></th>\
+                              </tr>\
+                              <tr>\
+                                <td style="background-color: red; color: white;">{json_data[min_time]["lineName"]}</td>\
+                                <td style="background-color: #f6efcd; color: black;">' \
+                           f'{json_data[min_time]["destinationName"]}</td>\
+                                <td style="background-color: #f6efcd; color: black;">' \
+                           f'<div style="text-align:right">{json_data[min_time]["expectedArrival"].split("T")[1][:-1]}' \
+                           f'</div></td>\
+                              </tr>\
+                            </table><br>'
 
             if reply == f"Time Table for {station}: ":
                 reply = f"{line} does not call at {station}"
                 return {'display': reply, 'say': reply}
 
-            return {'display': reply, 'say': reply.replace('<br>', '\n')}
+            return {'display': display[:-4], 'say': reply.replace('<br>', '\n'), 'reply': reply}
         else:
 
             if station.lower().split()[-1] != "station":
@@ -693,6 +714,7 @@ def get_timetable(line, station):
             # print(station)
             station_id = get_train_station_id(station, line)
             reply = f"Time Table for {station}: <br>"
+            display = ''
             query = f"https://api.tfl.gov.uk/Line/{line}/Arrivals/{station_id}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
             json_data = requests.get(query).json()
             # print(json_data)
@@ -710,14 +732,54 @@ def get_timetable(line, station):
                          f"in {json_data[out_min_time]['platformName']} on {json_data[out_min_time]['stationName']} " \
                          f"travelling towards {json_data[out_min_time]['destinationName']} " \
                          f"is {json_data[out_min_time]['expectedArrival'].split('T')[1][:-1]}<br>"
+                display += f'<table style="width:800px;" border="0">\
+                                            <tr>\
+                                                <th style="background-color: #EAE6E5;"></th>\
+                                                <th style="background-color: #EAE6E5; color: black;">\
+                                                <div style="text-align:center">\
+                                                <font color="black" size="4" face="verdana">{station.title()}</font>\
+                                                <font color="red"> [{json_data[out_min_time]["platformName"]}] </font>\
+                                                </div>\
+                                                </th>\
+                                                <th style="background-color: #EAE6E5;"></th>\
+                                              </tr>\
+                                              <tr>\
+                                                <td style="background-color: red; color: white;">{json_data[out_min_time]["lineName"]}</td>\
+                                                <td style="background-color: #f6efcd; color: black;">' \
+                           f'{json_data[out_min_time]["destinationName"]}</td>\
+                                <td style="background-color: #f6efcd; color: black;">' \
+                           f'<div style="text-align:right">{json_data[out_min_time]["expectedArrival"].split("T")[1][:-1]}' \
+                           f'</div></td>\
+                              </tr>\
+                            </table><br>'
             if inbound_dict_time:
                 in_min_time = min(inbound_dict_time, key=inbound_dict_time.get)
                 reply += f"The expected arrival Time for {json_data[in_min_time]['lineName']} " \
                          f"in {json_data[in_min_time]['platformName']} on {json_data[in_min_time]['stationName']} " \
                          f"travelling towards {json_data[in_min_time]['destinationName']} " \
                          f"is {json_data[in_min_time]['expectedArrival'].split('T')[1][:-1]}<br>"
+                display += f'<table style="width:800px;" border="0">\
+                                                            <tr>\
+                                                                <th style="background-color: #EAE6E5;"></th>\
+                                                                <th style="background-color: #EAE6E5; color: black;">\
+                                                                <div style="text-align:center">\
+                                                                <font color="black" size="4" face="verdana">{station.title()}</font>\
+                                                                <font color="red"> [{json_data[in_min_time]["platformName"]}] </font>\
+                                                                </div>\
+                                                                </th>\
+                                                                <th style="background-color: #EAE6E5;"></th>\
+                                                              </tr>\
+                                                              <tr>\
+                                                                <td style="background-color: red; color: white;">{json_data[in_min_time]["lineName"]}</td>\
+                                                                <td style="background-color: #f6efcd; color: black;">' \
+                           f'{json_data[in_min_time]["destinationName"]}</td>\
+                                <td style="background-color: #f6efcd; color: black;">' \
+                           f'<div style="text-align:right">{json_data[in_min_time]["expectedArrival"].split("T")[1][:-1]}' \
+                           f'</div></td>\
+                              </tr>\
+                            </table><br>'
 
-            return {'display': reply, 'say': reply.replace('<br>', '\n')}
+            return {'display': display[:-4], 'say': reply.replace('<br>', '\n'), reply: reply}
 
     except Exception as reply:
         # return "Sorry, I can't find the line or station name"
