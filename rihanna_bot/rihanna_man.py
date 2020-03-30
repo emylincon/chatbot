@@ -75,6 +75,7 @@ def man_tfl():
                         </tr>\
                         "
     func = ["tfl tube service report",
+            "tfl find tube station on map",
             "tfl journey duration from <b>se1 5hp</b> to <b>se18 3px</b>",
             "tfl live arrivals for <b>53</b> at <b>dunton road</b>",
             "tfl live arrivals for <b>northern</b> at <b>bank underground station</b>"]
@@ -557,6 +558,28 @@ def man_sound_cloud():
     return reply
 
 
+def man_map():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Map Usage</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'map <b>London bridge UK</b>': 'displays location on map',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the map functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 def man_news_():
     display = "<table id='t01'>\
                             <tr>\
@@ -637,4 +660,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man windows': man_windows,
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man image': man_image,
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
-            'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100}
+            'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map}
