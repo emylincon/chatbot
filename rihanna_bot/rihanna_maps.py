@@ -16,5 +16,5 @@ def google_locate(message):
                   src="https://www.google.com/maps/embed/v1/place?key={config.google_api}\
                     &q={query}" allowfullscreen>\
                 </iframe>'
-    say = 'find displayed the requested location'
+    say = f'find displayed the map location for {message}'
     return {'display': display, 'say': say}
