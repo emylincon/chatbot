@@ -2,8 +2,8 @@ import config
 
 
 def selector(query):
-    if query[:len('google find ')] == 'google find ':
-        message = query[len('google find '):]
+    if query[:len('map ')] == 'map ':
+        message = query[len('map '):]
         return google_locate(message)
 
 
