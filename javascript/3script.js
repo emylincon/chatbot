@@ -75,7 +75,6 @@ var ws = new WebSocket("ws://localhost:8000");
              $(this).val("");
              chat_add_message(message, true);
 			 store.push(message);
-			 console.log(message);
 			 s_g = -2;
 			 if (answer != ''){
 			    var resp = ['why', 'dunno', 'why?'];
