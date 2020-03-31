@@ -830,11 +830,48 @@ def journey_duration(start, stop):
         start_time = json_data["journeys"][0]["startDateTime"].split('T')[1][:-1]  # "2019-11-16T16:14:00"
         arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[1][:-1]  # "2019-11-16T16:45:00"
         duration = json_data["journeys"][0]["duration"]
+        if duration > 60:
+            h = int(duration/60)
+            m = duration - (h*60)
+            duration = f'{h}hr {m}'
+        cost = str(json_data["journeys"][0]["fare"]["totalCost"]/100)
+        if len(cost.split('.')[1]) == 1:
+            cost += '0'
+
+        display = f'<table style="width:800px;">\
+                    <tr>\
+                        <td style="text-align:left">{start_time[:-2]} - {arrival_time[:-2]}</td>\
+                        <td style="text-align:right">{duration}mins</td>\
+                      </tr>\
+                      <tr>\
+                        <td style="text-align:left">£{cost}</td>\
+                        <td style="text-align:right"></td>\
+                      </tr>\
+                    </table><br><table id="t01">'
+        mode = {'walking': 'walk1.png', 'bus': 'bus.png', 'tube': 'underground.jpg', 'overground': 'overground.png',
+                'national-rail': 'national_rail.jpg', 'replacement-bus': 'bus.png'}
+        for trip in json_data["journeys"][0]["legs"]:
+            trip_duration = trip["duration"]
+            instruction = trip["instruction"]["summary"]
+            trip_mode = trip["mode"]["name"]
+            view_stops = ''
+            if len(trip["path"]["stopPoints"]) != 0:
+                view_stops += '<select id = "myList"><option >View Stop Points</option>'
+                for _stop in trip["path"]["stopPoints"]:
+                    view_stops += f'<option >{_stop["name"]}</option>'
+                view_stops += '</select>'
+
+            display += f'<tr>\
+                            <td><img src="tfl/{mode[trip_mode]}" alt="{trip_mode}" width="40px"></td>\
+                            <td>{instruction} {view_stops}</td>\
+                            <td>{trip_duration}mins</td>\
+                        </tr>'
+        display += '</table>'
         reply = f"If you leave at {start_time}, you will arrive at {stop} at {arrival_time}<br>" \
                 f"Therefore, It will take {duration} minutes"
-        return {'display': reply, 'say': reply.replace('<br>', '\n')}
+        return {'display': display, 'say': reply.replace('<br>', '\n'), 'reply': reply}
     except Exception as reply:
-        return {'display': reply, 'say': reply}
+        return {'display': str(reply), 'say': str(reply)}
 
 
 def tfl_find_station():
@@ -845,7 +882,7 @@ def tfl_find_station():
     say = 'Use the search entry to search for station'
     return {'display': say, 'say': say, }
 
-
+# adding images link https://www.pagetutor.com/html_tutor/missing.html
 # get_station_id("victoria station")
 # print(get_timetable("115", "aldgate underground station"))
 # print(get_timetable("northern", "elephant & castle underground station"))
@@ -853,3 +890,5 @@ def tfl_find_station():
 # print(format_time("2019-11-16T15:01:37Z".split('T')))
 # print(journey_duration(start="se18 3px", stop="se1 5hp"))
 # tfl_find_station()
+
+
