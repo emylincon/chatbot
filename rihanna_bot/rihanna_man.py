@@ -277,7 +277,7 @@ def man_youtube():
             "Youtube <b>video_name</b>": "plays embedded video within chat log",
             "Youtube loop <b>video_name</b>": "plays embedded video within chat log in a loop",
             "Youtube playlist <b>artist_name</b>": "plays embedded playlist video within chat log",
-            "youtube choose playlist <b>omg usher, anaconda, going bad</b>":
+            "youtube choose playlist <b>desires drake, drake war, drake do not disturb, drake mob ties</b>":
                 "plays embedded playlist video within chat log",
             'youtube a random song': 'plays a random song on billboard hot 100 from youtube',
             "youtube popular songs playlist": "plays top 5 popular songs",
