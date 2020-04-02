@@ -9,6 +9,7 @@ import numpy as np
 import urllib.request
 import urllib.parse
 import json
+from textblob import TextBlob
 
 
 def embed_tweet(query):
@@ -339,6 +340,25 @@ def twitter_search_cloud_user(query):
     return answer
 
 
+def sentiment(query):
+    result = api.GetSearch(term=query, count=30)
+    tweets = {}
+    for status in result:
+        tweet = status.text
+        links = re.findall(r'(https?://\S+)', tweet)
+        if links:
+            for i in links:
+                tweet = tweet.replace(i, '')
+        score = TextBlob(tweet).polarity
+        senti_ = 'Neutral'
+        if score > 0:
+            senti_ = 'Happy'
+        elif score < 0:
+            senti_ = 'sad'
+        tweets[tweet] = {'score': score, 'sentiment': senti_}
+    return tweets
+
+
 #print(twitter_global_trends())
 #print(twitter_search_("drake"))
 #twitter("tweet test in 2")
@@ -351,3 +371,4 @@ def twitter_search_cloud_user(query):
 # a = "https://twitter.com/BleacherReport/status/1236526501073281029"
 # print(embed_tweet(a))
 # print(search_twitter(query='drake'))
+# print(sentiment('drake'))
