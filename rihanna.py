@@ -28,6 +28,7 @@ _time = ("what is the time", "time", "what is the current time", "current time")
 email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
 run_email = {1: 'which email address do you want to send to?', 2: 'what is the subject?',
              3: 'what do you wish to send to '}
+laugh = ["haha", "lol", "hahaha", "ha", "lool"]
 
 
 def email_thread(message):
@@ -131,6 +132,14 @@ def stop_words():
     return {'display': reply, 'say': reply}
 
 
+def funny():
+    response = ["its not that funny", "lol", "i am surprised you have a sense of humor",
+                "funny eh?", "I know, I am hilarious", "haha"]
+
+    reply = response[r.randrange(len(response))]
+    return {'display': reply, 'say': reply}
+
+
 def rihanna(message):
     if (message[:len("dictionary translate")] != "dictionary translate") and (
             rihanna_dict.detect_lang(message) != 'en'):
@@ -151,6 +160,8 @@ def rihanna(message):
         elif message.lower()[:len('rihanna ')] == 'rihanna ':
             msg = message.lower()[len('rihanna '):]
             return rihanna_science.selector(msg)
+        elif message[:len('map')] == 'map':
+            return rihanna_maps.selector(format_string(message))
         elif message.lower()[:len('iot')] == 'iot':
             return rihanna_iot.selector(format_string(message).lower().strip())
         elif message.lower()[:len('man')] == 'man':
@@ -169,6 +180,9 @@ def rihanna(message):
             return rihanna_job.selector(format_string(message).lower().strip())
         elif message.lower()[:len('docker')] == 'docker':
             return rihanna_docker.selector(message.lower().strip())
+        elif message.strip().lower() in laugh:
+            return funny()
+
         else:
             message = rihanna_spell.auto_correct(format_string(message).lower().strip())
     else:
@@ -194,9 +208,6 @@ def rihanna(message):
 
     elif message[:len('nhs')] == 'nhs':
         return rihanna_nhs.selector(message)
-
-    elif message[:len('map')] == 'map':
-        return rihanna_maps.selector(message)
 
     elif message[:len('hot 100')] == 'hot 100':
         return hot100.selector(message)
