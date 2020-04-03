@@ -66,6 +66,11 @@ def twitter(message):
         reply = last_tweet()
         return reply
 
+    elif message[:len('twitter sentiment for ')] == 'twitter sentiment for ':
+        query = message[len('twitter sentiment for '):].strip()
+        reply = sentiment_report(query)
+        return reply
+
     elif message[:28] == 'show last twitter status for':
         user = message.strip()[29:]
         reply = display_last_tweet(user)
@@ -340,23 +345,45 @@ def twitter_search_cloud_user(query):
     return answer
 
 
-def sentiment(query):
-    result = api.GetSearch(term=query, count=30)
+def sentiment_report(query):
+    result = api.GetSearch(term=query, count=15)
     tweets = {}
     for status in result:
+        user = status.user.screen_name  # use
+        _id_ = status.id
+        url = f"https://twitter.com/{user}/status/{_id_}"
+        display = embed_tweet(query=url)
         tweet = status.text
         links = re.findall(r'(https?://\S+)', tweet)
         if links:
             for i in links:
                 tweet = tweet.replace(i, '')
         score = TextBlob(tweet).polarity
-        senti_ = 'Neutral'
+        percent, senti_ = '0%', 'Neutral'
         if score > 0:
-            senti_ = 'Happy'
+            percent, senti_ = f'{round(score*100, 1)}%', 'Happy'
+
         elif score < 0:
-            senti_ = 'sad'
-        tweets[tweet] = {'score': score, 'sentiment': senti_}
-    return tweets
+            percent, senti_ = f'{round(score*-100, 1)}%', 'Sad'
+        tweets[tweet] = {'score': score, 'sentiment': senti_, 'percentage': percent, 'display': display}
+    return {'display': sentiment_display(tweets), 'say': 'find displayed the sentiment analysis for the top 15 tweets'}
+
+
+def sentiment_display(report):
+    display = f'<table id="t01">'
+    for tweet in report.values():
+        display += f'<tr>\
+                        <td>{tweet["display"]}</td>\
+                        <td><div style="color:#55acee; font-size:30px; border-style: solid; border-color:#55acee; ' \
+                   f'text-align:center; float:center">' \
+                   f'{tweet["percentage"]}</div>'\
+                   f'<br><div style="float:center;">' \
+                   f'<img src="tweet_image/{tweet["sentiment"].lower()}.png" width="80px">' \
+                   f'</div>' \
+                   f'</td>\
+                      </tr>'
+    display += '</table>'
+    return display
 
 
 #print(twitter_global_trends())
@@ -371,4 +398,4 @@ def sentiment(query):
 # a = "https://twitter.com/BleacherReport/status/1236526501073281029"
 # print(embed_tweet(a))
 # print(search_twitter(query='drake'))
-# print(sentiment('drake'))
+# print(sentiment_report('drake'))
