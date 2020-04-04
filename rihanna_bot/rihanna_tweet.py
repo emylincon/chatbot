@@ -348,6 +348,7 @@ def twitter_search_cloud_user(query):
 def sentiment_report(query):
     result = api.GetSearch(term=query, count=15)
     tweets = {}
+    plot_data = {'Happy': 0, 'Neutral': 0, 'Sad': 0}
     for status in result:
         user = status.user.screen_name  # use
         _id_ = status.id
@@ -355,27 +356,33 @@ def sentiment_report(query):
         display = embed_tweet(query=url)
         tweet = status.text
         links = re.findall(r'(https?://\S+)', tweet)
+
         if links:
             for i in links:
                 tweet = tweet.replace(i, '')
+        tweet = " ".join(re.findall("[a-zA-Z]+", tweet)).replace('RT', '')
         score = TextBlob(tweet).polarity
-        percent, senti_ = '0%', 'Neutral'
         if score > 0:
             percent, senti_ = f'{round(score*100, 1)}%', 'Happy'
-
         elif score < 0:
             percent, senti_ = f'{round(score*-100, 1)}%', 'Sad'
+        else:
+            percent, senti_ = '0%', 'Neutral'
+        plot_data[senti_] += 1
         tweets[tweet] = {'score': score, 'sentiment': senti_, 'percentage': percent, 'display': display}
-    return {'display': sentiment_display(tweets), 'say': 'find displayed the sentiment analysis for the top 15 tweets'}
+    plot_sentiment(plot_data, query)
+    display = sentiment_display(tweets) + \
+              f'<br><img src="tweet_image/sentiment.png?{time.time()}" alt="Sentiment graph" width="">'
+    return {'display': display, 'say': 'find displayed the sentiment analysis for the top 15 tweets'}
 
 
 def sentiment_display(report):
     display = f'<table id="t01">'
     for tweet in report.values():
-        display += f'<tr>\
+        display += f'<tr style="background-color:#15202b">\
                         <td>{tweet["display"]}</td>\
-                        <td><div style="color:#55acee; font-size:30px; border-style: solid; border-color:#55acee; ' \
-                   f'text-align:center; float:center">' \
+                        <td><div style="color:white; font-size:30px; border-style: solid; border-color:white; ' \
+                   f'text-align:center; float:center; background-color:#15202b">' \
                    f'{tweet["percentage"]}</div>'\
                    f'<br><div style="float:center;">' \
                    f'<img src="tweet_image/{tweet["sentiment"].lower()}.png" width="80px">' \
@@ -385,6 +392,14 @@ def sentiment_display(report):
     display += '</table>'
     return display
 
+
+def plot_sentiment(data, query):
+    fig, ax = plt.subplots()
+    ax.bar([1,2,3], data.values(), align='center', color=['g','b','r'], alpha=0.3)
+    ax.set_xticks([1,2,3])
+    ax.set_xticklabels(data.keys())
+    ax.set_title(f'Sentiment Analysis for {query.capitalize()}')
+    plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet_image\sentiment.png')
 
 #print(twitter_global_trends())
 #print(twitter_search_("drake"))
