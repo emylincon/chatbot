@@ -824,60 +824,60 @@ def tfl_tube_status():
 
 
 def journey_duration(start, stop):
-    # try:
-    main_api = f"https://api.tfl.gov.uk/Journey/JourneyResults/{start}/to/{stop}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
-    json_data = requests.get(main_api).json()
-    start_time = json_data["journeys"][0]["startDateTime"].split('T')[1][:-1]  # "2019-11-16T16:14:00"
-    arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[1][:-1]  # "2019-11-16T16:45:00"
-    duration = json_data["journeys"][0]["duration"]
-    if duration > 60:
-        h = int(duration/60)
-        m = duration - (h*60)
-        duration = f'{h}hr {m}'
-    cost = 'Unavailable'
-    for journey in json_data["journeys"]:
-        if "fare" in journey:
-            cost = '£' + str(json_data["journeys"][0]["fare"]["totalCost"] / 100)
-            if len(cost.split('.')[1]) == 1:
-                cost += '0'
-            break
+    try:
+        main_api = f"https://api.tfl.gov.uk/Journey/JourneyResults/{start}/to/{stop}?app_id={config.tfl_id}&app_key={config.tfl_Keys}"
+        json_data = requests.get(main_api).json()
+        start_time = json_data["journeys"][0]["startDateTime"].split('T')[1][:-1]  # "2019-11-16T16:14:00"
+        arrival_time = json_data["journeys"][0]["arrivalDateTime"].split('T')[1][:-1]  # "2019-11-16T16:45:00"
+        duration = json_data["journeys"][0]["duration"]
+        if duration > 60:
+            h = int(duration/60)
+            m = duration - (h*60)
+            duration = f'{h}hr {m}'
+        cost = 'Unavailable'
+        for journey in json_data["journeys"]:
+            if "fare" in journey:
+                cost = '£' + str(json_data["journeys"][0]["fare"]["totalCost"] / 100)
+                if len(cost.split('.')[1]) == 1:
+                    cost += '0'
+                break
 
-    display = f'<table style="width:800px;">\
-                <tr>\
-                    <td style="text-align:left">{start_time[:-2]} - {arrival_time[:-2]}</td>\
-                    <td style="text-align:right">{duration}mins</td>\
-                  </tr>\
-                  <tr>\
-                    <td style="text-align:left">{cost}</td>\
-                    <td style="text-align:right"></td>\
-                  </tr>\
-                </table><br><table id="t01">'
-    mode = {'walking': 'walk1.png', 'bus': 'bus.png', 'tube': 'underground.jpg', 'overground': 'overground.png',
-            'national-rail': 'national_rail.jpg', 'replacement-bus': 'bus.png'}
-    for trip in json_data["journeys"][0]["legs"]:
-        trip_duration = trip["duration"]
-        instruction = trip["instruction"]["summary"]
-        trip_mode = trip["mode"]["name"]
-        view_stops = ''
-        if len(trip["path"]["stopPoints"]) != 0:
-            view_stops += f'<select id = "myList" style="width:270px;">' \
-                          f'<option >{len(trip["path"]["stopPoints"])} Stop Points</option>'
-            for _stop in trip["path"]["stopPoints"]:
-                view_stops += f'<option >{_stop["name"]}</option>'
-            view_stops += '</select>'
+        display = f'<table style="width:800px;">\
+                    <tr>\
+                        <td style="text-align:left">{start_time[:-2]} - {arrival_time[:-2]}</td>\
+                        <td style="text-align:right">{duration}mins</td>\
+                      </tr>\
+                      <tr>\
+                        <td style="text-align:left">{cost}</td>\
+                        <td style="text-align:right"></td>\
+                      </tr>\
+                    </table><br><table id="t01">'
+        mode = {'walking': 'walk1.png', 'bus': 'bus.png', 'tube': 'underground.jpg', 'overground': 'overground.png',
+                'national-rail': 'national_rail.jpg', 'replacement-bus': 'bus.png'}
+        for trip in json_data["journeys"][0]["legs"]:
+            trip_duration = trip["duration"]
+            instruction = trip["instruction"]["summary"]
+            trip_mode = trip["mode"]["name"]
+            view_stops = ''
+            if len(trip["path"]["stopPoints"]) != 0:
+                view_stops += f'<select id = "myList" style="width:270px;">' \
+                              f'<option >{len(trip["path"]["stopPoints"])} Stop Points</option>'
+                for _stop in trip["path"]["stopPoints"]:
+                    view_stops += f'<option >{_stop["name"]}</option>'
+                view_stops += '</select>'
 
-        display += f'<tr>\
-                        <td><img src="tfl/{mode[trip_mode]}" alt="{trip_mode}" width="40px"></td>\
-                        <td>{instruction} </td><td>{view_stops}</td>\
-                        <td>{trip_duration}mins</td>\
-                    </tr>'
-    display += '</table>'
-    reply = f"If you leave at {start_time}, you will arrive at {stop} at {arrival_time}<br>" \
-            f"Therefore, It will take {duration} minutes"
-    return {'display': display, 'say': reply.replace('<br>', '\n'), 'reply': reply}
-    # except Exception as error:
-    #     print(error)
-    #     return {'display': str(error), 'say': str(error)}
+            display += f'<tr>\
+                            <td><img src="tfl/{mode[trip_mode]}" alt="{trip_mode}" width="40px"></td>\
+                            <td>{instruction} </td><td>{view_stops}</td>\
+                            <td>{trip_duration}mins</td>\
+                        </tr>'
+        display += '</table>'
+        reply = f"If you leave at {start_time}, you will arrive at {stop} at {arrival_time}<br>" \
+                f"Therefore, It will take {duration} minutes"
+        return {'display': display, 'say': reply.replace('<br>', '\n'), 'reply': reply}
+    except Exception as error:
+        reply = f'Code Bug detected: {error}'
+        return {'display': reply, 'say': reply}
 
 
 def tfl_find_station():
