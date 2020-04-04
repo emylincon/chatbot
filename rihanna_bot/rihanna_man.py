@@ -56,7 +56,8 @@ def man_twitter():
             "show last twitter status for <b>user_twitter_id</b>",
             "tweet <b>message</b>",
             "show twitter hash tags associated with <b>query</b>",
-            "search twitter <b>search_query</b>"]
+            "search twitter <b>search_query</b>",
+            'twitter sentiment for <b>amazon</b>']
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
@@ -282,7 +283,8 @@ def man_youtube():
             'youtube a random song': 'plays a random song on billboard hot 100 from youtube',
             "youtube popular songs playlist": "plays top 5 popular songs",
             "youtube popular songs playlist top <b>10</b>": "plays top 10 popular songs",
-            "youtube songs chart": "plays chart playlist"
+            "youtube songs chart": "plays chart playlist",
+            'youtube rihanna playlist': 'plays demo playlist'
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
