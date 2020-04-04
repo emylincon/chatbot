@@ -24,6 +24,8 @@ def selector(message):
         return hot_100_playlist()
     elif message == 'youtube songs chart':
         return youtube_playlist()
+    elif message == 'youtube rihanna playlist':
+        return rihanna_playlist()
     elif message[:len('youtube popular songs playlist')] == "youtube popular songs playlist":
         no = message.split()[-1]
         return hot_100_playlist(no)
@@ -196,6 +198,13 @@ def youtube_playlist():
                            'src="https://www.youtube.com/embed/videoseries?'
                            'list=PLywWGW4ILrvpqqkgKRV8jpZMaUPohQipP&loop=1 frameborder="0" allowfullscreen"></iframe>',
                 'say': 'Now playing Official UK Top 100 Singles Chart (Top 40 Songs) Week Ending 2nd April 2020'}
+
+
+def rihanna_playlist():
+    return {'display': '<iframe width="560" height="315" '
+                       'src="https://www.youtube.com/embed/videoseries?'
+                       'list=PL2oLK9yB8WKVahzI1Akf1_zwPnmmAbFow&loop=1 frameborder="0" allowfullscreen"></iframe>',
+            'say': 'Now playing Rihanna Demo playlist on youtube'}
 
 
 # https://www.w3schools.com/html/html_youtube.asp
