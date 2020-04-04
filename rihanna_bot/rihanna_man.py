@@ -462,9 +462,9 @@ def man_hot100():
                                 <th>Description</th>\
                             </tr>\
                             "
-    func = ["hot 100 chart",
+    func = ["hot 100 chart",'hot 100 billboard playlist'
             ]
-    des = ["displays chart",]
+    des = ["displays chart", 'hot 100 billboard playlist videos from youtube']
     for i in func:
         display += f"<tr>\
                             <td onclick='man_complete(" + f'"{i}"' + f")'>{i}</td>\
