@@ -24,7 +24,7 @@
         border-radius: 15px;
         border: 1px solid #111112; /* #92d2f5; */
         margin: 0px 80px 0px 80px;
-        height: 95vh;
+        height: 95.5vh;
     }
 
 
@@ -33,7 +33,7 @@
         padding: 10px;
         border-bottom: 1px solid white;
         overflow-y: scroll;
-        height: 73vh;
+        height: 78vh;
         font-size: 20px;
     }
     #chat_input_container {
@@ -101,12 +101,12 @@
 
     }
     #button {
-      background-color: #338EFF; /* sky blue */
+      background-color: #111112; /* sky blue */
       /*float: right;*/
       border: none;
       color: white;
       border: none;
-      padding: 9px 25px;
+      padding: 11.5px 40px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
@@ -162,10 +162,15 @@
 
 <body>
 <div id="chat_container">
-    <div class="banner">
+    <!--div class="banner"-->
         <!--<img class="banner-image" src="img/chatbot-banner.jpg" alt="CHAT BANNER"/>-->
         <!--<img class="banner-image" src="img/img_banner.png" alt="CHAT BANNER"/>-->
-    </div>
+    <!--/div-->
+    <table style="width:100%">
+      <tr>
+        <th style="background-color:#111112;"><div style="align:center; text-align:center"><img src="img/banner_image.png" alt="banner" height="90px"></div></th>
+      </tr>
+    </table>
     <div id="chat_log">
     </div>
     <div id="chat_input_container">
@@ -175,6 +180,6 @@
         <button id="button" onclick="myFunction()">Speak</button>
     </div>
 </div>
-<script src="javascript/2script.js"></script>
+<script src="javascript/3script.js"></script>
 </body>
 </html>
