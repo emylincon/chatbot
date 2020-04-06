@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import config
 import random as r
 from multiprocessing.pool import ThreadPool
+import billboard
 import datetime
 from rihanna_bot.hot100_data import *
 dict_songs = {
@@ -514,10 +515,14 @@ class Music2:
     def get_vids(self):
         print('processing, please wait...')
         result_list = {}
-        pool = ThreadPool(processes=len(self.songs))
-        for i in self.songs:
-            result_list[i] = pool.apply_async(self.find, (i,))
+        pool = ThreadPool(processes=len(self.songs)/2)
         songs = self.songs
+        for i in self.songs:
+            if i in hot_songs:
+                songs[i]['url'] = hot_songs[i]['url']
+            else:
+                result_list[i] = pool.apply_async(self.find, (i,))
+
         for i in result_list:
             songs[i]['url'] = result_list[i].get()
         return songs
@@ -548,5 +553,32 @@ class Music2:
         display += '</table>'
         return {'display': display, 'say': 'find displayed the hot 100 chart list'}
 
+# most popular song in the uk
+class BillboardMusic:
+    def __init__(self):
+        self.charts = billboard.charts()
+        self.chart = billboard.ChartData
+
+    def most_popular(self, query):
+        return self.chart(query).entries[0].__dict__
+
+    def chart_country(self):
+        display = "<table id='t01'>"
+        chart_index = list(range(0, len(self.charts)+1, 13))
+        start = 0
+        skip = 13
+        while skip < len(self.charts):
+            chart = self.charts[start:skip]
+            display += "<tr>"
+            for title in chart:
+                display += ''
+
+
+
+
 # a = Music2().chart()
 # print(a)
+
+# most popular song in italy, canada, germany, france, uk, us
+# most popular rap song, pop song, rock song, latin song
+# https://github.com/guoguo12/billboard-charts
