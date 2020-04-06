@@ -164,3 +164,9 @@ var ws = new WebSocket("ws://localhost:8000");
 
         speechSynthesis.speak(msg);
     }
+
+    function man_mySelect(word) {
+      var sel = document.getElementById("mySelect").value;
+      document.getElementById("chat_input").value = word+' '+sel;
+
+    }
