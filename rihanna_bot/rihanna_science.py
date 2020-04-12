@@ -87,31 +87,35 @@ class Science:
             return {'display': _ans.replace('\n', '<br>'), 'say': _ans}
 
     def universal(self):
-        result_list = self.result['pod']
-        reply = "<table width='250px'>"
+        try:
+            result_list = self.result['pod']
+            reply = "<table width='250px'>"
 
-        for pod in result_list:
-            if pod['@numsubpods'] == '1':
-                reply += f"<tr bgcolor='#FDF0ED'>" \
-                f"<th align='center'><font color='black'>{pod['@title']}</font></th>" \
-                "</tr>" \
-                "<tr>" \
-                f"<td align='center'><img src='{pod['subpod']['img']['@src']}' alt='{pod['subpod']['plaintext']}'></td>" \
-                "</tr>"
-            else:
-                reply += f"<tr bgcolor='#FDF0ED'>" \
-                         f"<th align='center'><font color='black'>{pod['@title']}</font></th>" \
-                         f"</tr>"
-                for subpod in pod['subpod']:
-                    reply += "<tr><td>"
-                    reply += "<div style = 'width:250px; word-wrap: break-word'>" \
-                             f"<b><font color='blue'>{subpod['@title']}</font></b>" \
-                             f"<br><img src='{subpod['img']['@src']}' alt='{subpod['plaintext']}'>" \
-                             "</div></td>" \
-                             "</tr>"
-        reply += "</table>"
+            for pod in result_list:
+                if pod['@numsubpods'] == '1':
+                    reply += f"<tr bgcolor='#FDF0ED'>" \
+                    f"<th align='center'><font color='black'>{pod['@title']}</font></th>" \
+                    "</tr>" \
+                    "<tr>" \
+                    f"<td align='center'><img src='{pod['subpod']['img']['@src']}' alt='{pod['subpod']['plaintext']}'></td>" \
+                    "</tr>"
+                else:
+                    reply += f"<tr bgcolor='#FDF0ED'>" \
+                             f"<th align='center'><font color='black'>{pod['@title']}</font></th>" \
+                             f"</tr>"
+                    for subpod in pod['subpod']:
+                        reply += "<tr><td>"
+                        reply += "<div style = 'width:250px; word-wrap: break-word'>" \
+                                 f"<b><font color='blue'>{subpod['@title']}</font></b>" \
+                                 f"<br><img src='{subpod['img']['@src']}' alt='{subpod['plaintext']}'>" \
+                                 "</div></td>" \
+                                 "</tr>"
+            reply += "</table>"
 
-        return {'display': reply, 'say': f'Find displayed the requested result for {self.query}: '}
+            return {'display': reply, 'say': f'Find displayed the requested result for {self.query}: '}
+        except Exception:
+            reply = 'bug has been detected in universal'
+            return {'display': reply, 'say': reply}
     # f'{self.default()["say"]}'
 
     def default(self):
@@ -120,5 +124,5 @@ class Science:
         return {'display': reply, 'say': reply}
 
 
-# a = Science('carbon').universal()
+# a = Science('movies').universal()
 # print(a)
