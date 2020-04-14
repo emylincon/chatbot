@@ -633,18 +633,26 @@ def man_hot100():
                                 <th>Description</th>\
                             </tr>\
                             "
-    chart_select = f'<select id="mySelect">' \
+    chart_select1 = f'<select id="mySelect1">' \
                    f'{select}' \
                    f'</select>'
-    func = ["hot 100 chart", 'hot 100 billboard playlist', ['most popular ', chart_select]
+    chart_select2 = f'<select id="mySelect2">' \
+                   f'{select}' \
+                   f'</select>'
+    chart_select3 = f'<select id="mySelect3">' \
+                   f'{select}' \
+                   f'</select>'
+    func = ["hot 100 chart", 'hot 100 billboard playlist', ['billboard most popular ', chart_select1, 1],
+            ['billboard play most popular ', chart_select2, 2], ['billboard chart ', chart_select3, 3]
             ]
-    des = ["displays chart", 'hot 100 billboard playlist videos from youtube', 'most popular']
+    des = ["displays chart", 'hot 100 billboard playlist videos from youtube', 'billboard most popular',
+           'billboard plays most popular on youtube', 'billboard chart']
     for i in func:
         if type(i).__name__ == 'list':
 
             display += f"<tr>\
-                            <td onclick='man_mySelect(" + f'"{i[0]}"' + f")'>{i[0]+i[1]}</td>\
-                            <td onclick='man_mySelect(" + f'"{i[0]}"' + f")'>{des[func.index(i)]}</td>\
+                            <td onclick='man_mySelect(" + f'"{i[0]}{i[2]}"' + f")'>{i[0]+i[1]}</td>\
+                            <td onclick='man_mySelect(" + f'"{i[0]}{i[2]}"' + f")'>{des[func.index(i)]}</td>\
                             </tr>"
         else:
             display += f"<tr>\
@@ -836,6 +844,34 @@ def man_alpha():
     return reply
 
 
+def man_movies():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Movies Usage</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'search <b>matrix</b> in movies': 'returns search result',
+            'show top movies': 'display top movies',
+            'show top 50 movies': 'shows top 50 movies',
+            'show by year top <b>100</b> movies': 'sort by year',
+            'show by year top movies': 'sort by year',
+            'find people <b>angelina</b> in movies': 'finds and displays at most 5 movie-star details',
+            'find person <b>angelina</b> in movies': 'finds and displays one movie-star details',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the movies functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
@@ -843,4 +879,5 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man amazon': man_amazon, 'man dictionary': man_dictionary, 'man iot': man_iot, 'man windows': man_windows,
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man image': man_image,
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
-            'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map}
+            'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map,
+            'man movies': man_movies}
