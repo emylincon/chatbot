@@ -1,4 +1,5 @@
 from imdb import IMDb, IMDbError
+# https://imdbpy.readthedocs.io/
 
 
 def selector(query):
@@ -215,7 +216,7 @@ class Movies:
         for person in all_people:
             bio = f'<button type="button" class="collapsible">BIO</button>\
                             <div class="content">\
-                             {" ".join(person["mini biography"])} </div>'
+                             {" ".join(person["mini biography"]).replace("(qv)", "").replace("_", "")} </div>'
             try:
                 birth_place = person['birth info']['birth place']
             except KeyError:
@@ -283,7 +284,7 @@ class Movies:
                 display += s_table
                 display += '</td></tr>'
             except KeyError:
-                display += ''
+                pass
             try:
                 display += '<tr><td>'
                 display += f'<button type="button" class="collapsible">Salary History</button>'
@@ -294,7 +295,7 @@ class Movies:
                 display += '</div>'
                 display += '</td></tr>'
             except KeyError:
-                display += ''
+                pass
         display += '</table>'
 
         script = '<script>\
