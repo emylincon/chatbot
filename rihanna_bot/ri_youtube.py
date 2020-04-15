@@ -5,9 +5,9 @@ import config
 from rihanna_bot import youtube_data
 import json
 import random
-from youtube_sim import youtube_sim_main
+from rihanna_bot.youtube_sim import youtube_sim_main
 from multiprocessing.pool import ThreadPool
-import hot100_data
+from rihanna_bot import hot100_data
 
 
 def selector(message):
@@ -34,6 +34,9 @@ def selector(message):
     elif message[:len('youtube')] == "youtube":
         message_ = message[len("youtube") + 1:]
         return Youtube().search_youtube(message_)
+    elif message[:len('youtube views for ')] == 'youtube views for ':
+        msg = message[len('youtube views for '):]
+        return Youtube().youtube_views(msg)
     else:
         reply = "Youtube is offline at the moment. refer to man youtube"
         return {'display': reply, 'say': reply}
@@ -363,7 +366,10 @@ class Youtube:
             play = list(hot100_data.hot_songs.values())[:no]
             playlist = ''
             for vid in play:
-                playlist += vid['url'].split('v=')[1] + ','
+                if 'v=' in vid['url']:
+                    playlist += vid['url'].split('v=')[1] + ','
+                else:
+                    print(vid)
 
             display = f'<iframe width="560" height="315"\
                         src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
@@ -372,6 +378,71 @@ class Youtube:
             say = f"playing hot 100 songs from youtube"
             reply = {'display': display, 'say': say}
             return reply
+
+    def youtube_views(self, query):
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+
+        driver = webdriver.Chrome(options=options)
+        req = self.url + query
+        driver.get(req)
+        soup = BeautifulSoup(driver.page_source, 'lxml')
+
+        load = soup.find_all("script")
+        script = None
+        for i in load:
+            scr = i.string
+            if scr:
+                if 'window["ytInitialData"]' in scr:
+                    script = i
+                    break
+
+        if script:
+            lscript = script.string.split(';')
+            variable = lscript[0].strip().split(' = ')[1]
+            try:
+                obj = json.loads(variable)
+            except json.decoder.JSONDecodeError:
+                return None
+            set_id = 0  # 0 or 1 controls if video has been found
+            changed = 0  # 0 or 1 controls if youtube data content has changed
+            result = ''
+            vid_time = ''
+            contents = \
+                obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][
+                    0][
+                    'itemSectionRenderer']['contents']
+            for data in contents:
+                if 'videoRenderer' in data:
+                    vid_data = data['videoRenderer']
+                    if set_id == 0:
+                        result = vid_data['title']['runs'][0]['text'].replace('- ', '').lower()
+                        vid = vid_data['videoId']
+                        vid_name = vid_data['title']['runs'][0]['text'].replace('- ', '').lower()
+                        vid_length = vid_data['lengthText']['accessibility']['accessibilityData']['label']
+                        vid_views = vid_data['viewCountText']['simpleText']
+                        vid_time = vid_data['publishedTimeText']['simpleText']
+                        if vid_name not in self.u_data:
+                            self.u_data[vid_name] = {'videoID': vid, 'videoTitle': vid_name.title(),
+                                                     'videoLength': vid_length, 'videoViews': vid_views}
+                            changed = 1
+                        set_id = 1
+                        break
+
+            if changed == 1:
+                file = open('youtube_data.py', 'w', encoding='utf-8')
+                file.write(f'yt_data = {self.u_data}\n')
+                file.write(f'data_length = {len(self.u_data)}\n')
+                file.close()
+            if vid_time != '':
+                reply = f"{vid_name.title()} has accumulated {vid_views} since it was posted {vid_time}"
+                return {'display': reply, 'say': reply}
+            else:
+                reply = 'I cannot find video'
+                return {'display': reply, 'say': reply}
+        else:
+            reply = 'I cannot find video'
+            return {'display': reply, 'say': reply}
 
 
 
@@ -390,7 +461,8 @@ class Youtube:
 # a = Youtube().random_song()
 # a = Youtube().choose_playlist('drake war,drake in my feelings,nav tap')
 # a = Youtube().hot_100_playlist()
-# a = Youtube().search_youtube_loop('meek mill going bad')
-# a = Youtube().youtube_playlist()
+# # a = Youtube().search_youtube_loop('meek mill going bad')
+# # a = Youtube().youtube_playlist()
+# a = Youtube().youtube_views('toosie slide drake')
 # print(a)
 
