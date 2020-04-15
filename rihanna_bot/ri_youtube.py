@@ -65,8 +65,10 @@ class Youtube:
         if script:
             lscript = script.string.split(';')
             variable = lscript[0].strip().split(' = ')[1]
-
-            obj = json.loads(variable)
+            try:
+                obj = json.loads(variable)
+            except json.decoder.JSONDecodeError:
+                return None
             set_id = 0  # 0 or 1 controls if video has been found
             changed = 0  # 0 or 1 controls if youtube data content has changed
             result = ''
@@ -104,7 +106,10 @@ class Youtube:
                 file.write(f'yt_data = {self.u_data}\n')
                 file.write(f'data_length = {len(self.u_data)}\n')
                 file.close()
-            return self.u_data[result]
+            if result in self.u_data:
+                return self.u_data[result]
+            else:
+                return None
         else:
             return None
 
