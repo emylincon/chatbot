@@ -280,9 +280,10 @@ dict_songs = {
 
 def selector(query):
     if query == 'hot 100 chart':
-        return Music2().chart()
+        reply = Music2().chart()
+        return reply
     elif query == 'hot 100 billboard playlist':
-        return billboard_playlist()
+        return Music2().billboard_playlist()
     elif query[:len('billboard most popular ')] == 'billboard most popular ':
         msg = query[len('billboard most popular '):]
         if '-' in msg:
