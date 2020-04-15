@@ -31,12 +31,12 @@ def selector(message):
     elif message[:len('youtube popular songs playlist')] == "youtube popular songs playlist":
         no = message.split()[-1]
         return Youtube().hot_100_playlist(no)
-    elif message[:len('youtube')] == "youtube":
-        message_ = message[len("youtube") + 1:]
-        return Youtube().search_youtube(message_)
     elif message[:len('youtube views for ')] == 'youtube views for ':
         msg = message[len('youtube views for '):]
         return Youtube().youtube_views(msg)
+    elif message[:len('youtube')] == "youtube":
+        message_ = message[len("youtube") + 1:]
+        return Youtube().search_youtube(message_)
     else:
         reply = "Youtube is offline at the moment. refer to man youtube"
         return {'display': reply, 'say': reply}
