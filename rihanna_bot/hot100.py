@@ -5,7 +5,9 @@ import random as r
 from multiprocessing.pool import ThreadPool
 import billboard
 import datetime
+from rihanna_bot.ri_youtube import Youtube
 from rihanna_bot.hot100_data import *
+from rihanna_bot.similarity import sim_main
 dict_songs = {
     'Future Featuring Drake Life Is Good The Billboard Hot 100': {'rank': '4', 'artist': 'Future Featuring Drake',
                                                                   'song': 'Life Is Good',
@@ -278,9 +280,42 @@ dict_songs = {
 
 def selector(query):
     if query == 'hot 100 chart':
-        return Music().chart()
+        return Music2().chart()
     elif query == 'hot 100 billboard playlist':
         return billboard_playlist()
+    elif query[:len('billboard most popular ')] == 'billboard most popular ':
+        msg = query[len('billboard most popular '):]
+        if '-' in msg:
+            return BillboardMusic().most_popular(msg.strip())
+        else:
+            chart = sim_main(msg)
+            if chart == 0:
+                reply = 'sorry i could not find chart'
+                return {'display': reply, 'say': reply}
+            else:
+                return BillboardMusic().most_popular(chart)
+    elif query[:len('billboard play most popular ')] == 'billboard play most popular ':
+        msg = query[len('billboard play most popular '):]
+        if '-' in msg:
+            return BillboardMusic().play_most_popular(msg.strip())
+        else:
+            chart = sim_main(msg)
+            if chart == 0:
+                reply = 'sorry i could not find chart'
+                return {'display': reply, 'say': reply}
+            else:
+                return BillboardMusic().play_most_popular(chart)
+    elif query[:len('billboard chart ')] == 'billboard chart ':
+        msg = query[len('billboard chart '):]
+        if '-' in msg:
+            return BillboardMusic().chart_songs(msg.strip())
+        else:
+            chart = sim_main(msg)
+            if chart == 0:
+                reply = 'sorry i could not find chart'
+                return {'display': reply, 'say': reply}
+            else:
+                return BillboardMusic().chart_songs(chart)
     else:
         return {'display': 'nothing to show', 'say': 'nothing to show'}
 
@@ -407,21 +442,6 @@ class Music:
         return {'display': display, 'say': 'find displayed the hot 100 chart list'}
 
 
-def billboard_playlist():
-    playlist = ''
-    for song in hot_songs.values():
-        vid = song['url'].split('=')[1]
-        playlist += vid+','
-
-    display = f'<iframe width="560" height="315"\
-                            src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
-              f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
-            </iframe>'
-    say = f"playing Billboard chart video playist from youtube"
-    reply = {'display': display, 'say': say}
-    return reply
-
-
 class Music2:
     def __init__(self):
         try:
@@ -434,7 +454,7 @@ class Music2:
                 self.songs = {**self.get_songs}
                 self.songs = self.get_vids()
                 path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\rihanna_bot\hot100_data.py'
-                file = open(path, 'w')
+                file = open(path, 'w', encoding='utf-8')
                 file.write('import datetime\n')
                 file.write(f'hot_songs = {self.songs}\n')
                 now = datetime.datetime.now()
@@ -515,16 +535,27 @@ class Music2:
     def get_vids(self):
         print('processing, please wait...')
         result_list = {}
-        pool = ThreadPool(processes=len(self.songs)/2)
+        vid_url = 'https://www.youtube.com/watch?v='
+        url = "https://www.youtube.com/results?search_query="
+        pool = ThreadPool(processes=30)
         songs = self.songs
         for i in self.songs:
             if i in hot_songs:
                 songs[i]['url'] = hot_songs[i]['url']
             else:
-                result_list[i] = pool.apply_async(self.find, (i,))
+                # pool.apply_async(self.get_data, (i,))
+                result_list[i] = pool.apply_async(Youtube().get_data, (i,))
 
         for i in result_list:
-            songs[i]['url'] = result_list[i].get()
+            if type(result_list[i]).__name__ == 'dict':
+                songs[i]['url'] = vid_url + result_list[i]['videoID']
+            else:
+                print(i)
+                item = result_list[i].get()
+                if item:
+                    songs[i]['url'] = vid_url + item['videoID']
+                else:
+                    songs[i]['url'] = url + i
         return songs
 
     def chart(self):
@@ -553,28 +584,76 @@ class Music2:
         display += '</table>'
         return {'display': display, 'say': 'find displayed the hot 100 chart list'}
 
+    def billboard_playlist(self):
+        playlist = ''
+        for song in self.songs.values():
+            if 'v=' in song['url']:
+                vid = song['url'].split('v=')[1]
+                playlist += vid + ','
+
+        display = f'<iframe width="560" height="315"\
+                                src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
+                  f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
+                </iframe>'
+        say = f"playing Billboard Hot 100 chart video playist from youtube"
+        reply = {'display': display, 'say': say}
+        return reply
+
 
 # most popular song in the uk
-class BillboardMusic:   # Todo
+class BillboardMusic:
     def __init__(self):
         self.charts = billboard.charts()
         self.chart = billboard.ChartData
 
     def most_popular(self, query):
-        return self.chart(query).entries[0].__dict__
+        try:
+            song = self.chart(query).entries[0].__dict__
+            reply = f'{query.replace("-", " ")}: {song["title"]} by {song["artist"]}'
+            return {'display': reply, 'say': reply}
+        except Exception:
+            reply = 'bug has been detected in billboard most popular'
+            return {'display': reply, 'say': reply}
 
-    def chart_country(self):
-        display = "<table id='t01'>"
-        chart_index = list(range(0, len(self.charts)+1, 13))
-        start = 0
-        skip = 13
-        while skip < len(self.charts):
-            chart = self.charts[start:skip]
-            display += "<tr>"
-            for title in chart:
-                display += ''
+    def play_most_popular(self, query):
+        try:
+            song_details = self.chart(query).entries[0].__dict__
+            song = song_details['title'] + ' ' + song_details['artist']
+            return Youtube().search_youtube(song)
+        except Exception:
+            reply = 'bug has been detected in billboard play most popular'
+            return {'display': reply, 'say': reply}
 
+    def chart_songs(self, query):
+        # try:
+        chart_details = self.chart(query).entries
+        display = "<table id='t01'>\
+                              <tr>\
+        <td><p style='font-size:15px; color:#5985E9; font-family:verdana;'>Rank</p></td>"
+        for i in chart_details[0].__dict__:
+            if (i != 'rank') and (i != 'image') and (i != 'isNew') and (chart_details[0].__dict__[i]):
+                display += f"<th><p style='font-size:15px; color:#5985E9; font-family:verdana;'>{i.title()}</p></th>"
 
+        display += "<th></th>\
+                     </tr>"
+        for song in chart_details:
+            display += f"<tr>\
+                        <td><p style='font-size:12px; color:#3C6BD3; font-family:verdana;'>{song.rank}</p></td>"
+            for item in song.__dict__:
+                if (item != 'rank') and (item != 'image') and (item != 'isNew') and (chart_details[0].__dict__[item]):
+                    d = song.__dict__
+                    display += f"<td><p style='font-size:12px; color:#3C6BD3; font-family:verdana;'>{d[item]}</p></td>"
+            if song.image and (requests.get(song.image).status_code == 200):
+                display += f"<td><img src='{song.image}' alt='{song.artist} image' width='60px'></td>\
+                        </tr>"
+            else:
+                display += f"<td><img src='billboard.jpg' alt='{song.artist} image' width='60px'></td>\
+                                        </tr>"
+        display += '</table>'
+        return {'display': display, 'say': 'find chart below'}
+        # except Exception:
+        #     reply = 'bug has been detected in billboard chart songs'
+        #     return {'display': reply, 'say': reply}
 
 
 # a = Music2().chart()
@@ -583,3 +662,6 @@ class BillboardMusic:   # Todo
 # most popular song in italy, canada, germany, france, uk, us
 # most popular rap song, pop song, rock song, latin song
 # https://github.com/guoguo12/billboard-charts
+#
+# a = BillboardMusic().chart_songs('hot-100')
+# print(a)
