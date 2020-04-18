@@ -455,7 +455,8 @@ def man_youtube():
             "youtube popular songs playlist": "plays top 5 popular songs",
             "youtube popular songs playlist top <b>10</b>": "plays top 10 popular songs",
             "youtube songs chart": "plays chart playlist",
-            'youtube rihanna playlist': 'plays demo playlist'
+            'youtube rihanna playlist': 'plays demo playlist',
+            'youtube views for <b>drake war</b>': 'give youtube view stats',
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
@@ -872,6 +873,30 @@ def man_movies():
     return reply
 
 
+def man_lyrics():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Lyrics feature</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'lyrics to <b>in my feelings</b> by <b>drake</b>': 'displays song lyrics',
+            'lyrics and video to <b>in my feelings</b> by <b>drake</b>': 'lyrics + video',
+            'lyrics with video to <b>drake in my feelings</b>': 'lyrics + video',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the Lyrics functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
@@ -880,4 +905,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man image': man_image,
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
             'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map,
-            'man movies': man_movies}
+            'man movies': man_movies, 'man lyrics': man_lyrics}
