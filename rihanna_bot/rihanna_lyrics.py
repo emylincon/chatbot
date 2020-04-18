@@ -1,5 +1,6 @@
 import lyricsgenius
 import config
+from rihanna_bot.ri_youtube import Youtube
 import json
 
 
@@ -10,6 +11,15 @@ def selector(query):  # lyrics to in my feelings by drake
             return lyrics_finder(song=msg[0], artist=msg[1])
         else:
             return lyrics_finder(song=msg[0])
+    elif query[:len('lyrics and video to ')] == 'lyrics and video to ':
+        msg = query[len('lyrics and video to '):].split('by')
+        if len(msg) == 2:
+            return lyrics_video(song=msg[0], artist=msg[1])
+        else:
+            return lyrics_video(song=msg[0])#
+    elif query[:len('lyrics with video to ')] == 'lyrics with video to ':
+        msg = query[len('lyrics with video to '):]
+        return youtube_lyrics(msg)
 
 
 def format_lyrics(song_obj):
@@ -19,6 +29,7 @@ def format_lyrics(song_obj):
     style_i = "style='float:left;'"
     style_p = 'color:yellow; margin:0; padding:0; margin-bottom:0; margin-top:0;'
     style_l = f"style='background-color:#e6e4e1; font-size:17px; width:600px; text-align: center;'"
+    style_lyrics = "style='color:#58638E; font-size:35px; font-family: Comic Sans MS;'"
     title = song_obj.title
     artist = song_obj.artist
     a = '\n'
@@ -28,9 +39,10 @@ def format_lyrics(song_obj):
               f'<p style="{style_p} font-size:45px; ">{title}</p>' \
               f'<p style="{style_p} font-size:40px; ">{artist}</p>' \
               f'</div>' \
-              '</div>' \
-              f'<div {style_l}>{song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")}</div>'
-    return display
+              f'</div><div {style_l}>'
+    tail = f'<span {style_lyrics}>Song Lyrics<br></span>' \
+           f'{song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")}</div>'
+    return display,tail
 
 
 def lyrics_finder(song, artist=None):
@@ -39,13 +51,69 @@ def lyrics_finder(song, artist=None):
         song_obj = genius.search_song(song, artist)
         display = format_lyrics(song_obj)
 
-        return {'display': display, 'say': f'find displayed the lyrics for {song_obj.title}', 'lyrics': song_obj.lyrics}
+        return {'display': display[0]+display[1],
+                'say': f'find displayed the lyrics for {song_obj.title}',
+                'lyrics': song_obj.lyrics}
     else:
         genius = lyricsgenius.Genius(config.lyrics_key)
         song_obj = genius.search_song(song)
         display = format_lyrics(song_obj)
 
-        return {'display': display, 'say': f'find displayed the lyrics for {song_obj.title}', 'lyrics': song_obj.lyrics}
+        return {'display': display[0]+display[1],
+                'say': f'find displayed the lyrics for {song_obj.title}',
+                'lyrics': song_obj.lyrics}
+
+
+def lyrics_video(song, artist=None):
+    if artist:
+        genius = lyricsgenius.Genius(config.lyrics_key)
+        song_obj = genius.search_song(song, artist)
+        display = format_lyrics(song_obj)
+        vid = Youtube().search_youtube(song+' '+artist)
+
+        return {'display': display[0]+vid['display']+display[1],
+                'say': f'find displayed the lyrics for {song_obj.title}',
+                'lyrics': song_obj.lyrics}
+    else:
+        genius = lyricsgenius.Genius(config.lyrics_key)
+        song_obj = genius.search_song(song)
+        display = format_lyrics(song_obj)
+        vid = Youtube().search_youtube(song)
+
+        return {'display': display[0]+vid['display']+display[1],
+                'say': f'find displayed the lyrics for {song_obj.title}',
+                'lyrics': song_obj.lyrics}
+
+
+def youtube_lyrics(query):
+    a = '\n'
+    lyrics = lyrics_finder(query)['lyrics'].replace(a, "<br>").replace("[", "<br>[")
+    video_div = Youtube().search_youtube(query)['display']
+    say = 'find displayed the video and lyrics'
+    script = '<script>\
+                        var coll = document.getElementsByClassName("collapsible");\
+                        var i;\
+                        for (i = 0; i < coll.length; i++) {\
+                          coll[i].addEventListener("click", function() {\
+                            this.classList.toggle("active");\
+                            var content = this.nextElementSibling;\
+                            if (content.style.maxHeight){\
+                              content.style.maxHeight = null;\
+                            } else {\
+                              content.style.maxHeight = content.scrollHeight + "px";\
+                            } \
+                          });\
+                        }\
+                        </script>'
+    lyrics_button = f'<br><button type="button" class="collapsible">Song Lyrics</button>'
+    lyrics_button += f' <div class="content"><div style="text-align:center;">{lyrics}</div></div>'
+    main_div = "<div style='width:600px;'>"
+
+    video_div += lyrics_button + script
+    main_div += video_div + '</div>'
+    return {'display': main_div, 'say': say}
 
 # a =lyrics_finder('in my feelings', 'drake')['display']
+# print(a)
+# a = youtube_lyrics('drake in my feelings')
 # print(a)
