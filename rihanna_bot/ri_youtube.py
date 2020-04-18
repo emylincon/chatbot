@@ -172,7 +172,7 @@ class Youtube:
             you_dict = self.get_data(query)
             if you_dict:
 
-                display = f'<iframe width="560" height="315"\
+                display = f'<iframe width="600" height="335"\
                                 src="https://www.youtube.com/embed/{you_dict["videoID"]}?rel=0" ' \
                           f'allow="autoplay" frameborder="0" allowfullscreen>\
                                 </iframe>'
@@ -185,7 +185,7 @@ class Youtube:
                 return {'display': reply, 'say': reply}
         else:
             # link = "https://www.youtube.com/watch?v=" + vid
-            display = f'<iframe width="560" height="315"\
+            display = f'<iframe width="600" height="335"\
                                             src="https://www.youtube.com/embed/{sim_dict["videoID"]}?rel=0" ' \
                       f'allow="autoplay" frameborder="0" allowfullscreen>\
                                             </iframe>'
