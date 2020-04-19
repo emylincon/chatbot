@@ -113,6 +113,45 @@ def youtube_lyrics(query):
     main_div += video_div + '</div>'
     return {'display': main_div, 'say': say}
 
+
+# does not work
+def youtube_lyrics_1(query):
+    genius = lyricsgenius.Genius(config.lyrics_key)
+    song_obj = genius.search_song(query)
+    a = '\n'
+    style_m = f"style='background-image: url({song_obj._body['header_image_url']}); " \
+              f"background-size: cover; background-repeat: no-repeat; " \
+              f"background-position: center; height: 1500px;" \
+              f"filter: blur(8px); -webkit-filter: blur(8px);'"
+    style_text = "style ='background-color: rgb(0,0,0); background-color: rgba(0,0,0, 0.4); color: white; " \
+                 "font-weight: bold; border: 3px solid #f1f1f1; transform: translate(-0%, -97%);" \
+                 "z-index: 2; height: 100%; padding: 20px; text-align: center;'"
+    lyrics = song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")
+    video_div = Youtube().search_youtube(query)['display']
+    say = 'find displayed the video and lyrics'
+    script = '<script>\
+                        var coll = document.getElementsByClassName("collapsible");\
+                        var i;\
+                        for (i = 0; i < coll.length; i++) {\
+                          coll[i].addEventListener("click", function() {\
+                            this.classList.toggle("active");\
+                            var content = this.nextElementSibling;\
+                            if (content.style.maxHeight){\
+                              content.style.maxHeight = null;\
+                            } else {\
+                              content.style.maxHeight = content.scrollHeight + "px";\
+                            } \
+                          });\
+                        }\
+                        </script>'
+    lyrics_button = f'<br><button type="button" class="collapsible">Song Lyrics</button>'
+    lyrics_button += f' <div class="content" style="max-height: 1550px;"><div {style_m}></div><div {style_text}>{lyrics}</div></div>'
+    main_div = "<div style='width:600px;'>"
+
+    video_div += lyrics_button + script
+    main_div += video_div + '</div>'
+    return {'display': main_div, 'say': say}
+
 # a =lyrics_finder('in my feelings', 'drake')['display']
 # print(a)
 # a = youtube_lyrics('drake in my feelings')
