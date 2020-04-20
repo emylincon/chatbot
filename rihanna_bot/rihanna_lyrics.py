@@ -1,7 +1,7 @@
 import lyricsgenius
 import config
 from rihanna_bot.ri_youtube import Youtube
-import json
+from multiprocessing.pool import ThreadPool
 
 
 def selector(query):  # lyrics to in my feelings by drake
@@ -116,13 +116,18 @@ def youtube_lyrics(query):
 
 def youtube_lyrics_2(query):
     genius = lyricsgenius.Genius(config.lyrics_key)
-    song_obj = genius.search_song(query)
+    result_list = []
+    pool = ThreadPool(processes=2)
+    result_list.append(pool.apply_async(genius.search_song, (query,)))
+    result_list.append(pool.apply_async(Youtube().search_youtube, (query,)))
+
+    song_obj = result_list[0].get()
     a = '\n'
     lyrics = song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")
     style_text = "style ='background-color: rgb(0,0,0); background-color: rgba(0,0,0, 0.4); color: white; " \
                  "font-weight: bold; border: 3px solid #f1f1f1; transform: translate(-0%, -0%);" \
                  "z-index: 2; height: 100%; padding: 20px; text-align: center;'"
-    video_div = Youtube().search_youtube(query)['display']
+    video_div = result_list[1].get()['display']
     say = 'find displayed the video and lyrics'
     script = '<script>\
                         var coll = document.getElementsByClassName("collapsible");\
@@ -190,5 +195,5 @@ def youtube_lyrics_1(query):
 
 # a =lyrics_finder('in my feelings', 'drake')['display']
 # print(a)
-# a = youtube_lyrics('drake in my feelings')
+# a = youtube_lyrics_2('drake in my feelings')
 # print(a)
