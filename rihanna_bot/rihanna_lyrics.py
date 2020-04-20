@@ -19,7 +19,7 @@ def selector(query):  # lyrics to in my feelings by drake
             return lyrics_video(song=msg[0])#
     elif query[:len('lyrics with video to ')] == 'lyrics with video to ':
         msg = query[len('lyrics with video to '):]
-        return youtube_lyrics(msg)
+        return youtube_lyrics_2(msg)
 
 
 def format_lyrics(song_obj):
@@ -111,6 +111,42 @@ def youtube_lyrics(query):
 
     video_div += lyrics_button + script
     main_div += video_div + '</div>'
+    return {'display': main_div, 'say': say}
+
+
+def youtube_lyrics_2(query):
+    genius = lyricsgenius.Genius(config.lyrics_key)
+    song_obj = genius.search_song(query)
+    a = '\n'
+    lyrics = song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")
+    style_text = "style ='background-color: rgb(0,0,0); background-color: rgba(0,0,0, 0.4); color: white; " \
+                 "font-weight: bold; border: 3px solid #f1f1f1; transform: translate(-0%, -0%);" \
+                 "z-index: 2; height: 100%; padding: 20px; text-align: center;'"
+    video_div = Youtube().search_youtube(query)['display']
+    say = 'find displayed the video and lyrics'
+    script = '<script>\
+                        var coll = document.getElementsByClassName("collapsible");\
+                        var i;\
+                        for (i = 0; i < coll.length; i++) {\
+                          coll[i].addEventListener("click", function() {\
+                            this.classList.toggle("active");\
+                            var lyrics = this.nextElementSibling;\
+                            if (lyrics.style.maxHeight){\
+                              lyrics.style.maxHeight = null;\
+                            } else {\
+                              lyrics.style.maxHeight = lyrics.scrollHeight + "px";'
+    script += f'lyrics.style.backgroundImage = "url(' + f"'" + f'{song_obj._body["header_image_url"]}' + "')" + '";'
+    script += ' \
+                            } \
+                          });\
+                        }\
+                        </script>'
+    lyrics_button = f'<br><button type="button" class="collapsible">Song Lyrics</button>'
+    lyrics_button += f' <div class="lyrics"><div {style_text}>{lyrics}</div></div>'
+    main_div = "<div style='width:600px;'>"
+
+    video_div += lyrics_button
+    main_div += video_div + '</div>' + script
     return {'display': main_div, 'say': say}
 
 
