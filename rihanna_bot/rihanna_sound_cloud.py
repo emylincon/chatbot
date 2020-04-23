@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import config
 from rihanna_bot import hot100
+from rihanna_bot.rihanna_lyrics import sound_cloud_lyrics
 
 
 def selector(message):
@@ -9,6 +10,9 @@ def selector(message):
         return random_song()
     elif message == 'sound cloud play song cloud playlist':
         return playlist()
+    elif message[:len('sound cloud with lyrics ')] == 'sound cloud with lyrics ':
+        query = message[len('sound cloud with lyrics '):].strip()
+        return songlyrics(query)
     elif message[:len('sound cloud play')] == "sound cloud play":
         message_ = message[len("sound cloud play") + 1:]
         return sound_cloud(message_)
@@ -36,7 +40,7 @@ def sound_cloud(query):
             track_id = track_id.split(i)[-1]
 
     # step 3: pass the track_id into the sound cloud media frame
-    frame = f'<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" ' \
+    frame = f'<iframe width="600px" height="166" scrolling="no" frameborder="no" allow="autoplay" ' \
             f'src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{track_id}' \
             f'&color=%237900ff&auto_play=true&hide_related=false&show_comments=true&' \
             f'show_user=true&show_reposts=false&show_teaser=true"></iframe>'
@@ -56,7 +60,18 @@ def random_song():
     return sound_cloud(song)
 
 
+def songlyrics(query):
+    result = sound_cloud_lyrics(query)
+    music = sound_cloud(query)
+    display = f'<div style="width=600px;">{music["display"]}{result["lyrics"]}</div>{result["script"]}'
+    say = 'playing music with lyrics'
+    return {'display': display, 'say': say}
+
+
 f'<iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay" ' \
 f'src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/723315721' \
 f'&color=%237900ff&auto_play=false&hide_related=false&show_comments=true&' \
 f'show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>'
+
+#
+# print(songlyrics('kendrick humble'))
