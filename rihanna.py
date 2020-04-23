@@ -90,6 +90,35 @@ def play_song(song):
     driver.get(search)
     driver.find_element_by_xpath(xpath='//*[@id="dismissable"]').click()
 
+heart_effect = 0
+
+
+def add_heart_effect():
+    global heart_effect
+    say = 'I am not programmed to love. However, your mouse cursor is'
+
+    if heart_effect == 0:
+        display = f'<script>putMouse()</script> {say}'
+
+        heart_effect = 1
+    else:
+        display = "<img src='img/heart.png' width='70px'>"
+        say = 'I know, you have already mentioned it'
+    return {'display': display, 'say': say}
+
+
+def remove_heart_effect():
+    global heart_effect
+    say = 'Oh well. It was good while it lasted. Mouse, Deactivate!'
+
+    if heart_effect == 1:
+        display = f'<script>removeMouse()</script> {say}'
+
+        heart_effect = 0
+    else:
+        display = say = f"That doesnt hurt my feelings. Because, I dont have one"
+    return {'display': display, 'say': say}
+
 
 def format_string(string):
     d = "!?\|:;@'][<>"
@@ -208,6 +237,12 @@ def rihanna(message):
 
     elif (len(message) == 1) or message.isdigit():
         return rihanna_one_char.main(message)
+
+    elif message == 'i love you':
+        return add_heart_effect()
+
+    elif message == 'i hate you':
+        return remove_heart_effect()
 
     elif message[:len('word cloud')] == 'word cloud':
         return rihanna_wc.selector(message)
