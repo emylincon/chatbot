@@ -8,7 +8,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs, hot100, \
-    rihanna_movies, rihanna_lyrics
+    rihanna_movies, rihanna_lyrics, rihanna_spotify
 import config
 import random as r
 
@@ -172,13 +172,13 @@ def funny():
 
 def rihanna(message):
     if (message[:len("dictionary translate")] != "dictionary translate") and (
-            rihanna_dict.detect_lang(message) != 'en'):
+            rihanna_dict.detect_lang(message) != 'en') and ('spotify' not in message):
         config.lang_code = rihanna_dict.detect_lang(message)
         message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
         # print(f'trans: {message} \n l_code: {lang_code}')
 
-        # Formatting message input
+    # print(message)
     if email['run'] == 0:
         if message.lower()[:3] == 'tfl':
             message = format_string(message).lower().strip()
@@ -210,6 +210,9 @@ def rihanna(message):
         elif message.lower()[:len('sound cloud')] == 'sound cloud':
             msg = format_string(message).lower().strip()
             return rihanna_sound_cloud.selector(msg)
+        elif (message.lower()[:len('spotify ')] == 'spotify') or (message.lower()[-len('spotify'):] == 'spotify'):
+            msg = format_string(message).lower().strip()
+            return rihanna_spotify.selector(msg)
         elif message.lower()[:len('dictionary')] == 'dictionary':
             return rihanna_dict.selector(format_string(message).lower().strip())
         elif message.lower()[:len('job search')] == 'job search':
