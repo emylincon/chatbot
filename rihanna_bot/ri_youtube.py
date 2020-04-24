@@ -55,7 +55,6 @@ class Youtube:
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
-
         load = soup.find_all("script")
         script = None
         for i in load:
@@ -64,13 +63,13 @@ class Youtube:
                 if 'window["ytInitialData"]' in scr:
                     script = i
                     break
-
         if script:
-            lscript = script.string.split(';')
-            variable = lscript[0].strip().split(' = ')[1]
+            lscript = script.string.split('window["ytInitialPlayerResponse"]')
+            variable = lscript[0].strip().split(' = ')[1][:-1]
             try:
                 obj = json.loads(variable)
             except json.decoder.JSONDecodeError:
+                print('cant decode this')
                 return None
             set_id = 0  # 0 or 1 controls if video has been found
             changed = 0  # 0 or 1 controls if youtube data content has changed
@@ -105,15 +104,18 @@ class Youtube:
                             changed = 1
 
             if changed == 1:
-                file = open('youtube_data.py', 'w', encoding='utf-8')
+                path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\rihanna_bot\youtube_data.py'
+                file = open(path, 'w', encoding='utf-8')
                 file.write(f'yt_data = {self.u_data}\n')
                 file.write(f'data_length = {len(self.u_data)}\n')
                 file.close()
             if result in self.u_data:
                 return self.u_data[result]
             else:
+                print('result not in data')
                 return None
         else:
+            print('is not script')
             return None
 
     def get_artist_data(self, query):
@@ -456,7 +458,7 @@ class Youtube:
 # a = choose_playlist(g)
 # print(a)
 # a = youtube_playlist()
-# a = Youtube().search_youtube('future mask off')
+# a = Youtube().search_youtube('2face african queen')
 # a = Youtube().artist_playlist('post malone')
 # a = Youtube().random_song()
 # a = Youtube().choose_playlist('drake war,drake in my feelings,nav tap')
