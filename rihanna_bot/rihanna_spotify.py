@@ -2,6 +2,9 @@ import requests
 import json
 import config
 
+# get token for new release from this link =
+#  https://developer.spotify.com/console/get-new-releases/?country=&limit=&offset=
+
 
 def selector(query):
     if (query == 'spotify new releases') or (query == 'whats new on spotify'):
@@ -17,6 +20,7 @@ class SpotifyMusic:
         url = self.baseURL+'browse/new-releases'
         response = requests.get(url, headers=self.header)
         data = json.loads(response.content)
+        # print(data)
         display = "<table id='t01'>\
                       <tr>\
                         <th></th>\
@@ -37,3 +41,6 @@ class SpotifyMusic:
                    "
         display += '</table>'
         return {'display': display, 'say': 'find displayed new releases on spotify'}
+
+
+# print(SpotifyMusic().new_release())
