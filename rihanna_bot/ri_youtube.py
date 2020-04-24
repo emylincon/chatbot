@@ -8,6 +8,7 @@ import random
 from rihanna_bot.youtube_sim import youtube_sim_main
 from multiprocessing.pool import ThreadPool
 from rihanna_bot import hot100_data
+import sys, traceback
 
 
 def selector(message):
@@ -235,9 +236,11 @@ class Youtube:
             else:
                 reply = f"Sorry, I couldn't find {query}"
                 return {'display': reply, 'say': reply}
-
-        except Exception as e:
-            return {'display': str(e), 'say': str(e)}
+        except:
+            traceback.print_exc()
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            reply = f'rihanna detected a bug in Youtube.artist_playlist: {exc_value}'
+            return {'display': reply, 'say': reply}
 
     def choose_playlist(self, query):
         try:
@@ -265,8 +268,11 @@ class Youtube:
             say = f"playing a {query} playlist video from youtube"
             reply = {'display': display, 'say': say}
             return reply
-        except Exception as e:
-            return {'display': str(e), 'say': str(e)}
+        except:
+            traceback.print_exc()
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            reply = f'rihanna detected a bug in choose playlist: {exc_value}'
+            return {'display': reply, 'say': reply}
 
     def youtube_playlist(self):
         req = self.url + 'chart'
@@ -461,7 +467,7 @@ class Youtube:
 # a = Youtube().search_youtube('2face african queen')
 # a = Youtube().artist_playlist('post malone')
 # a = Youtube().random_song()
-# a = Youtube().choose_playlist('drake war,drake in my feelings,nav tap')
+# a = Youtube().choose_playlist('drake club paradise, drake draft day, drake 5pm in toronto, drake war, drake do not disturb, drake mob ties')
 # a = Youtube().hot_100_playlist()
 # # a = Youtube().search_youtube_loop('meek mill going bad')
 # # a = Youtube().youtube_playlist()
