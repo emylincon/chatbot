@@ -67,7 +67,7 @@ def lyrics_finder(song, artist=None):
     except:
         traceback.print_exc()
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        reply = f'rihanna detected a bug in lyrics.youtube_lyrics_2: {exc_value}'
+        reply = f'rihanna detected a bug in lyrics.lyrics_finder: {exc_value}'
         return {'display': reply, 'say': reply, 'lyrics': 'NOT FOUND'}
 
 
