@@ -2,6 +2,7 @@ import lyricsgenius
 import config
 from rihanna_bot.ri_youtube import Youtube
 from multiprocessing.pool import ThreadPool
+import traceback, sys
 
 
 def selector(query):  # lyrics to in my feelings by drake
@@ -46,22 +47,28 @@ def format_lyrics(song_obj):
 
 
 def lyrics_finder(song, artist=None):
-    if artist:
-        genius = lyricsgenius.Genius(config.lyrics_key)
-        song_obj = genius.search_song(song, artist)
-        display = format_lyrics(song_obj)
+    try:
+        if artist:
+            genius = lyricsgenius.Genius(config.lyrics_key)
+            song_obj = genius.search_song(song, artist)
+            display = format_lyrics(song_obj)
 
-        return {'display': display[0]+display[1],
-                'say': f'find displayed the lyrics for {song_obj.title}',
-                'lyrics': song_obj.lyrics}
-    else:
-        genius = lyricsgenius.Genius(config.lyrics_key)
-        song_obj = genius.search_song(song)
-        display = format_lyrics(song_obj)
+            return {'display': display[0]+display[1],
+                    'say': f'find displayed the lyrics for {song_obj.title}',
+                    'lyrics': song_obj.lyrics}
+        else:
+            genius = lyricsgenius.Genius(config.lyrics_key)
+            song_obj = genius.search_song(song)
+            display = format_lyrics(song_obj)
 
-        return {'display': display[0]+display[1],
-                'say': f'find displayed the lyrics for {song_obj.title}',
-                'lyrics': song_obj.lyrics}
+            return {'display': display[0]+display[1],
+                    'say': f'find displayed the lyrics for {song_obj.title}',
+                    'lyrics': song_obj.lyrics}
+    except:
+        traceback.print_exc()
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        reply = f'rihanna detected a bug in lyrics.youtube_lyrics_2: {exc_value}'
+        return {'display': reply, 'say': reply, 'lyrics': 'NOT FOUND'}
 
 
 def lyrics_video(song, artist=None):
@@ -115,44 +122,50 @@ def youtube_lyrics(query):
 
 
 def youtube_lyrics_2(query):
-    genius = lyricsgenius.Genius(config.lyrics_key)
-    result_list = []
-    pool = ThreadPool(processes=2)
-    result_list.append(pool.apply_async(genius.search_song, (query,)))
-    result_list.append(pool.apply_async(Youtube().search_youtube, (query,)))
+    try:
+        genius = lyricsgenius.Genius(config.lyrics_key)
+        result_list = []
+        pool = ThreadPool(processes=2)
+        result_list.append(pool.apply_async(genius.search_song, (query,)))
+        result_list.append(pool.apply_async(Youtube().search_youtube, (query,)))
 
-    song_obj = result_list[0].get()
-    a = '\n'
-    lyrics = song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")
-    style_text = "style ='background-color: rgb(0,0,0); background-color: rgba(0,0,0, 0.4); color: white; " \
-                 "font-weight: bold; border: 3px solid #f1f1f1; transform: translate(-0%, -0%);" \
-                 "z-index: 2; height: 100%; padding: 20px; text-align: center;'"
-    video_div = result_list[1].get()['display']
-    say = 'find displayed the video and lyrics'
-    script = '<script>\
-                        var coll = document.getElementsByClassName("collapsible");\
-                        var i;\
-                        for (i = 0; i < coll.length; i++) {\
-                          coll[i].addEventListener("click", function() {\
-                            this.classList.toggle("active");\
-                            var lyrics = this.nextElementSibling;\
-                            if (lyrics.style.maxHeight){\
-                              lyrics.style.maxHeight = null;\
-                            } else {\
-                              lyrics.style.maxHeight = lyrics.scrollHeight + "px";'
-    script += f'lyrics.style.backgroundImage = "url(' + f"'" + f'{song_obj._body["header_image_url"]}' + "')" + '";'
-    script += ' \
-                            } \
-                          });\
-                        }\
-                        </script>'
-    lyrics_button = f'<br><button type="button" class="collapsible">Song Lyrics</button>'
-    lyrics_button += f' <div class="lyrics"><div {style_text}>{lyrics}</div></div>'
-    main_div = "<div style='width:600px;'>"
+        song_obj = result_list[0].get()
+        a = '\n'
+        lyrics = song_obj.lyrics.replace(a, "<br>").replace("[", "<br>[")
+        style_text = "style ='background-color: rgb(0,0,0); background-color: rgba(0,0,0, 0.4); color: white; " \
+                     "font-weight: bold; border: 3px solid #f1f1f1; transform: translate(-0%, -0%);" \
+                     "z-index: 2; height: 100%; padding: 20px; text-align: center;'"
+        video_div = result_list[1].get()['display']
+        say = 'find displayed the video and lyrics'
+        script = '<script>\
+                            var coll = document.getElementsByClassName("collapsible");\
+                            var i;\
+                            for (i = 0; i < coll.length; i++) {\
+                              coll[i].addEventListener("click", function() {\
+                                this.classList.toggle("active");\
+                                var lyrics = this.nextElementSibling;\
+                                if (lyrics.style.maxHeight){\
+                                  lyrics.style.maxHeight = null;\
+                                } else {\
+                                  lyrics.style.maxHeight = lyrics.scrollHeight + "px";'
+        script += f'lyrics.style.backgroundImage = "url(' + f"'" + f'{song_obj._body["header_image_url"]}' + "')" + '";'
+        script += ' \
+                                } \
+                              });\
+                            }\
+                            </script>'
+        lyrics_button = f'<br><button type="button" class="collapsible">Song Lyrics</button>'
+        lyrics_button += f' <div class="lyrics"><div {style_text}>{lyrics}</div></div>'
+        main_div = "<div style='width:600px;'>"
 
-    video_div += lyrics_button
-    main_div += video_div + '</div>' + script
-    return {'display': main_div, 'say': say}
+        video_div += lyrics_button
+        main_div += video_div + '</div>' + script
+        return {'display': main_div, 'say': say}
+    except:
+        traceback.print_exc()
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        reply = f'rihanna detected a bug in lyrics.youtube_lyrics_2: {exc_value}'
+        return {'display': reply, 'say': reply}
 
 
 # does not work
