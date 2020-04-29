@@ -47,5 +47,5 @@ def youtube_sim_main(word):
 
 yt_d = list(youtube_data.yt_data.keys())
 
-# a = youtube_sim_main('Toosie Slide Drake')
+# a = youtube_sim_main('zodiac signs drake')
 # print(a)
