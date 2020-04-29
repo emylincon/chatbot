@@ -9,7 +9,7 @@
 
 <style>
     :root {
-      --mainColor: #00bbff;
+      --mainColor: #62605F;
     }
     * {
         box-sizing: border-box;
@@ -44,7 +44,7 @@
         border: 1px solid transparent;
         padding: 7px;
         font-size: 18px;
-        background-color: #E6E9EC;
+        background-color: #E6E9EC; /* 62605F */
         width: 100%;
     }
     .chat_line {
@@ -101,7 +101,7 @@
 
     }
     #button {
-      background-color: #111112; /* sky blue */
+      background-color: #111112; /* black */
       /*float: right;*/
       border: none;
       color: white;
@@ -207,6 +207,105 @@
       background-position: center;
       filter: brightness(50%);
     }
+    span
+    {
+        position: absolute;
+        background: url(img/heart.png);
+        background-size: cover;
+        pointer-events: none;
+        transform: translate(-50%,-50%);
+        animation: animate 2s linear infinite;
+    }
+    @keyframes animate
+    {
+        0%
+        {
+            transform: translate(-50%,-50%);
+            opacity: 1;
+            filter: hue-rotate(0deg);
+        }
+        100%
+        {
+            transform: translate(-50%,-1000%);
+            opacity: 0;
+            filter: hue-rotate(720deg);
+        }
+    }
+
+    .ring {
+				position: absolute;
+				top: 6.5%;
+				left: 85%;
+				transform: translate(-50%, -50%);
+				width: 100px;
+				height: 100px;
+				background: transparent;
+				border: 3px solid #3c3c3c;
+				border-radius: 50%;
+				text-align: center;
+				line-height: 90px;
+				font-family: sans-serif;
+				color: #fff000;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				text-shadow: 0 0 10px #fff000;
+				box-shadow: 0 0 20px rgba(0,0,0,.5);
+			}
+			.ring:before {
+				content: '';
+				position: absolute;
+				top:-3px;
+				left:-3px;
+				width: 100%;
+				height: 100%;
+				border: 3px solid transparent;
+				border-top:3px solid #fff000;
+				border-right:3px solid #fff000;
+				border-radius: 50%;
+				animation: animateCircle 2s linear infinite;
+
+			}
+			.ringer{
+				display: block;
+				position: absolute;
+				/*top: calc(50% -2px);*/
+				top: 50%;
+				left: 50%;
+				width: 50%;
+				height: 4px;
+				background: transparent;
+				transform-origin: left;
+				animation: animated 2s linear infinite;
+			}
+			.ringer:before {
+				content: '';
+				position: absolute;
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				background: #fff000;
+				top: -6px;
+				right: -8px;
+				box-shadow: 0 0 20px #fff000;
+			}
+			@keyframes animated {
+				0%{
+					transform: rotate(45deg);
+				}
+				100%{
+					transform: rotate(405deg);
+				}
+			}
+			@keyframes animateCircle {
+				0%{
+					transform: rotate(0deg);
+				}
+				100%{
+					transform: rotate(360deg);
+				}
+			}
+
+
 </style>
 </head>
 
@@ -230,6 +329,7 @@
         <button id="button" onclick="myFunction()">Speak</button>
     </div>
 </div>
+<div id="loading"></div>
 <script src="javascript/3script.js"></script>
 </body>
 </html>
