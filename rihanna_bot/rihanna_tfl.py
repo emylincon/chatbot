@@ -3,6 +3,7 @@ import requests
 import config
 import datetime as dt
 from selenium import webdriver
+import traceback, sys
 
 '''
 main_api = "https://api.tfl.gov.uk/"
@@ -781,8 +782,10 @@ def get_timetable(line, station):
 
             return {'display': display[:-4], 'say': reply.replace('<br>', '\n'), reply: reply}
 
-    except Exception as reply:
-        # return "Sorry, I can't find the line or station name"
+    except:
+        traceback.print_exc()
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        reply = f'rihanna detected a bug in tfl.get_timetable: {exc_value}'
         return {'display': reply, 'say': reply}
 
 
@@ -875,8 +878,10 @@ def journey_duration(start, stop):
         reply = f"If you leave at {start_time}, you will arrive at {stop} at {arrival_time}<br>" \
                 f"Therefore, It will take {duration} minutes"
         return {'display': display, 'say': reply.replace('<br>', '\n'), 'reply': reply}
-    except Exception as error:
-        reply = f'Code Bug detected: {error}'
+    except:
+        traceback.print_exc()
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        reply = f'rihanna detected a bug in tfl.journey_duration: {exc_value}'
         return {'display': reply, 'say': reply}
 
 
