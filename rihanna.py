@@ -11,6 +11,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_movies, rihanna_lyrics, rihanna_spotify
 import config
 import random as r
+import time
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -129,6 +130,78 @@ def format_string(string):
     return string
 
 
+def weather_format(msg):
+    image = {'rain': 'rain.webp', 'clear sky': 'sun.png', 'snow': 'snow.gif', 'thunder': 'thunder_storm.png',
+             'sun': 'sun_cloud.png', 'storm': 'thunder_storm.png', 'clouds': 'cloud.png'}
+    # 3333E5 grey = E2E3E5
+    for key in image:
+        if key in msg:
+            img = image[key]
+            display = f"<div style='background-color:#69BFF7; width:600px; height:250px;'>" \
+                      f"<img src='img/weather/{img}' width='200px' alt='{key}' style='display:block; margin-left:auto; " \
+                      f"margin-right:auto;'>" \
+                      f"</div><div style='background-color:black; width:600px; text-align:center; " \
+                      f"color:white; font-size:18px;'>{msg}</div>"
+            return {'display': display, 'say': msg}
+    display = f"<div style='background-color:black; width:600px; text-align:center; color:white; font-size:18px;'>" \
+              f"{msg}</div>"
+    return {'display': display, 'say': msg}
+
+
+def weather_f(json_data):
+    # image = {'rain': 'rain.gif', 'clear sky': 'clear_sky.jpeg', 'snow': 'snow.gif', 'thunder': 'thunderstorm.jpg',
+    #          'sun': 'sun_clouds.jpg', 'storm': 'thunderstorm.jpg', 'clouds': 'clouds.jpg', 'other': 'other.jpg'}
+    image = {'rain': 'rain.gif', 'clear sky': 'clear_sky.gif', 'snow': 'snow.gif', 'thunder': 'thunder.gif',
+             'sun': 'sun.gif', 'storm': 'thunder.gif', 'broken clouds': 'clouds.gif',
+             'scattered clouds':'scattered_clouds.gif', 'other': 'other.jpg'}
+    img = ''
+    for key in image:
+        if key in json_data['weather'][0]['description']:
+            img = image[key]
+            break
+    if img == '':
+        img = image['other']
+    desc = json_data['weather'][0]['description']
+    wind = json_data['wind']['speed']
+    temp_c = round(json_data['main']['temp'] - 273)
+    temp_min = round(json_data['main']['temp_min'] - 273)
+    temp_max = round(json_data['main']['temp_max'] - 273)
+    hum = json_data['main']['humidity']
+    city = json_data['name']
+    time_now = time.strftime("%H:%M", time.localtime(json_data['dt']))
+    sunrise = time.strftime("%H:%M", time.localtime(json_data['sys']['sunrise']))
+    sunset = time.strftime("%H:%M", time.localtime(json_data['sys']['sunset']))
+
+    forecast = f"{desc.title()} in {city} at {time_now}. The temperature is {temp_c}° celcius with wind speed of {wind}"
+    display = f"<table style='width:650px; text-align:center; background-color:black;'>" \
+              f"<tr>" \
+              f"<td><img src='img/weather/icons/temp.png' height='30px'></td> " \
+              f"<td style='color:white;'>{temp_c}°C</td>" \
+              f"<td><img src='img/weather/icons/min_temp.png' height='30px'></td> " \
+              f"<td style='color:white;'>{temp_min}°C</td>" \
+              f"<td><img src='img/weather/icons/max_temp.png' height='30px'></td> " \
+              f"<td style='color:white;'>{temp_max}°C</td>" \
+              f"<td><img src='img/weather/icons/hum.webp' height='30px'></td> " \
+              f"<td style='color:white;'>{hum}%</td>" \
+              f"<td><img src='img/weather/icons/wind.webp' height='30px'></td> " \
+              f"<td style='color:white;'>{wind}</td>" \
+              f"<td><img src='img/weather/icons/sunrise2.png' height='30px'></td> " \
+              f"<td style='color:white;'>{sunrise}</td>" \
+              f"<td><img src='img/weather/icons/sunset.svg' height='30px'></td> " \
+              f"<td style='color:white;'>{sunset}</td>	" \
+              f"</tr>" \
+              f"</table>" \
+              f"<div style='width: 650px; '>" \
+              f"<img src='img/weather/new/{img}' width='650px'>" \
+              f"</div>" \
+              f"<table style='width:650px;'>" \
+              f"<tr>" \
+              f"<td style='text-align:center; background-color:black; color:white;'>{forecast}</td>" \
+              f"</tr>" \
+              f"</table>"
+    return {'display': display, 'say': forecast}
+
+
 def weather(place):
     try:
         api_address = f'http://api.openweathermap.org/data/2.5/weather?appid={config.weather_id}='
@@ -141,18 +214,21 @@ def weather(place):
         url = api_address + city
 
         json_data = requests.get(url).json()
-        desc = json_data['weather'][0]['description']
-        temp_f = json_data['main']['temp']
-        wind = json_data['wind']['speed']
-
-        temp_c = round(temp_f - 273)
-
-        forecast = f"{desc} in {city}. The temperature is {temp_c}° celcius with wind speed of {wind}"
+        # print(json_data)
+        # desc = json_data['weather'][0]['description']
+        # temp_f = json_data['main']['temp']
+        # wind = json_data['wind']['speed']
+        #
+        # temp_c = round(temp_f - 273)
+        #
+        # forecast = f"{desc} in {city}. The temperature is {temp_c}° celcius with wind speed of {wind}"
+        return weather_f(json_data)
 
     except:
-        forecast = 'Sorry could not find location {}'.format(place)
+        reply = 'Sorry could not find location {}'.format(place)
+        return {'display': reply, 'say': reply}
 
-    return forecast
+    # return forecast
 
 
 def stop_words():
@@ -321,12 +397,12 @@ def rihanna(message):
 
     elif message == 'weather forecast today':
         reply = weather('london,uk')
-        # rihanna_voice(reply)
-        if config.lang_code != 'en':
-            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
-            config.lang_code = 'en'
-            return reply
-        return {'display': reply, 'say': reply}
+        # # rihanna_voice(reply)
+        # if config.lang_code != 'en':
+        #     reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+        #     config.lang_code = 'en'
+        #     return reply
+        return reply
 
     elif "facebook" in message:
         return rihanna_facebook.fb(message)
@@ -354,11 +430,11 @@ def rihanna(message):
 
     elif message[0:16] == 'weather forecast':
         reply = weather(message.strip()[16:].strip())
-        if config.lang_code != 'en':
-            reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
-            config.lang_code = 'en'
-            return reply
-        return {'display': reply, 'say': reply}
+        # if config.lang_code != 'en':
+        #     reply = rihanna_dict.translate_sentence_code(reply, config.lang_code)
+        #     config.lang_code = 'en'
+        #     return reply
+        return reply
 
     elif message[0:4] == 'play':
         critic = ['that is a lovely song', 'that is a terrible song', "don't like that song",
