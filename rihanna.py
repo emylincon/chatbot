@@ -8,7 +8,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs, hot100, \
-    rihanna_movies, rihanna_lyrics, rihanna_spotify
+    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes
 import config
 import random as r
 import time
@@ -168,7 +168,7 @@ def weather_f(json_data):
     d_tt = timedelta(minutes=tt.tm_hour*60+tt.tm_min)
     # print(f'd_sr = {d_sr} \nd_ss = {d_ss} \nd_tt = {d_tt}')
     if d_sr > d_ss:
-        print('swapped')
+        # print('swapped')
         sr, ss = ss, sr
         d_sr, d_ss = d_ss, d_sr
     if (d_tt < d_sr) or (d_tt > d_ss):
@@ -308,6 +308,9 @@ def rihanna(message):
         elif message.lower()[:len('youtube')] == 'youtube':
             msg = format_string(message).lower().strip()
             return ri_youtube.selector(msg)
+        elif message.lower()[:len('itunes')] == 'itunes':
+            msg = format_string(message).lower().strip()[len('itunes '):]
+            return rihanna_itunes.selector(msg)
         elif message.lower()[:len('sound cloud')] == 'sound cloud':
             msg = format_string(message).lower().strip()
             return rihanna_sound_cloud.selector(msg)
