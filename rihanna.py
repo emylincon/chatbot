@@ -12,6 +12,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
 import config
 import random as r
 import time
+import re
 
 bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               logic_adapters=[
@@ -149,16 +150,34 @@ def weather_format(msg):
 
 
 def weather_f(json_data):
+    from tzwhere import tzwhere
+    from pytz import timezone
+    from datetime import datetime, timedelta
     # image = {'rain': 'rain.gif', 'clear sky': 'clear_sky.jpeg', 'snow': 'snow.gif', 'thunder': 'thunderstorm.jpg',
     #          'sun': 'sun_clouds.jpg', 'storm': 'thunderstorm.jpg', 'clouds': 'clouds.jpg', 'other': 'other.jpg'}
     image = {'rain': 'rain.gif', 'clear sky': 'clear_sky.gif', 'snow': 'snow.gif', 'thunder': 'thunder.gif',
              'sun': 'sun.gif', 'storm': 'thunder.gif', 'broken clouds': 'clouds.gif',
              'scattered clouds':'scattered_clouds.gif', 'other': 'other.jpg'}
+    night = ['night1.gif', 'night.gif']
     img = ''
-    for key in image:
-        if key in json_data['weather'][0]['description']:
-            img = image[key]
-            break
+    sr = time.localtime(json_data['sys']['sunrise'])
+    ss = time.localtime(json_data['sys']['sunset'])
+    tt = time.localtime(json_data['dt']+json_data['timezone']-3600)
+    d_sr = timedelta(minutes=sr.tm_hour*60+sr.tm_min)
+    d_ss = timedelta(minutes=ss.tm_hour*60+ss.tm_min)
+    d_tt = timedelta(minutes=tt.tm_hour*60+tt.tm_min)
+    # print(f'd_sr = {d_sr} \nd_ss = {d_ss} \nd_tt = {d_tt}')
+    if d_sr > d_ss:
+        print('swapped')
+        sr, ss = ss, sr
+        d_sr, d_ss = d_ss, d_sr
+    if (d_tt < d_sr) or (d_tt > d_ss):
+        img = r.choice(night)
+    else:
+        for key in image:
+            if key in json_data['weather'][0]['description']:
+                img = image[key]
+                break
     if img == '':
         img = image['other']
     desc = json_data['weather'][0]['description']
@@ -168,11 +187,15 @@ def weather_f(json_data):
     temp_max = round(json_data['main']['temp_max'] - 273)
     hum = json_data['main']['humidity']
     city = json_data['name']
-    time_now = time.strftime("%H:%M", time.localtime(json_data['dt']))
-    sunrise = time.strftime("%H:%M", time.localtime(json_data['sys']['sunrise']))
-    sunset = time.strftime("%H:%M", time.localtime(json_data['sys']['sunset']))
+    # time_now = time.strftime("%H:%M", time.localtime(json_data['dt']))
+    # time_n = datetime.now(timezone(tzwhere.tzwhere().tzNameAt(json_data['coord']['lat'], json_data['coord']['lon'])))
+    time_t = time.strftime("%H:%M", tt)
+    # print(f'time_n: {time_n} \ntimet: {time_t}')
+    sunrise = time.strftime("%H:%M", sr)
+    sunset = time.strftime("%H:%M", ss)
 
-    forecast = f"{desc.title()} in {city} at {time_now}. The temperature is {temp_c}° celcius with wind speed of {wind}"
+    forecast = f"{desc.title()} in {city} at {time_t} O'clock. The temperature is {temp_c}° " \
+               f"celcius with wind speed of {wind}"
     display = f"<table style='width:650px; text-align:center; background-color:black;'>" \
               f"<tr>" \
               f"<td><img src='img/weather/icons/temp.png' height='30px'></td> " \
@@ -205,11 +228,13 @@ def weather_f(json_data):
 def weather(place):
     try:
         api_address = f'http://api.openweathermap.org/data/2.5/weather?appid={config.weather_id}='
-        word = place.split(' ')
+        word = re.findall('[a-z]+', place)
         if len(word) == 1:
             city = word[0]
+        elif len(word) == 3:
+            city = f'{word[0]} {word[1]},{word[2]}'
         else:
-            city = word[0] + ',' + word[1]
+            city = place
 
         url = api_address + city
 
