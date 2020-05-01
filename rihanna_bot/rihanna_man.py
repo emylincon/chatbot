@@ -921,6 +921,28 @@ def man_spotify():
     return reply
 
 
+def man_itunes():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Itunes feature</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'itunes album details for <b>views drake</b>': 'displays album details',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the itunes functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
@@ -929,4 +951,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man word cloud': man_word_cloud, 'man job search': man_job_search, 'man image': man_image,
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
             'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map,
-            'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify}
+            'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify, 'man itunes': man_itunes}
