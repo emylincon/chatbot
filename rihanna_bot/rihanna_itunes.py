@@ -1,10 +1,15 @@
 import itunespy
 
+# https://github.com/sleepyfran/itunespy
+
 
 def selector(query):
     if query[:len('album details for ')] == 'album details for ':
         msg = query[len('album details for '):].strip()
         return Albums(msg).track_list_()
+    elif query[:len('albums for ')] == 'albums for ':
+        msg = query[len('albums for '):]
+        return Albums(msg).artist_albums()
     else:
         reply = 'itunespy cannot resolve this query'
         return {'display': reply, 'say': reply}
@@ -30,9 +35,13 @@ class Albums:
         r_date = album[0].release_date.split('T')[0]
         length = album[0].get_album_time()
         tracks = album[0].get_tracks()  # Get tracks from the first result
-        display = f'<div><img src="{img}" alt="image"> <span>{album_name} by {artist}. ' \
-                  f'Released on {r_date} with a runtime of {length} minutes</span></div>'
-        display += "<table id='t01'>"
+        display = f'<div>' \
+                  f'<img src="{img}" alt="image" style="float:left; height:100px"> ' \
+                  f'<div style="float:left; height:100px; width:500px; background-color:black; color:white;">' \
+                  f'<span style="font-size:30px;">{album_name} by {artist} </span>' \
+                  f'<p style="font-size:15px;">Released on {r_date}</p>' \
+                  f'<p style="font-size:15px;">Runtime of {length} minutes</p></div></div>'
+        display += "<table id='t01' style='width:600px;'>"
 
         for song in tracks:
             preview = self.audio_tag(song.preview_url)
@@ -47,7 +56,26 @@ class Albums:
         return {'display': display, 'say': say}
 
     def artist_albums(self):
-        pass
+        artist = itunespy.search_artist(self.query)  # Returns a list
+        albums = artist[0].get_albums()  # Get albums from the first result
+        display = ''
+        for album in albums:
+            album_name = album.collection_name
+            artist = album.artist_name
+            img = album.artwork_url_100
+            r_date = album.release_date.split('T')[0]
+            length = album.get_album_time()
+            # border-style: solid;
+            #   border-color: coral;
+            display += f'<div>' \
+                          f'<img src="{img}" alt="image" style="float:left; height:100px"> ' \
+                          f'<div style="float:left; height:100px; width:500px; background-color:black; color:white; ' \
+                       f'border-style: solid; border-color: white;">' \
+                          f'<span style="font-size:20px;">{album_name} by {artist} </span>' \
+                          f'<p style="font-size:15px;">Released on {r_date}</p>' \
+                          f'<p style="font-size:15px;">Runtime of {length} minutes</p></div></div>'
+        say = f'find displayed albums for {self.query}'
+        return {'display': display, 'say': say}
 
     @staticmethod
     def audio_tag(link):
@@ -55,3 +83,6 @@ class Albums:
               f'<source src="{link}">' \
               f'</audio>'
         return tag
+
+
+# Albums('drake').artist_albums()
