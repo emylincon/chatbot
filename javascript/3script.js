@@ -22,10 +22,12 @@ var ws = new WebSocket("ws://localhost:8000");
                     chat_add_message(obj['user_said'], true);
                     chat_add_message(obj['display'], false);
                     voice(obj['say']);
+                    unloading();
                 }
                 else{
                     chat_add_message(obj['display'], false);
                     voice(obj['say']);
+                    unloading();
                 }
 		}
 
@@ -34,11 +36,13 @@ var ws = new WebSocket("ws://localhost:8000");
 		   var msg = message_received.split(';')[1];
 		   chat_add_message(speak, true);
 		   chat_add_message(msg, false);
+		   unloading();
 
 		}
 
 		else{
 		        chat_add_message(message_received, false);
+		        unloading();
 		    }
 
 
@@ -74,6 +78,7 @@ var ws = new WebSocket("ws://localhost:8000");
              var message = $(this).val();
              $(this).val("");
              chat_add_message(message, true);
+             loading();
 			 store.push(message);
 			 s_g = -2;
 			 if (answer != ''){
@@ -83,17 +88,21 @@ var ws = new WebSocket("ws://localhost:8000");
 			    if (resp.indexOf(message.toLowerCase()) > 0){
 			        chat_add_message(ans, false);
 			        voice(ans);
+			        unloading();
+
 			    }
 			    else{
 			        if (ans.slice(8,).toLowerCase() == message.toLowerCase()){
 			            var reply = 'you are right. '
                         chat_add_message(reply+ans, false);
                         voice(reply+ans);
+                        unloading();
                     }
                     else{
                         var reply = 'you are wrong. '
                         chat_add_message(reply+ans, false);
                         voice(reply+ans);
+                        unloading();
                     }
 			    }
 
@@ -175,6 +184,7 @@ var ws = new WebSocket("ws://localhost:8000");
     function mouseFunction(e){
   		var body = document.querySelector('body');
   		var heart = document.createElement("span");
+  		heart.className = 'love';
   		var x = e.offsetX;
   		var y = e.offsetY;
   		heart.style.left = x+'px';
@@ -195,3 +205,19 @@ var ws = new WebSocket("ws://localhost:8000");
   	function removeMouse(){
 	document.removeEventListener("mousemove", mouseFunction);
 	}
+
+	function loading() {
+		  const load = document.createElement('div');
+		  load.className = 'ring';
+		  load.classId = 'ring';
+		  load.innerHTML = `
+			active<div class='ringer'></div>
+		  `;
+		  document.getElementById('loading').appendChild(load);
+		}
+    function unloading(){
+       var x;
+       x = document.getElementById('loading');
+       if (x.innerHTML){ x.innerHTML = '';}
+
+    }
