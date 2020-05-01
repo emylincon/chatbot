@@ -930,6 +930,7 @@ def man_itunes():
                             "
 
     func = {'itunes album details for <b>views drake</b>': 'displays album details',
+            'itunes albums for <b>drake</b>': 'displays albums for a particular artist',
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
