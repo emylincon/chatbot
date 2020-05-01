@@ -18,5 +18,5 @@ def auto_correct(sentence):
 
     return sentence
 
-#print(auto_correct("sned email"))
+# print(auto_correct("new york, us"))
 #print(auto_correct("lol"))
