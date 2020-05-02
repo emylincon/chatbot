@@ -8,7 +8,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs, hot100, \
-    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes
+    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx
 import config
 import random as r
 import time
@@ -284,6 +284,8 @@ def rihanna(message):
         if message.lower()[:3] == 'tfl':
             message = format_string(message).lower().strip()
 
+        elif message[:len('word file')] == 'word file':
+            return rihanna_docx.selector(message)
         elif message.lower()[:5] == 'skype':
             return rihanna_skype.selector(format_string(message[6:]).lower().strip())
         elif message.lower()[:len('solve')] == 'solve':
