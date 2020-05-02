@@ -954,7 +954,7 @@ def man_wordfile():
                                 </tr>\
                                 "
 
-    func = {"word file create file.docx + content| test file + heading| Test + ": 'creates file',
+    func = {"word file create file.docx + content| test file + heading| Test": 'creates file',
             "word file create file.docx + heading| Test + "
             "content_styled|[[{'content':'i love people', 'style':'bold'}, "
             "{'content':' they are very nice', 'style':'italic'}]]": 'creates file',
