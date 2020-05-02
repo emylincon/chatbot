@@ -8,6 +8,7 @@ import random
 from rihanna_bot.youtube_sim import youtube_sim_main
 from multiprocessing.pool import ThreadPool
 from rihanna_bot import hot100_data
+from rihanna_bot.rihanna_itunes import Albums
 import sys, traceback
 
 
@@ -35,6 +36,9 @@ def selector(message):
     elif message[:len('youtube views for ')] == 'youtube views for ':
         msg = message[len('youtube views for '):]
         return Youtube().youtube_views(msg)
+    elif message[:len('youtube album play ')] == 'youtube album play ':
+        msg = message[len('youtube album play '):]
+        return Youtube().choose_playlist(Albums(msg).track_list())
     elif message[:len('youtube')] == "youtube":
         message_ = message[len("youtube") + 1:]
         return Youtube().search_youtube(message_)
