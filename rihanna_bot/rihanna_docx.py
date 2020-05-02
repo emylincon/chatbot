@@ -6,7 +6,21 @@ import os
 
 
 def selector(query):
-    pass
+    if query[:len('word file read ')] == 'word file read ':
+        f_name = query[len('word file read '):].strip()
+        return WordFile(f_name).read()
+    elif query[:len('word file create ')] == '':    # word file create e.docx | content: b| heading:i content_styled:khb
+        msg = query[len('word file create '):]
+        mg = msg.split('|')
+        f_name = mg[0]
+        dict_msg = {}
+        for i in mg[1:]:
+            d = i.split(':')
+            dict_msg[d[0].strip()] = d[1].strip()
+        return WordFile(f_name).create(**dict_msg)
+    elif query[:len('word file delete ')] == '':
+        msg = query[len('word file delete '):].strip()
+        return WordFile(msg).delete()
 
 
 class WordFile:
