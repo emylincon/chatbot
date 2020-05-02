@@ -457,6 +457,7 @@ def man_youtube():
             "youtube songs chart": "plays chart playlist",
             'youtube rihanna playlist': 'plays demo playlist',
             'youtube views for <b>drake war</b>': 'give youtube view stats',
+            'youtube album play <b>drake views</b>': 'puts album track list in a playlist'
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
