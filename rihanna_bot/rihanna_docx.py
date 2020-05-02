@@ -1,7 +1,7 @@
 from docx import Document
 from os import path
 import os
-
+import ast
 # https://www.youtube.com/watch?v=26vNgM_wSAE
 
 
@@ -9,18 +9,21 @@ def selector(query):
     if query[:len('word file read ')] == 'word file read ':
         f_name = query[len('word file read '):].strip()
         return WordFile(f_name).read()
-    elif query[:len('word file create ')] == '':    # word file create e.docx | content: b| heading:i content_styled:khb
+    elif query[:len('word file create ')] == 'word file create ':  # word file create e.docx + content| b + heading|i +content_styled|khb
         msg = query[len('word file create '):]
-        mg = msg.split('|')
+        mg = msg.split('+')
         f_name = mg[0]
         dict_msg = {}
         for i in mg[1:]:
-            d = i.split(':')
+            d = i.split('|')
             dict_msg[d[0].strip()] = d[1].strip()
         return WordFile(f_name).create(**dict_msg)
-    elif query[:len('word file delete ')] == '':
+    elif query[:len('word file delete ')] == 'word file delete ':
         msg = query[len('word file delete '):].strip()
         return WordFile(msg).delete()
+    else:
+        reply = 'i do not know'
+        return {'display': reply, 'say': reply}
 
 
 class WordFile:
@@ -42,6 +45,12 @@ class WordFile:
             reply = f'Word document {self.filename} has been created'
             return {'display': reply, 'say': reply}
         elif content_styled:
+            if type(content_styled).__name__ == 'str':
+                try:
+                    content_styled = ast.literal_eval(content_styled)
+                except:
+                    reply = 'improper formatting on WordFile'
+                    return {'display': reply, 'say': reply}
             for para in content_styled:
                 p = doc.add_paragraph('')
                 for run in para:
@@ -98,7 +107,7 @@ class WordFile:
 
 # WordFile('emeka.docx').delete()
 # con = [
-#         [{'content':'i love people', 'style':'bold'}, {'content':' they are very nice', 'style':None}],
+#         [{'content':'i love people', 'style':'bold'}, {'content':' they are very nice', 'style':'italic'}],
 #         [{'content':'i love people', 'style':'italic'}, {'content':' they are very nice', 'style':None}],
 #        [{'content': 'i love people', 'style': 'bold'}, {'content': ' they are very nice', 'style': 'bold'}],
 #        [{'content': 'i love people', 'style': None}, {'content': ' they are very nice', 'style': 'italic'}]
@@ -108,4 +117,11 @@ class WordFile:
 # print(a)
 
 # a = WordFile('emeka.docx').read()
+# print(a)
+
+# d = "word file create file.docx + heading| Test + " \
+#     "content_styled|[[{'content':'i love people', 'style':'bold'}, " \
+#     "{'content':' they are very nice', 'style':'italic'}]]"
+# a = selector(d)
+#
 # print(a)
