@@ -973,6 +973,30 @@ def man_wordfile():
     return reply
 
 
+def man_games():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Games feature</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'games play <b>tetris</b>': 'displays game',
+            'games play <b>bouncy dunk</b>': 'displays game',
+            'games play <b>snake</b>': 'displays game',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the games functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
