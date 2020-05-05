@@ -2,6 +2,7 @@ var ws = new WebSocket("ws://localhost:8000");
 	var store = [''];
 	var s_g = -2;
 	var answer = '';
+	var word_file = {};
 	document.getElementById("chat_input").onkeydown = check;
     // Close socket when window closes
     $(window).on('beforeunload', function(){
@@ -221,3 +222,26 @@ var ws = new WebSocket("ws://localhost:8000");
        if (x.innerHTML){ x.innerHTML = '';}
 
     }
+
+    function keep_clock(){
+    var deg = 6;
+    var hrs = document.querySelectorAll("#hr");
+    var mns = document.querySelectorAll("#mn");
+    var scs = document.querySelectorAll("#sc");
+
+    setInterval(
+    ()=>{
+        let day = new Date();
+        let hh = day.getHours() * 30;
+        let mm = day.getMinutes() * deg;
+        let ss = day.getSeconds() * deg;
+        for (i = 0; i < hrs.length; ++i) {
+            hrs[i].style.transform = `rotateZ(${hh+(mm/12)}deg)`;
+            mns[i].style.transform = `rotateZ(${mm}deg)`;
+            scs[i].style.transform = `rotateZ(${ss}deg)`;
+            }
+
+    }
+)
+
+}
