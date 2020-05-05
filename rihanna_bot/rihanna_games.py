@@ -1,8 +1,5 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
-url = "https://www.miniclip.com/games/search/en/?query=bounce#privacy-consents"
-# search for class='game-icon-component game-icon'. within the class find the link
-# find loader-scene
 
 
 def selector(query):
