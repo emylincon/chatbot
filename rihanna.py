@@ -8,7 +8,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs, hot100, \
-    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx
+    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx, rihanna_games
 import config
 import random as r
 import time
@@ -325,6 +325,8 @@ def rihanna(message):
             return rihanna_job.selector(format_string(message).lower().strip())
         elif message.lower()[:len('docker')] == 'docker':
             return rihanna_docker.selector(message.lower().strip())
+        elif message.lower()[:len('game play')] == 'game play':
+            return rihanna_games.selector(format_string(message).lower().strip())
         elif message.strip().lower() in laugh:
             return funny()
         else:
