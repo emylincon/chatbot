@@ -1006,4 +1006,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
             'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map,
             'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify, 'man itunes': man_itunes,
-            'man word file': man_wordfile, 'man game': man_games}
+            'man word file': man_wordfile, 'man game': man_games, 'man games': man_games}
