@@ -77,7 +77,7 @@ def tetris():
 def bouncy_dunk():
     game = """<Object width="380px" height="680px"
             <param name="movie" value="https://games.gamepix.com/play/40407?sid=30166">
-            <embed SRC="https://games.gamepix.com/play/40264?sid=30166" width="380px" height="680px"
+            <embed SRC="https://games.gamepix.com/play/40407?sid=30166" width="380px" height="680px"
             </embed>
             </object>
             """
