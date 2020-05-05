@@ -33,7 +33,7 @@ class Games:
             link = game.find('a').get('href')
             game_obj = self.__get_game_url(link)
             if game_obj:
-                return {'display': game_obj, 'say': f'You now play {self.query}. enjoy!'}
+                return {'display': game_obj, 'say': f'You can now play {self.query}. enjoy!'}
         reply = f'Sorry I cannot find {self.query}'
         return {'display': reply, 'say': reply}
 
@@ -71,7 +71,7 @@ def tetris():
             </embed>
             </object>
             """
-    return {'display': game, 'say': 'You now play tetris. enjoy!'}
+    return {'display': game, 'say': 'You can now play tetris. enjoy!'}
 
 
 def bouncy_dunk():
@@ -81,7 +81,7 @@ def bouncy_dunk():
             </embed>
             </object>
             """
-    return {'display': game, 'say': f'You now play bouncy dunk. enjoy!'}
+    return {'display': game, 'say': f'You can now play bouncy dunk. enjoy!'}
 
 
 # a = selector('game play snake')
