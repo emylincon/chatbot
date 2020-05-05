@@ -981,9 +981,9 @@ def man_games():
                             </tr>\
                             "
 
-    func = {'games play <b>tetris</b>': 'displays game',
-            'games play <b>bouncy dunk</b>': 'displays game',
-            'games play <b>snake</b>': 'displays game',
+    func = {'game play <b>tetris</b>': 'displays game',
+            'game play <b>bouncy dunk</b>': 'displays game',
+            'game play <b>snake</b>': 'displays game',
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
