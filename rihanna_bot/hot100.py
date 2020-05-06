@@ -461,11 +461,41 @@ class Music2:
                 now = datetime.datetime.now()
                 file.write(f'date = datetime.datetime'
                            f'{(now.year, now.month, now.day, now.hour, now.minute, now.second, now.microsecond)}\n')
+                n_dt = self.get_next_update()
+                file.write(f'next_update = datetime.datetime'
+                           f'{(n_dt.year, n_dt.month, n_dt.day, n_dt.hour, n_dt.minute, n_dt.second, n_dt.microsecond)}\n')
+                file.close()
+            elif datetime.datetime.now() > next_update:
+                url = 'https://www.billboard.com/charts/hot-100'
+                page = requests.get(url, headers=config.header)
+                soup = BeautifulSoup(page.content, 'html.parser')
+                self.main_li = soup.find_all("li", {"class": "chart-list__element display--flex"})
+                self.songs = {**self.get_songs}
+                self.songs = self.get_vids()
+                path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\rihanna_bot\hot100_data.py'
+                file = open(path, 'w', encoding='utf-8')
+                file.write('import datetime\n')
+                file.write(f'hot_songs = {self.songs}\n')
+                now = datetime.datetime.now()
+                file.write(f'date = datetime.datetime'
+                           f'{(now.year, now.month, now.day, now.hour, now.minute, now.second, now.microsecond)}\n')
+                n_dt = self.get_next_update()
+                file.write(f'next_update = datetime.datetime'
+                           f'{(n_dt.year, n_dt.month, n_dt.day, n_dt.hour, n_dt.minute, n_dt.second, n_dt.microsecond)}\n')
                 file.close()
             else:
                 self.songs = hot_songs
         except AttributeError:
             self.songs = hot_songs
+
+    @staticmethod
+    def get_next_update():
+        dt = datetime.datetime.now()
+        inc = 7 - (dt.weekday() - 2)     #updates every wednesday
+        if inc > 7:
+            inc = inc - 7
+        next_dt = dt + datetime.timedelta(days=inc)
+        return next_dt
 
     @property
     def get_songs(self):
@@ -666,3 +696,4 @@ class BillboardMusic:
 #
 # a = BillboardMusic().chart_songs('hot-100')
 # print(a)
+
