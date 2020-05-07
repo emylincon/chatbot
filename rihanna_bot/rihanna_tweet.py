@@ -382,7 +382,7 @@ def sentiment_display(report):
         display += f'<tr style="background-color:#15202b">\
                         <td>{tweet["display"]}</td>\
                         <td><div style="color:white; font-size:30px; border-style: solid; border-color:white; ' \
-                   f'text-align:center; float:center; background-color:#15202b">' \
+                   f'text-align:center; float:center; background-color:#15202b; border-radius: 20%;">' \
                    f'{tweet["percentage"]}</div>'\
                    f'<br><div style="float:center;">' \
                    f'<img src="tweet_image/{tweet["sentiment"].lower()}.png" width="80px">' \
