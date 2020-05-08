@@ -107,6 +107,7 @@
       background-color: #111112; /* black */
       color: white;
       border-radius: 20%;
+      display: inline-block;
     }
     a {
       background:
