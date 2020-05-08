@@ -2,7 +2,7 @@ var ws = new WebSocket("ws://localhost:8000");
 	var store = [''];
 	var s_g = -2;
 	var answer = '';
-	var word_file = {};
+	var wordfile_dic = {};
 	document.getElementById("chat_input").onkeydown = check;
     // Close socket when window closes
     $(window).on('beforeunload', function(){
@@ -111,6 +111,15 @@ var ws = new WebSocket("ws://localhost:8000");
 			 else if (message == "clear"){
 			    location.reload();
 			 }
+			 else if (message.slice(0, "word create file ".length) == "word create file "){
+                    var filename = message.slice('word create file '.length);
+                    wordfile_dic['filename'] = filename + '.docx';
+                    var word_text_form = '<b>' + filename + '</b><div class="wordfile_div"><textarea id="wordfile" rows="10" cols="100"></textarea><br><button id="file_button" onclick="saveWordfile()">Save</button></div>';
+                    // send word_text_form to website/user
+                    chat_add_message(word_text_form, false);
+                    voice('add content to your word file');
+                    unloading();
+                }
 			 else{
 			    ws.send(message);
 			 }
@@ -239,9 +248,24 @@ var ws = new WebSocket("ws://localhost:8000");
             hrs[i].style.transform = `rotateZ(${hh+(mm/12)}deg)`;
             mns[i].style.transform = `rotateZ(${mm}deg)`;
             scs[i].style.transform = `rotateZ(${ss}deg)`;
-            }
+                }
+
+        }
+    )
 
     }
-)
 
-}
+    function saveWordfile(){
+        wordfile_dic['content'] = document.getElementById("wordfile").value ;
+        var send_me = `word file send ${JSON.stringify(wordfile_dic)}`;
+        var notify = `<p style='color: white; background-color:black; width:250px;'>${wordfile_dic['filename']} Saved!</p>`;
+
+        var elements = document.getElementsByClassName("wordfile_div");
+        for(var i=0; i<elements.length; i++) {
+            if (elements[i].innerHTML){ elements[i].innerHTML = notify;}
+        }
+        // send send_me to python for processing
+        ws.send(send_me);
+        wordfile_dic = {};
+
+    }
