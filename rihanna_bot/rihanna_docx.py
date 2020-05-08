@@ -2,6 +2,8 @@ from docx import Document
 from os import path
 import os
 import ast
+import re
+from bs4 import BeautifulSoup
 # https://www.youtube.com/watch?v=26vNgM_wSAE
 
 
@@ -24,7 +26,7 @@ def selector(query):
     elif query[:len('word file send ')] == 'word file send ':
         msg = query[len('word file send '):].strip()
         q = ast.literal_eval(msg)
-        return WordFile(q['filename']).create(content=q['content'])
+        return WordFile(q['filename']).create(html=q['content'])
     else:
         reply = 'i do not know'
         return {'display': reply, 'say': reply}
@@ -35,7 +37,7 @@ class WordFile:
         self.path = r'C:\Users\emyli\PycharmProjects\Chatbot_Project\wordfiles'
         self.filename = filename
 
-    def create(self, content=None, content_styled=None, heading=None):
+    def create(self, content=None, content_styled=None, heading=None, html=None):
         # content = just text, content_styled = [[{'content':'i ..', 'style':'bold' or'italic' or None]},{}...], ..]
         if path.exists(f'{self.path}\{self.filename}'):
             reply = f'{self.filename} exists in directory'
@@ -67,6 +69,46 @@ class WordFile:
             doc.save(f'{self.path}\{self.filename}')
             reply = f'Word document {self.filename} has been created'
             return {'display': reply, 'say': reply}
+        elif html:
+            b = html.split('\n')
+            for i in b:
+                soup = BeautifulSoup(i, 'html.parser')
+                no = re.findall('<+[a-z0-9]+>', i)
+                if len(no) == 0:
+                    doc.add_paragraph(i)
+                elif len(no) == 1:
+                    for tag in no:
+                        t = re.findall('\w+', tag)[0]
+                        print(t)
+                        if t == 'h1':
+                            # soup = BeautifulSoup(i, 'html.parser')
+                            title = soup.find('h1').text
+                            doc.add_heading(title, 0)
+                        elif t[0] == 'h':
+                            # soup = BeautifulSoup(i, 'html.parser')
+                            data = soup.find(t).text
+                            doc.add_heading(data)
+                        else:
+                            p = doc.add_paragraph('')
+                            data = soup.find(t).text
+                            if t == 'b':
+                                p.add_run(data).bold = True
+                            elif t == 'em':
+                                p.add_run(data).italic = True
+                else:
+                    p = doc.add_paragraph('')
+                    for tag in no:
+                        t = re.findall('\w+', tag)
+                        for wa in t:
+                            data = soup.find(wa).text
+                            if t == 'b':
+                                p.add_run(data).bold = True
+                            elif t == 'em':
+                                p.add_run(data).italic = True
+            doc.save(f'{self.path}\{self.filename}')
+            reply = f'Word document {self.filename} has been created'
+            return {'display': reply, 'say': reply}
+
         else:
             reply = 'no content specified'
             return {'display': reply, 'say': reply}
@@ -129,3 +171,22 @@ class WordFile:
 # a = selector(d)
 #
 # print(a)
+
+
+# import re
+# from bs4 import BeautifulSoup
+#
+# a = ' i am good \n i love you \n <b>thank you</b> \n my tahns <b>i knwp</b>'
+# b = a.split('\n')
+# con = []
+# for i in b:
+#     no = re.findall('<+[a-z]+>', i)
+#     if len(no) == 0:
+#         con.append([{'content': i, 'style':None}])
+#     else:
+#         style = {'b': 'bold', 'em': 'italic'}
+#         para = []
+#         for tag in no:
+#             t = re.findall('\w+', tag)
+# a = '<h1> i am good</h1> \n i <b>love</b> you \n <b>thank you</b> \n my tahns <b>i knwp</b>'
+# WordFile('tesr.docx').create(html=a)
