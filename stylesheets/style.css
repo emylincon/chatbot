@@ -103,6 +103,11 @@
       border-radius: 5px;
       font-size: 15px;
     }
+    #file_button {
+      background-color: #111112; /* black */
+      color: white;
+      border-radius: 20%;
+    }
     a {
       background:
          linear-gradient(
