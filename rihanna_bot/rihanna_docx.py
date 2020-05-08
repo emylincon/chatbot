@@ -21,6 +21,10 @@ def selector(query):
     elif query[:len('word file delete ')] == 'word file delete ':
         msg = query[len('word file delete '):].strip()
         return WordFile(msg).delete()
+    elif query[:len('word file send ')] == 'word file send ':
+        msg = query[len('word file send '):].strip()
+        q = ast.literal_eval(msg)
+        return WordFile(q['filename']).create(content=q['content'])
     else:
         reply = 'i do not know'
         return {'display': reply, 'say': reply}
