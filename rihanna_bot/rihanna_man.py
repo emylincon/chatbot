@@ -960,6 +960,8 @@ def man_wordfile():
             "{'content':' they are very nice', 'style':'italic'}]]": 'creates file',
             'word file read file.docx': 'reads file',
             'word file delete file.docx': 'deletes file',
+            'word create file emeka': 'creates file',   # word file edit
+            'word file edit emeka': 'opens file in editing mode'
             }
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
