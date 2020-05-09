@@ -2,7 +2,7 @@ var ws = new WebSocket("ws://localhost:8000");
 	var store = [''];
 	var s_g = -2;
 	var answer = '';
-	var wordfile_dic = {};
+	var wordfile_dic = {'filename': ''};
 	document.getElementById("chat_input").onkeydown = check;
     // Close socket when window closes
     $(window).on('beforeunload', function(){
@@ -114,7 +114,7 @@ var ws = new WebSocket("ws://localhost:8000");
 			 else if (message.slice(0, "word create file ".length) == "word create file "){
                     var filename = message.slice('word create file '.length);
                     wordfile_dic['filename'] = filename + '.docx';
-                    var word_text_form = '<b>' + filename + '</b><div class="wordfile_div"><textarea id="wordfile" rows="10" cols="100"></textarea><br><button id="file_button" onclick="saveWordfile()">Save</button></div>';
+                    var word_text_form = '<b> Editing ' + filename + '.docx </b><div class="wordfile_div"><textarea id="wordfile" rows="10" cols="100"></textarea><br><button id="file_button" onclick="saveWordfile()">Save</button></div>';
                     // send word_text_form to website/user
                     chat_add_message(word_text_form, false);
                     voice('add content to your word file');
@@ -266,6 +266,6 @@ var ws = new WebSocket("ws://localhost:8000");
         }
         // send send_me to python for processing
         ws.send(send_me);
-        wordfile_dic = {};
+        wordfile_dic = {'filename': ''};
 
     }
