@@ -5,12 +5,16 @@ import ast
 import re
 from bs4 import BeautifulSoup
 # https://www.youtube.com/watch?v=26vNgM_wSAE
+editing = None
 
 
 def selector(query):
     if query[:len('word file read ')] == 'word file read ':
         f_name = query[len('word file read '):].strip()
         return WordFile(f_name).read()
+    elif query[:len('word file edit ')] == 'word file edit ':
+        f_name = query[len('word file edit '):].strip()
+        return WordFile(f_name).edit()
     elif query[:len('word file create ')] == 'word file create ':  # word file create e.docx + content| b + heading|i +content_styled|khb
         msg = query[len('word file create '):]
         mg = msg.split('+')
@@ -26,6 +30,8 @@ def selector(query):
     elif query[:len('word file send ')] == 'word file send ':
         msg = query[len('word file send '):].strip()
         q = ast.literal_eval(msg)
+        if q['filename'] == '' and editing:
+            return WordFile(editing).create(html=q['content'])
         return WordFile(q['filename']).create(html=q['content'])
     else:
         reply = 'i do not know'
@@ -39,7 +45,7 @@ class WordFile:
 
     def create(self, content=None, content_styled=None, heading=None, html=None):
         # content = just text, content_styled = [[{'content':'i ..', 'style':'bold' or'italic' or None]},{}...], ..]
-        if path.exists(f'{self.path}\{self.filename}'):
+        if path.exists(f'{self.path}\{self.filename}') and not editing:
             reply = f'{self.filename} exists in directory'
             return {'display': reply, 'say': reply}
         doc = Document()
@@ -79,7 +85,6 @@ class WordFile:
                 elif len(no) == 1:
                     for tag in no:
                         t = re.findall('\w+', tag)[0]
-                        print(t)
                         if t == 'h1':
                             # soup = BeautifulSoup(i, 'html.parser')
                             title = soup.find('h1').text
@@ -140,6 +145,20 @@ class WordFile:
         else:
             reply = f'file {self.filename} does not exist'
             return {'display': reply, 'say': reply}
+
+    def edit(self):
+        global editing
+        read_obj = self.read()
+        if read_obj['display'] == f'file {self.filename} does not exist':
+            return read_obj
+
+        display = f'<b> Editing ' + self.filename + ' </b><div class="wordfile_div">' \
+                                                    '<textarea id="wordfile" rows="10" cols="100">' \
+                                                    f'{read_obj["display"]}</textarea><br><button id="file_button" ' \
+                                                    'onclick="saveWordfile()">Save</button></div>'
+        say = 'File opened in editing mode'
+        editing = self.filename
+        return {'display': display, 'say': say}
 
     def delete(self):
         if path.exists(f'{self.path}\{self.filename}'):
