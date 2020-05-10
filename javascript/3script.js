@@ -227,6 +227,17 @@ var recognition = new window.SpeechRecognition();
 		  `;
 		  document.getElementById('loading').appendChild(load);
 		}
+
+	function listening() {
+		  const load = document.createElement('div');
+		  load.className = 'ring';
+		  load.classId = 'ring';
+		  load.innerHTML = `
+			listening<div class='ringer'></div>
+		  `;
+		  document.getElementById('loading').appendChild(load);
+		}
+
     function unloading(){
        var x;
        x = document.getElementById('loading');
@@ -281,7 +292,8 @@ var recognition = new window.SpeechRecognition();
         recognition.interimResults = true;
         recognition.maxAlternatives = 10;
         // recognition.continuous = true;
-        loading();
+        voice('listening');
+        listening();
         recognition.onresult = (event) => {
             let interimTranscript = '';
             for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
@@ -292,10 +304,11 @@ var recognition = new window.SpeechRecognition();
                 interimTranscript += transcript;
                 }
             }
-            //document.querySelector('#print').innerHTML = finalTranscript;
-            console.log('trans: '+finalTranscript);
+            //console.log('trans: '+finalTranscript);
             if (finalTranscript != ''){
+                unloading();
                 chat_add_message(finalTranscript, true);
+                loading();
                 ws.send(finalTranscript);
             }
         }
