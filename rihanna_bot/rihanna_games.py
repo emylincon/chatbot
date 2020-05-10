@@ -86,3 +86,21 @@ def bouncy_dunk():
 
 # a = selector('game play snake')
 # print(a)
+# https://www.miniclip.com/games/strike-force-heroes/en/#privacy-consents
+
+# a = 'https://www.miniclip.com/games/strike-force-heroes/en/#privacy-consents'
+# options = webdriver.ChromeOptions()
+# options.add_argument('headless')
+#
+# driver = webdriver.Chrome(options=options)
+# req = a
+# driver.get(req)
+# soup = BeautifulSoup(driver.page_source, 'lxml')
+# load = soup.find("div", {"class": "loader-scene"})
+# try:
+#     value = load.find('form').get('action')
+#     div_style = soup.find("div", {"class": "loader-container"}).get('style')
+#     g = Games('yes')
+#     print(g.game_frame(value=value, style=div_style))
+# except:
+#     print('no')
