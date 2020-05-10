@@ -239,10 +239,10 @@
 				border: 3px solid #3c3c3c;
 				border-radius: 50%;
 				text-align: center;
-				line-height: 90px;
+				line-height: 85px;
 				font-family: sans-serif;
 				color: #fff000;
-				letter-spacing: 2px;
+				letter-spacing: 1px;
 				text-transform: uppercase;
 				text-shadow: 0 0 10px #fff000;
 				box-shadow: 0 0 20px rgba(0,0,0,.5);
