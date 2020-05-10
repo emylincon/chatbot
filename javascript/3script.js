@@ -1,4 +1,6 @@
 var ws = new WebSocket("ws://localhost:8000");
+window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+var recognition = new window.SpeechRecognition();
 	var store = [''];
 	var s_g = -2;
 	var answer = '';
@@ -267,5 +269,35 @@ var ws = new WebSocket("ws://localhost:8000");
         // send send_me to python for processing
         ws.send(send_me);
         wordfile_dic = {'filename': ''};
+
+    }
+
+    function Speak_now(){
+        recognition.start();
+
+        let finalTranscript = '';
+
+
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 10;
+        // recognition.continuous = true;
+        loading();
+        recognition.onresult = (event) => {
+            let interimTranscript = '';
+            for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+                let transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+                } else {
+                interimTranscript += transcript;
+                }
+            }
+            //document.querySelector('#print').innerHTML = finalTranscript;
+            console.log('trans: '+finalTranscript);
+            if (finalTranscript != ''){
+                chat_add_message(finalTranscript, true);
+                ws.send(finalTranscript);
+            }
+        }
 
     }
