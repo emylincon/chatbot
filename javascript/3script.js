@@ -173,8 +173,8 @@ var ws = new WebSocket("ws://localhost:8000");
 
 
         const voice = {
-        "name": "Tessa",
-        "lang": "en-ZA"
+        "name":  "Microsoft Hazel Desktop - English (Great Britain)",
+        "lang": "en-GB"
       }; //47
         console.log(`Voice: ${voice.name} and Lang: ${voice.lang}`);
         msg.voiceURI = voice.name;
