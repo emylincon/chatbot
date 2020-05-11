@@ -8,7 +8,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_time, rihanna_maths as calc, rihanna_email, rihanna_tfl, rihanna_spell, rihanna_facebook, rihanna_amazon, \
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, rihanna_docker, rihanna_nhs, hot100, \
-    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx, rihanna_games
+    rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx, rihanna_games, rihanna_covid
 import config
 import random as r
 import time
@@ -273,7 +273,7 @@ def funny():
 
 def rihanna(message):
     if (message[:len("dictionary translate")] != "dictionary translate") and (
-            rihanna_dict.detect_lang(message) != 'en') and ('spotify' not in message):
+            rihanna_dict.detect_lang(message) != 'en') and ('spotify' not in message)and ('covid' not in message):
         config.lang_code = rihanna_dict.detect_lang(message)
         message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
@@ -295,6 +295,8 @@ def rihanna(message):
             return rihanna_science.selector(msg)
         elif message[:len('map')] == 'map':
             return rihanna_maps.selector(format_string(message))
+        elif message[:len('covid')] == 'covid':
+            return rihanna_covid.selector(format_string(message).lower())
         elif message[:len('lyrics')] == 'lyrics':
             return rihanna_lyrics.selector(format_string(message))
         elif message[:len('billboard')] == 'billboard':
