@@ -58,9 +58,11 @@ class Youtube:
         options.add_argument('headless')
 
         try:
-            chrome_path = os.listdir('chrome_driver/')[0]
+            chrome_p = os.listdir('chrome_driver/')[0]
+            chrome_path = f'chrome_driver/{chrome_p}'
         except:
-            chrome_path = os.listdir('../chrome_driver/')[0]
+            chrome_p = os.listdir('../chrome_driver/')[0]
+            chrome_path = f'../chrome_driver/{chrome_p}'
         driver = webdriver.Chrome(chrome_path, options=options)
         req = self.url + query
         driver.get(req)
@@ -133,9 +135,11 @@ class Youtube:
         options.add_argument('headless')
 
         try:
-            chrome_path = os.listdir('chrome_driver/')[0]
+            chrome_p = os.listdir('chrome_driver/')[0]
+            chrome_path = f'chrome_driver/{chrome_p}'
         except:
-            chrome_path = os.listdir('../chrome_driver/')[0]
+            chrome_p = os.listdir('../chrome_driver/')[0]
+            chrome_path = f'../chrome_driver/{chrome_p}'
         driver = webdriver.Chrome(chrome_path, options=options)
         req = self.url + query
         driver.get(req)
@@ -411,9 +415,11 @@ class Youtube:
         options.add_argument('headless')
 
         try:
-            chrome_path = os.listdir('chrome_driver/')[0]
+            chrome_p = os.listdir('chrome_driver/')[0]
+            chrome_path = f'chrome_driver/{chrome_p}'
         except:
-            chrome_path = os.listdir('../chrome_driver/')[0]
+            chrome_p = os.listdir('../chrome_driver/')[0]
+            chrome_path = f'../chrome_driver/{chrome_p}'
         driver = webdriver.Chrome(chrome_path, options=options)
         req = self.url + query
         driver.get(req)
