@@ -10,6 +10,7 @@ from multiprocessing.pool import ThreadPool
 from rihanna_bot import hot100_data
 from rihanna_bot.rihanna_itunes import Albums
 import sys, traceback
+import os
 
 
 def selector(message):
@@ -56,7 +57,8 @@ class Youtube:
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
 
-        driver = webdriver.Chrome(options=options)
+        chrome_path = os.listdir('../chrome_driver/')[0]
+        driver = webdriver.Chrome(chrome_path, options=options)
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -127,7 +129,8 @@ class Youtube:
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
 
-        driver = webdriver.Chrome(options=options)
+        chrome_path = os.listdir('../chrome_driver/')[0]
+        driver = webdriver.Chrome(chrome_path, options=options)
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -401,7 +404,8 @@ class Youtube:
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
 
-        driver = webdriver.Chrome(options=options)
+        chrome_path = os.listdir('../chrome_driver/')[0]
+        driver = webdriver.Chrome(chrome_path, options=options)
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -479,7 +483,7 @@ class Youtube:
 # a = Youtube().random_song()
 # a = Youtube().choose_playlist('drake club paradise, drake draft day, drake 5pm in toronto, drake war, drake do not disturb, drake mob ties')
 # a = Youtube().hot_100_playlist()
-# # a = Youtube().search_youtube_loop('meek mill going bad')
+# a = Youtube().search_youtube_loop('6ix9ine gooba')
 # # a = Youtube().youtube_playlist()
 # a = Youtube().youtube_views('toosie slide drake')
 # print(a)
