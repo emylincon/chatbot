@@ -1,10 +1,14 @@
 import os
 import subprocess as sp
+import platform
 x = open('packages.txt','r')
 y = x.readlines()
 for i in y:
+    pip = 'pip3'
+    if platform.system() == 'Windows':
+        pip = 'pip'
     if i != '':
-        cmd = f'pip3 install {i}'
+        cmd = f'{pip} install {i}'
         print(f'installing {i}')
         os.system(cmd)
 
@@ -23,3 +27,5 @@ version = version_raw.split()[-1]
 link_chrome_driver = f'https://chromedriver.storage.googleapis.com/{version}/chromedriver_linux64.zip'
 os.system(f'wget {link_chrome_driver}')
 os.system('unzip chromedriver_linux64.zip')
+os.system('rm * -r chrome_driver/')
+os.system('mv chromedriver chrome_driver/')
