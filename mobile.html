@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Chat Bot</title>
+<meta charset="utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="stylesheets/mobile_style.css">
+<link rel="stylesheet" href="stylesheets/clock.css">
+</head>
+
+<body>
+<div id="chat_container">
+    <!--div class="banner"-->
+        <!--<img class="banner-image" src="img/chatbot-banner.jpg" alt="CHAT BANNER"/>-->
+        <!--<img class="banner-image" src="img/img_banner.png" alt="CHAT BANNER"/>-->
+    <!--/div-->
+    <table style="width:100%">
+      <tr>
+        <th style="background-color:#111112;"><div style="align:center; text-align:center"><img src="img/banner_image.png" alt="banner" height="90px"></div></th>
+      </tr>
+    </table>
+    <div id="chat_log">
+    </div>
+    <div id="chat_input_container">
+        <div class="autocomplete" style="width:100%">
+            <input id="chat_input" onKeyPress="javascript:check" placeholder="Ask me anything, don't be shy..."/>
+    </div>
+</div>
+<div id="loading"></div>
+<script src="javascript/3script.js"></script>
+</body>
+</html>
