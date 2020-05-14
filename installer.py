@@ -3,12 +3,11 @@ import subprocess as sp
 x = open('packages.txt','r')
 y = x.readlines()
 for i in y:
-    p = i.split()[0]
-    cmd = f'pip3 install {p}'
-    print(f'installing {p}')
-    os.system(cmd)
+    if i != '':
+        cmd = f'pip3 install {i}'
+        print(f'installing {i}')
+        os.system(cmd)
 
-os.system('pip3 install Chatterbot==0.8.4')
 import nltk
 nltk.download('all')
 nltk.download('punkt')
