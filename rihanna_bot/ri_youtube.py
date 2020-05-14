@@ -174,31 +174,37 @@ class Youtube:
             return None
 
     def search_youtube(self, query):
-        sim_dict = youtube_sim_main(query)
-        if sim_dict == 0:
-            you_dict = self.get_data(query)
-            if you_dict:
+        try:
+            sim_dict = youtube_sim_main(query)
+            if sim_dict == 0:
+                you_dict = self.get_data(query)
+                if you_dict:
 
+                    display = f'<iframe width="600" height="335"\
+                                    src="https://www.youtube.com/embed/{you_dict["videoID"]}?rel=0" ' \
+                              f'allow="autoplay" frameborder="0" allowfullscreen>\
+                                    </iframe>'
+                    say = f"playing {you_dict['videoTitle']} video from youtube"
+                    reply = {'display': display, 'say': say}
+                    return reply
+
+                else:
+                    reply = f"Sorry, I couldn't find {query}"
+                    return {'display': reply, 'say': reply}
+            else:
+                # link = "https://www.youtube.com/watch?v=" + vid
                 display = f'<iframe width="600" height="335"\
-                                src="https://www.youtube.com/embed/{you_dict["videoID"]}?rel=0" ' \
+                                                src="https://www.youtube.com/embed/{sim_dict["videoID"]}?rel=0" ' \
                           f'allow="autoplay" frameborder="0" allowfullscreen>\
-                                </iframe>'
-                say = f"playing {you_dict['videoTitle']} video from youtube"
+                                                </iframe>'
+                say = f"playing {sim_dict['videoTitle']} video from youtube"
                 reply = {'display': display, 'say': say}
                 return reply
-
-            else:
-                reply = f"Sorry, I couldn't find {query}"
-                return {'display': reply, 'say': reply}
-        else:
-            # link = "https://www.youtube.com/watch?v=" + vid
-            display = f'<iframe width="600" height="335"\
-                                            src="https://www.youtube.com/embed/{sim_dict["videoID"]}?rel=0" ' \
-                      f'allow="autoplay" frameborder="0" allowfullscreen>\
-                                            </iframe>'
-            say = f"playing {sim_dict['videoTitle']} video from youtube"
-            reply = {'display': display, 'say': say}
-            return reply
+        except:
+            traceback.print_exc()
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            reply = f'rihanna detected a bug in choose playlist: {exc_value}'
+            return {'display': reply, 'say': reply}
 
     def search_youtube_loop(self, query):
         sim_dict = youtube_sim_main(query)
