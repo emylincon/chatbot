@@ -4,7 +4,7 @@ import config
 
 # get token for new release from this link =
 #  https://developer.spotify.com/console/get-new-releases/?country=&limit=&offset=
-
+# spotify_username = 1199435190   Emeka James Ugwuanyi
 
 def selector(query):
     if (query == 'spotify new releases') or (query == 'whats new on spotify'):
