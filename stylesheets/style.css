@@ -206,7 +206,7 @@
     .love
     {
         position: absolute;
-        background: url(/Chatbot_Project/img/heart.png);
+        background: url(../img/heart.png);
         background-size: cover;
         pointer-events: none;
         transform: translate(-50%,-50%);
