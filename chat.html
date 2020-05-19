@@ -24,7 +24,7 @@
     <div id="chat_log">
     </div>
     <div id="chat_input_container">
-        <div class="autocomplete" style="width:92%">
+        <div class="autocomplete" style="width:87%">
             <input id="chat_input" onKeyPress="javascript:check" placeholder="Ask me anything, don't be shy..."/>
         </div>
         <!--<button id="button" onclick="myFunction()">Speak</button>-->
@@ -33,5 +33,11 @@
 </div>
 <div id="loading"></div>
 <script src="javascript/3script.js"></script>
+<script>
+    var elmnt = document.getElementById("chat_container");
+    var con_height = elmnt.offsetHeight - 168;
+    document.getElementById("chat_log").style.height = `${con_height}px`;
+	elmnt.style.height = `${con_height+168}px`;
+</script>
 </body>
 </html>
