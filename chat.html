@@ -24,7 +24,7 @@
     <div id="chat_log">
     </div>
     <div id="chat_input_container">
-        <div class="autocomplete" style="width:89%">
+        <div id="chatter" class="autocomplete" style="width:89%">
             <input id="chat_input" onKeyPress="javascript:check" placeholder="Ask me anything, don't be shy..."/>
         </div>
         <!--<button id="button" onclick="myFunction()">Speak</button>-->
@@ -38,6 +38,9 @@
     var con_height = elmnt.offsetHeight - 168;
     document.getElementById("chat_log").style.height = `${con_height}px`;
 	elmnt.style.height = `${con_height+168}px`;
+	if (navigator.platform != "Win32"){
+	    document.getElementById("chatter").style.width = "70%";
+	}
 </script>
 </body>
 </html>
