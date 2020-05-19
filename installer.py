@@ -1,12 +1,19 @@
 import os
 import subprocess as sp
 import platform
+
+"""
+install these first:
+sudo apt-get install apache2 -y
+sudo apt-get install php libapache2-mod-php -y
+"""
 x = open('packages.txt','r')
 y = x.readlines()
+pip = 'pip3'
+if platform.system() == 'Windows':
+    pip = 'pip'
 for i in y:
-    pip = 'pip3'
-    if platform.system() == 'Windows':
-        pip = 'pip'
+    i = i.strip()
     if i != '':
         cmd = f'{pip} install {i}'
         print(f'installing {i}')
