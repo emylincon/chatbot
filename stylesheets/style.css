@@ -23,7 +23,7 @@
         padding: 10px;
         border-bottom: 1px solid white;
         overflow-y: scroll;
-        height: 78vh;
+        /*height: 78vh;*/
         font-size: 20px;
     }
     #chat_input_container {
@@ -96,7 +96,8 @@
       border: none;
       color: white;
       border: none;
-      padding: 11.5px 40px;
+      width: 10%;
+      padding: 11.5px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
