@@ -34,5 +34,5 @@ version = version_raw.split()[-1]
 link_chrome_driver = f'https://chromedriver.storage.googleapis.com/{version}/chromedriver_linux64.zip'
 os.system(f'wget {link_chrome_driver}')
 os.system('unzip chromedriver_linux64.zip')
-os.system('rm * -r chrome_driver/')
+os.system('rm chrome_driver/*')
 os.system('mv chromedriver chrome_driver/')
