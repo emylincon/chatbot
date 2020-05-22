@@ -97,7 +97,7 @@ class Report:
                                   </tr>"""
                 display += '</table>'
                 say = f"find covid19 details for {place} updated on {str(datetime.datetime.now()).split()[0]}"
-                width = 450
+                width = 390
                 reply = f'''<div style="width: {width}px;">
                         <p style="text-align: center;"><b>{self.data[i]['Country']}</b></p>
                         <table style="width: {width}px; color: grey;">
