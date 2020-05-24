@@ -42,11 +42,16 @@ class Movies:
         display = "<table id='t01'>"
         for movie in movie_list:
             data = movie.data
-            link = self.watch + self.format_string(data['title'].lower().replace(' ', '-')) + f"-{data['year']}"
+            try:
+                link = self.watch + self.format_string(data['title'].lower().replace(' ', '-')) + f"-{data['year']}"
+                year = data['year']
+            except KeyError:
+                link = f"https://openloadmovies.ac/?s={self.format_string(data['title'].lower())}"
+                year = '-'
             display += f"<tr onclick='open_link(" + f'"{link}"' + f")'>\
                         <td><img src='{data['cover url']}' alt='{data['title']}'></td>\
                         <td><p style='font-size:15px; color:#5985E9; font-family:verdana;'>{data['title']}</p></td>\
-                        <td><p style='font-size:15px; color:#5985E9; font-family:verdana;'>{data['year']}</p></td>\
+                        <td><p style='font-size:15px; color:#5985E9; font-family:verdana;'>{year}</p></td>\
                         </tr>"
         display += '</table>'
         say = 'Find returned search results'
@@ -320,3 +325,4 @@ class Movies:
 
 # a = Movies().find_people('angelina')
 # print(a['display'])
+Movies().search('venom')
