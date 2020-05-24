@@ -325,4 +325,4 @@ class Movies:
 
 # a = Movies().find_people('angelina')
 # print(a['display'])
-Movies().search('venom')
+# Movies().search('venom')
