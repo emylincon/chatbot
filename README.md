@@ -7,7 +7,7 @@ A ChatBot to automate the boring general tasks using conversation and interactio
 * **Facebook** : Posts, view Posts and view friends
 * **IoT/ Sensor Network interaction**: controls and reads data from sensor networks and displays graph upon request
 * **Word Cloud** : Creates word cloud on a given Subject/Topic
-* **Maths** : Solves Maths given maths problems
+* **Maths** : Solves given maths problems
 * **Wikipedia** : Interacts with wikipedia API to obtain detailed explanations of Topics
 * **Youtube** : Search, display and make playlist of videos from Youtube
 * **Soundcloud** : Search, display and make playlist of songs from soundcloud
