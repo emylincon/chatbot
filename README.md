@@ -5,7 +5,7 @@ A ChatBot to automate the boring general tasks using conversation and interactio
 * __TFL__ : Plan Journey and Get live arrivals for Buses, Trains, DLR and Tubes
 * **Twitter** : Posts Tweets, view trending Topics, search twitter, view sentiment analysis on a query and more ..
 * **Facebook** : Posts, view Posts and view friends
-* **IoT/ Sensor** Network interaction: controls and reads data from sensor networks and displays graph upon request
+* **IoT/ Sensor Network interaction**: controls and reads data from sensor networks and displays graph upon request
 * **Word Cloud** : Creates word cloud on a given Subject/Topic
 * **Maths** : Solves Maths given maths problems
 * **Wikipedia** : Interacts with wikipedia API to obtain detailed explanations of Topics
