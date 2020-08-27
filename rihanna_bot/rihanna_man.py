@@ -170,9 +170,9 @@ select = '<option value="hot-100">HOT 100</option>\
 
 
 def selector(query):
-    if query in man_dict:
+    try:
         return man_dict[query]()
-    else:
+    except KeyError:
         reply = "I am sorry. I do not know which man page you want. \nUse 'man help' to view your options"
         return {'display': reply, 'say': reply}
 
@@ -1022,6 +1022,28 @@ def man_covid():
     return reply
 
 
+def man_recommend():
+    display = "<table id='t01'>\
+                            <tr>\
+                                <th>Recommend feature</th>\
+                                <th>Description</th>\
+                            </tr>\
+                            "
+
+    func = {'recommend movies <b>comedy, action, romance</b>': 'displays result',
+            }
+    for i in func:
+        j = i.replace('<b>', '[').replace('</b>', ']')
+        display += f"<tr>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
+                             <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
+                         </tr>"
+    display += "</table>"
+    say = "Find below How to use the movie recommender functionality"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
@@ -1031,4 +1053,5 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man docker': man_docker, 'man nhs': man_nhs, 'man sound cloud': man_sound_cloud,
             'man rihanna news': man_news_, 'man rihanna': man_alpha, 'man hot 100': man_hot100, 'man map': man_map,
             'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify, 'man itunes': man_itunes,
-            'man word file': man_wordfile, 'man game': man_games, 'man games': man_games, 'man covid': man_covid}
+            'man word file': man_wordfile, 'man game': man_games, 'man games': man_games, 'man covid': man_covid,
+            'man recommend': man_recommend}
