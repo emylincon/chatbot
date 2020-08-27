@@ -7,7 +7,7 @@ from multiprocessing.pool import ThreadPool
 
 def selector(message):
     msgs = message.split(',')
-    return Recommend(genres=msgs)
+    return Recommend(genres=msgs).get_request()
 
 
 class Recommend:
@@ -35,24 +35,24 @@ class Recommend:
 
     def display_request(self, result):
         pool = ThreadPool(processes=2)
-        response = '<div id="movie-display" style="width:560px;">'
+        response = '<div id="movie-display" style="width:600px;">'
         for movie in result:
             response += '<div class="movie-div">'
-            response += f'<div class="movie title"> {movie["title"]} </div>'
+            response += f'<div class="movie-title"> {movie["title"]} </div>'
 
             result_list = [pool.apply_async(self.ia.search_movie, (movie['title'],)),
                            pool.apply_async(Youtube().search_youtube, (f"{movie['title']} trailer",))]
 
             response += result_list[1].get()['display']
-            date = movie['dvdReleaseDate'] + ', ' + result_list[0].get()[0].data['year']
+            date = f"{movie['dvdReleaseDate']} , {result_list[0].get()[0].data['year']}"
             
             response += f'<div class="movie-foot"> <div class="movie-year">{date}</div> <div class="movie-rating"><span class="material-icons">star_outline</span>{movie["tomatoScore"]}</div> <div class="movie-mpaa">{movie["mpaaRating"]}</div> </div>'
             response += '</div>'
-        response += '</div>'
+        response += '</div>  &nbsp;'
         return response
 
 
-
+# https://pypi.org/project/rotten_tomatoes_client/
 # Give me some relatively shitty action, comedy, or romance movies on Netflix or Amazon Prime, sorted by popularity
 # query = MovieBrowsingQuery(minimum_rating=35, maximum_rating=70, services=[Service.netflix, Service.amazon_prime],
 #                            certified_fresh=False, genres=[Genre.action, Genre.comedy, Genre.romance], sort_by=SortBy.popularity,
@@ -66,3 +66,5 @@ class Recommend:
 #
 #
 # results = res['results'][:10]
+
+# print(selector('action, comedy'))
