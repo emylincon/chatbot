@@ -100,8 +100,9 @@ class Youtube:
             changed = 0  # 0 or 1 controls if youtube data content has changed
             result = ''
             contents = \
-            obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][0][
-                'itemSectionRenderer']['contents']
+                obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][
+                    0][
+                    'itemSectionRenderer']['contents']
             for data in contents:
                 if 'videoRenderer' in data:
                     vid_data = data['videoRenderer']
@@ -166,8 +167,9 @@ class Youtube:
             changed = 0  # 0 or 1 controls if youtube data content has changed
             data_ = ''
             contents = \
-            obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][0][
-                'itemSectionRenderer']['contents']
+                obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][
+                    0][
+                    'itemSectionRenderer']['contents']
             for data in contents:
                 if 'videoRenderer' in data:
                     vid_data = data['videoRenderer']
@@ -254,7 +256,7 @@ class Youtube:
             # print('playlist:', playlist)
             if playlist:
                 display = f'<iframe width="560" height="315" src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
-                          f'playlist={playlist[playlist.index(",")+1:]}&loop=1" frameborder="0" allowfullscreen>\
+                          f'playlist={playlist[playlist.index(",") + 1:]}&loop=1" frameborder="0" allowfullscreen>\
                                                 </iframe>'
                 say = f"playing a {query} playlist video from youtube"
                 reply = {'display': display, 'say': say}
@@ -290,7 +292,7 @@ class Youtube:
                         playlist += item['videoID'] + ','
             display = f'<iframe width="560" height="315"\
                             src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
-                      f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
+                      f'playlist={playlist[playlist.index(",") + 1:-1]}&loop=1" frameborder="0" allowfullscreen>\
                     </iframe>'
             say = f"playing a {query} playlist video from youtube"
             reply = {'display': display, 'say': say}
@@ -378,7 +380,7 @@ class Youtube:
 
                 display = f'<iframe width="560" height="315"\
                                             src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
-                          f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
+                          f'playlist={playlist[playlist.index(",") + 1:-1]}&loop=1" frameborder="0" allowfullscreen>\
                         </iframe>'
                 say = f"playing hot 100 songs from youtube"
                 reply = {'display': display, 'say': say}
@@ -392,7 +394,7 @@ class Youtube:
 
                 display = f'<iframe width="560" height="315"\
                             src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
-                          f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
+                          f'playlist={playlist[playlist.index(",") + 1:-1]}&loop=1" frameborder="0" allowfullscreen>\
                         </iframe>'
                 say = f"playing hot 100 songs from youtube"
                 reply = {'display': display, 'say': say}
@@ -408,7 +410,7 @@ class Youtube:
 
             display = f'<iframe width="560" height="315"\
                         src="https://www.youtube.com/embed/{playlist.split(",")[0]}?' \
-                      f'playlist={playlist[playlist.index(",")+1:-1]}&loop=1" frameborder="0" allowfullscreen>\
+                      f'playlist={playlist[playlist.index(",") + 1:-1]}&loop=1" frameborder="0" allowfullscreen>\
                     </iframe>'
             say = f"playing hot 100 songs from youtube"
             reply = {'display': display, 'say': say}
@@ -476,12 +478,6 @@ class Youtube:
             reply = 'I cannot find video'
             return {'display': reply, 'say': reply}
 
-
-
-
-
-
-
 # https://www.w3schools.com/html/html_youtube.asp
 # artist_playlist('drake')
 # g = "Future Featuring Drake Life Is Good,Post Malone Circles,Arizona Zervas Roxanne,Harry Styles Adore You,Justin Bieber Featuring Quavo Intentions,Lewis Capaldi Someone You Loved,Billie Eilish everything i wanted,blackbear Hot Girl Bummer,Maroon 5 Memories,Lil Uzi Vert Myron"
@@ -497,4 +493,3 @@ class Youtube:
 # # a = Youtube().youtube_playlist()
 # a = Youtube().youtube_views('toosie slide drake')
 # print(a)
-
