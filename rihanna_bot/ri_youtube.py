@@ -1,8 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import SessionNotCreatedException
 import config
 from rihanna_bot import youtube_data
+from rihanna_bot.download_chrome_driver import get_driver
 import json
 import random
 from rihanna_bot.youtube_sim import youtube_sim_main
@@ -53,17 +55,28 @@ class Youtube:
         self.url = "https://www.youtube.com/results?search_query="
         self.u_data = youtube_data.yt_data
 
-    def get_data(self, query):
+    @staticmethod
+    def get_driver():
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
 
         try:
             chrome_p = os.listdir('chrome_driver/')[0]
             chrome_path = f'chrome_driver/{chrome_p}'
-        except:
+        except FileNotFoundError:
             chrome_p = os.listdir('../chrome_driver/')[0]
             chrome_path = f'../chrome_driver/{chrome_p}'
-        driver = webdriver.Chrome(chrome_path, options=options)
+
+        try:
+            driver = webdriver.Chrome(chrome_path, options=options)
+        except SessionNotCreatedException:
+            get_driver()
+            driver = webdriver.Chrome(chrome_path, options=options)
+
+        return driver
+
+    def get_data(self, query):
+        driver = self.get_driver()
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -131,16 +144,7 @@ class Youtube:
             return None
 
     def get_artist_data(self, query):
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-
-        try:
-            chrome_p = os.listdir('chrome_driver/')[0]
-            chrome_path = f'chrome_driver/{chrome_p}'
-        except:
-            chrome_p = os.listdir('../chrome_driver/')[0]
-            chrome_path = f'../chrome_driver/{chrome_p}'
-        driver = webdriver.Chrome(chrome_path, options=options)
+        driver = self.get_driver()
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -411,16 +415,7 @@ class Youtube:
             return reply
 
     def youtube_views(self, query):
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-
-        try:
-            chrome_p = os.listdir('chrome_driver/')[0]
-            chrome_path = f'chrome_driver/{chrome_p}'
-        except:
-            chrome_p = os.listdir('../chrome_driver/')[0]
-            chrome_path = f'../chrome_driver/{chrome_p}'
-        driver = webdriver.Chrome(chrome_path, options=options)
+        driver = self.get_driver()
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
