@@ -320,8 +320,8 @@ var recognition = new window.SpeechRecognition();
 
                 if (finalTranscript.toLowerCase().slice(0, simonSays.length) == simonSays){
 			        let reply = finalTranscript.slice(simonSays.length+1, finalTranscript.length);
-			        let my_reply = reply.replace('[', '').replace(']', '');
-                    chat_add_message(my_reply, false);
+			        let my_reply = reply.replaceAll('*', '');
+                    chat_add_message(reply, false);
                     voice(my_reply);
                     unloading();
 			 }
