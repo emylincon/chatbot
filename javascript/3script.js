@@ -4,6 +4,7 @@ var recognition = new window.SpeechRecognition();
 	var store = [''];
 	var s_g = -2;
 	var answer = '';
+	const simonSays = "simon says";
 	var wordfile_dic = {'filename': ''};
 	document.getElementById("chat_input").onkeydown = check;
     // Close socket when window closes
@@ -113,6 +114,14 @@ var recognition = new window.SpeechRecognition();
 			 else if (message == "clear"){
 			    location.reload();
 			 }
+
+			 else if (message.toLowerCase().slice(0, simonSays.length) == simonSays){
+			     let reply = message.slice(simonSays.length+1, message.length);
+			     let my_reply = reply.replace('[', '').replace(']', '');
+			    chat_add_message(my_reply, false);
+			    voice(my_reply);
+			    unloading();
+			 }
 			 else if (message.slice(0, "word create file ".length) == "word create file "){
                     var filename = message.slice('word create file '.length);
                     wordfile_dic['filename'] = filename + '.docx';
@@ -123,7 +132,9 @@ var recognition = new window.SpeechRecognition();
                     unloading();
                 }
 			 else{
+			     console.log(`ans = ${message.toLowerCase().slice(0, simonSays.length) == simonSays}`)
 			    ws.send(message);
+
 			 }
 
           }
@@ -306,10 +317,21 @@ var recognition = new window.SpeechRecognition();
             }
             //console.log('trans: '+finalTranscript);
             if (finalTranscript != ''){
-                unloading();
-                chat_add_message(finalTranscript, true);
-                loading();
-                ws.send(finalTranscript);
+
+                if (finalTranscript.toLowerCase().slice(0, simonSays.length) == simonSays){
+			        let reply = finalTranscript.slice(simonSays.length+1, finalTranscript.length);
+			        let my_reply = reply.replace('[', '').replace(']', '');
+                    chat_add_message(my_reply, false);
+                    voice(my_reply);
+                    unloading();
+			 }
+                else{
+                    unloading();
+                    chat_add_message(finalTranscript, true);
+                    loading();
+                    ws.send(finalTranscript);
+                }
+
             }
         }
 
