@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import SessionNotCreatedException
+from rihanna_bot.download_chrome_driver import get_driver
+import os
 
 
 def selector(query):
@@ -21,11 +24,28 @@ class Games:
     def __game_link(link):
         return f"https://www.miniclip.com{link}#privacy-consents"
 
-    def search_games(self):
+    @staticmethod
+    def get_driver():
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
 
-        driver = webdriver.Chrome(options=options)
+        try:
+            chrome_p = os.listdir('chrome_driver/')[0]
+            chrome_path = f'chrome_driver/{chrome_p}'
+        except FileNotFoundError:
+            chrome_p = os.listdir('../chrome_driver/')[0]
+            chrome_path = f'../chrome_driver/{chrome_p}'
+
+        try:
+            driver = webdriver.Chrome(chrome_path, options=options)
+        except SessionNotCreatedException:
+            get_driver()
+            driver = webdriver.Chrome(chrome_path, options=options)
+
+        return driver
+
+    def search_games(self):
+        driver = self.get_driver()
         driver.get(self.url)
         soup = BeautifulSoup(driver.page_source, 'lxml')
         game_list = soup.find_all("div", {"class": "game-icon-component game-icon"})
@@ -38,10 +58,7 @@ class Games:
         return {'display': reply, 'say': reply}
 
     def __get_game_url(self, link):
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-
-        driver = webdriver.Chrome(options=options)
+        driver = self.get_driver()
         req = self.__game_link(link)
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -84,8 +101,8 @@ def bouncy_dunk():
     return {'display': game, 'say': f'You can now play bouncy dunk. enjoy!'}
 
 
-# a = selector('game play snake')
-# print(a)
+a = selector('game play snake')
+print(a)
 # https://www.miniclip.com/games/strike-force-heroes/en/#privacy-consents
 
 # a = 'https://www.miniclip.com/games/strike-force-heroes/en/#privacy-consents'
