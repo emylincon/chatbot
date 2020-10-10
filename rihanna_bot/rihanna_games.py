@@ -101,8 +101,8 @@ def bouncy_dunk():
     return {'display': game, 'say': f'You can now play bouncy dunk. enjoy!'}
 
 
-a = selector('game play snake')
-print(a)
+# a = selector('game play snake')
+# print(a)
 # https://www.miniclip.com/games/strike-force-heroes/en/#privacy-consents
 
 # a = 'https://www.miniclip.com/games/strike-force-heroes/en/#privacy-consents'
