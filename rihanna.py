@@ -272,6 +272,18 @@ def funny():
     return {'display': reply, 'say': reply}
 
 
+def sing_song():
+    display = """
+    <p>i dont sing, i rap</p>
+    <audio autoplay>
+      <source src="audio/rihanna_song.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    """
+    say = 'i dont sing, i rap'
+    return {'display': display, 'say': say}
+
+
 def rihanna(message):
     if (message[:len("dictionary translate")] != "dictionary translate") and (
             rihanna_dict.detect_lang(message) != 'en') and ('spotify' not in message)and ('covid' not in message):
@@ -353,6 +365,9 @@ def rihanna(message):
 
     elif (len(message) == 1) or message.isdigit():
         return rihanna_one_char.main(message)
+
+    elif message == 'sing a song':
+        return sing_song()
 
     elif message == 'i love you':
         return add_heart_effect()
