@@ -298,5 +298,5 @@ class Docker:
                 'docker prune': self.prune_containers}
 
 
-a = selector('docker container list')
-print(a)
+# a = selector('docker container list')
+# print(a)
