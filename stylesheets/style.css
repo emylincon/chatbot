@@ -301,3 +301,76 @@
 					transform: rotate(360deg);
 				}
 			}
+
+.movie-div{
+        font-family: Roboto, sans-serif;
+        border: 1px solid #338EFF;
+    }
+    .movie-title{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border: 1px solid #ffffff;
+        display: flex;
+        border-radius: 5px;
+        font-size: 25px;
+        height: 50px;
+        color: white;
+        background-color: #338EFF;
+
+    }
+    .movie-foot{
+        width: 600px;
+        height: 50px;
+        border: 1px solid #ffffff;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        background-color: lightblue;
+        color: white;
+        font-family: Roboto, sans-serif;
+    }
+
+    .movie-year{
+        width: 40%;
+        height: 100%;
+        margin-right: 4%;
+        float: left;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border: 1px solid #ffffff;
+        display: flex;
+        border-radius: 5px;
+        font-size: 20px;
+        background-color: #338EFF;
+
+
+    }
+    .movie-rating{
+        width: 40%;
+        height: 100%;
+        margin-right: 4%;
+        float: left;
+        border: 1px solid #ffffff;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        display: flex;
+        border-radius: 5px;
+        font-size: 20px;
+        background-color: #338EFF;
+    }
+    .movie-mpaa{
+        width: 50px;
+        height: 50px;
+        float: left;
+        border-radius: 50%;
+        border: 1px solid #ffffff;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        display: flex;
+        font-size: 20px;
+        background-color: #338EFF;
+    }
