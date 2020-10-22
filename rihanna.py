@@ -9,7 +9,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, ri_docker, rihanna_nhs, hot100, \
     rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx, rihanna_games, rihanna_covid, \
-    rihanna_movieRecommender
+    rihanna_movieRecommender, ri_sensor
 import config
 import random as r
 import time
@@ -368,6 +368,9 @@ def rihanna(message):
 
     elif message == 'sing a song':
         return sing_song()
+
+    elif message.split()[0] == 'sensor':
+        return ri_sensor.selector(message)
 
     elif message == 'i love you':
         return add_heart_effect()
