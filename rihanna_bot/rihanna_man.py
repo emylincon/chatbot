@@ -829,7 +829,7 @@ def man_alpha():
             'rihanna how many elements in the periodic table': 'chemistry knowledge',
             'rihanna carbon': 'chemistry knowledge',
             'rihanna 10 densest elements': 'chemistry knowledge',
-            "rihanna Newton's laws": 'physics knowledge',
+            "rihanna Newtons laws": 'physics knowledge',
             'rihanna Brownian motion': 'physics knowledge',
             'rihanna speed of light': 'physics knowledge',
             'rihanna Oscar for best actress 1982': 'entertainment knowledge',
