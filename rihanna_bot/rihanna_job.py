@@ -9,6 +9,7 @@ matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import time
 import os
+import random as r
 pool = ThreadPool(processes=5)
 cities = ["London", "Manchester", "Edinburgh", "Bristol", "Bath", "Birmingham", "Liverpool", "Glasgow"]
 thread_result = [list(range(len(cities))), list(range(len(cities)))]    # [[min], [max]]
@@ -106,7 +107,7 @@ def average_salary_raw(job, place, th=-1):
             thread_result[1][th] = avg_max
             #print(thread_result)
         else:
-            return avg_min, avg_max
+            return round(avg_min, 2), round(avg_max, 2)
 
 
 def average_salary(job, place):
@@ -245,13 +246,125 @@ def salary_plot(cities_min, cities_max, job):
     plt.close()
 
 
+def js_plot(d_min, d_max, job):
+    chart_id = r.randrange(1, 10000)
+    plot = f"""
+    <div style="width:500px; background-color:white;">
+        <canvas id="chart{chart_id}" height="200"></canvas>
+    </div>
+    """
+    plot += f"""
+    <script>
+    var ctx = document.getElementById('chart{chart_id}').getContext('2d');
+    var chart{chart_id} = new Chart(ctx, """
+    plot += """
+    {
+        type: 'bar',
+        data: {
+            labels: ['Min Salary', 'Max Salary'],
+            datasets: [{
+                label: 'London',
+        """
+    plot += f'data: [{d_min[0]}, {d_max[0]}],'
+    plot += """                
+                borderWidth: 1,
+                backgroundColor: 'rgba(253, 185, 185, 1)',
+            },
+            {
+                label: 'Manchester',
+            """
+    plot += f'data: [{d_min[1]}, {d_max[1]}],'
+    plot += """  
+                backgroundColor: 'rgba(185, 253, 185, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Edinburgh',
+            """
+    plot += f'data: [{d_min[2]}, {d_max[2]}],'
+    plot += """ 
+                backgroundColor: 'rgba(109, 31, 187, 0.7)',
+                borderWidth: 1
+            },
+            {
+                label: 'Bristol',
+    """
+    plot += f'data: [{d_min[3]}, {d_max[3]}],'
+    plot += """ 
+                backgroundColor: 'rgba(187, 31, 109, 0.7)',
+                borderWidth: 1
+            },
+            {
+                label: 'Bath',
+    """
+    plot += f'data: [{d_min[4]}, {d_max[4]}],'
+    plot += """ 
+                backgroundColor: 'rgba(187, 109, 31, 0.7)',
+                borderWidth: 1
+            },
+            {
+                label: 'Birmingham',
+    """
+    plot += f'data: [{d_min[5]}, {d_max[5]}],'
+    plot += """ 
+                backgroundColor: 'rgba(109, 187, 31, 0.7)',
+                borderWidth: 1
+            },
+            {
+                label: 'Liverpool',
+    """
+    plot += f'data: [{d_min[6]}, {d_max[6]}],'
+    plot += """ 
+                backgroundColor: 'rgba(31, 187, 187, 0.7)',
+                borderWidth: 1
+            },
+            {
+                label: 'Glasgow',
+    """
+    plot += f'data: [{d_min[7]}, {d_max[7]}],'
+    plot += """ 
+                backgroundColor: 'rgba(187, 109, 31, 0.7)',
+                borderWidth: 1
+            },
+            
+            ]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+    
+                }],
+                yAxes: [{
+                    ticks: {
+                        callback: function(value, index, values) {
+                        return '£' + (value/1000).toFixed(2) + 'k';
+                        },
+                        beginAtZero: true
+                    }
+                }]
+            },
+            title: {
+                fontSize: 20,
+    """
+    plot += f'text: "Salary for {job}",'
+    plot += """            
+                display: true,
+                fontStyle: 'bold',
+            },
+        }
+    });
+    </script>
+    """
+
+    return plot
+
+
 def average_salary_graph_(job):
     path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\salary.png'
     try:
         os.remove(path)
     except Exception as e:
         pass
-
 
     city_data = list(range(len(cities)))
     cities_min = list(range(len(cities)))
@@ -264,12 +377,12 @@ def average_salary_graph_(job):
             cities_min[i] = 0
         else:
             result = city_data[i].get()
-            cities_max[i] = result[1]
-            cities_min[i] = result[0]
-    #print(cities_max)
-    #print(cities_min)
-    salary_plot(cities_min, cities_max, job)
-    display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
+            cities_max[i] = round(result[1], 2)
+            cities_min[i] = round(result[0], 2)
+
+    # salary_plot(cities_min, cities_max, job)
+    display = js_plot(cities_min, cities_max, job)
+    # display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
     say = f"The displayed graph contains the average salary range for {job} job in Top cities in UK"
     reply = {'display': display,
              'say': say}
@@ -298,8 +411,9 @@ def average_salary_graph(job):
 
     # print(cities_max)
     # print(cities_min)
-    salary_plot(cities_min, cities_max, job)
-    display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
+    # salary_plot(cities_min, cities_max, job)
+    display = js_plot(cities_min, cities_max, job)
+    # display = f'<img src="salary.png?{time.time()}" alt=f"Average Salary graph for {job}" width="65%" height="65%">'
     say = f"The displayed graph contains the average salary range for {job} job in Top cities in UK"
     reply = {'display': display,
              'say': say}
