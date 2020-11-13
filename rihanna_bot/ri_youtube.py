@@ -85,12 +85,17 @@ class Youtube:
         for i in load:
             scr = i.string
             if scr:
-                if 'window["ytInitialData"]' in scr:
+                # if 'window["ytInitialData"]' in scr:
+                if 'ytInitialData' in scr:
                     script = i
                     break
         if script:
-            lscript = script.string.split('window["ytInitialPlayerResponse"]')
-            variable = lscript[0].strip().split(' = ')[1][:-1]
+            #print(script.string)
+            # lscript = script.string.split('ytInitialData')
+            # variable = lscript[1].strip().split(' = ')[1][:-1]
+            vari = script.string.split(' = ')[1]
+            variable = vari[:-23]
+            #print(variable)
             try:
                 obj = json.loads(variable)
             except json.decoder.JSONDecodeError:
@@ -155,13 +160,17 @@ class Youtube:
         for i in load:
             scr = i.string
             if scr:
-                if 'window["ytInitialData"]' in scr:
+                # if 'window["ytInitialData"]' in scr:
+                if 'ytInitialData' in scr:
                     script = i
                     break
 
         if script:
-            lscript = script.string.split(';')
-            variable = lscript[0].strip().split(' = ')[1]
+            # print(script.string)
+            # lscript = script.string.split(';')
+            # variable = lscript[0].strip().split(' = ')[1]
+            vari = script.string.split(' = ')[1]
+            variable = vari[:-23]
 
             obj = json.loads(variable)
             changed = 0  # 0 or 1 controls if youtube data content has changed
@@ -313,7 +322,8 @@ class Youtube:
         for i in load:
             scr = i.string
             if scr:
-                if 'window["ytInitialData"]' in scr:
+                # if 'window["ytInitialData"]' in scr:
+                if 'ytInitialData' in scr:
                     script = i
                     break
         # script = load[-2].string
@@ -424,10 +434,12 @@ class Youtube:
 
         load = soup.find_all("script")
         script = None
+        # print(load)
         for i in load:
             scr = i.string
             if scr:
-                if 'window["ytInitialData"]' in scr:
+                # if 'window["ytInitialData"]' in scr:
+                if 'ytInitialData' in scr:
                     script = i
                     break
 
@@ -484,7 +496,7 @@ class Youtube:
 # a = choose_playlist(g)
 # print(a)
 # a = youtube_playlist()
-# a = Youtube().search_youtube('2face african queen')
+# a = Youtube().search_youtube('drake one dance')
 # a = Youtube().artist_playlist('post malone')
 # a = Youtube().random_song()
 # a = Youtube().choose_playlist('drake club paradise, drake draft day, drake 5pm in toronto, drake war, drake do not disturb, drake mob ties')
