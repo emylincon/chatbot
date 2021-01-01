@@ -1076,13 +1076,7 @@ def man_song():
 
     func = {'sing a song': 'sings song',
             }
-    for i in func:
-        j = i.replace('<b>', '[').replace('</b>', ']')
-        display += f"<tr>\
-                                     <td onclick='man_complete(" + f'"{j}"' + f")'>{i}</td>\
-                                     <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
-                                 </tr>"
-    display += "</table>"
+    display = build_table(func=func, display=display)
     say = "Find below How to use the Song feature"
     reply = {'display': display, 'say': say}
     return reply
@@ -1098,6 +1092,13 @@ def man_sensor():
 
     func = {'sensor details for the lab <b>temperature</b>': 'displays details',
             }
+    display = build_table(func=func, display=display)
+    say = "Find below How to use the Sensor feature"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
+def build_table(func, display):
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
         display += f"<tr>\
@@ -1105,7 +1106,25 @@ def man_sensor():
                                      <td onclick='man_complete(" + f'"{j}"' + f")'>{func[i]}</td>\
                                  </tr>"
     display += "</table>"
-    say = "Find below How to use the Sensor feature"
+    return display
+
+
+def man_ibn():
+    display = "<table id='t01'>\
+                                    <tr>\
+                                        <th>IBN feature</th>\
+                                        <th>Description</th>\
+                                    </tr>\
+                                    "
+
+    func = {'IBN deploy a webserver': 'deploys webserver',
+            'IBN deploy webserver template for editing': 'deploy webserver template for editing in VScode',
+            'IBN show container list': 'show container list',
+            'IBN stop container <b>container_name</b>': 'stop container',
+            'IBN prune containers': 'removes all stopped containers'
+            }
+    display = build_table(func=func, display=display)
+    say = "Find below How to use the IBN feature"
     reply = {'display': display, 'say': say}
     return reply
 
@@ -1121,4 +1140,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify, 'man itunes': man_itunes,
             'man word file': man_wordfile, 'man game': man_games, 'man games': man_games, 'man covid': man_covid,
             'man recommend': man_recommend, 'man simon says': man_simon_says, 'man song': man_song,
-            'man sensor': man_sensor}
+            'man sensor': man_sensor, 'man ibn': man_ibn}
