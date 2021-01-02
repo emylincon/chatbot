@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css"/>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Portfolio</title>
+</head>
+<body>
+    <section id='sec1'>
+        <div class="name">
+            <span id='hello'>
+                <h1>
+                    Hello, my name is {{ profile.name }} . . .
+                </h1>
+            </span>
+            <span id='profile'>
+                <img src="{{ profile.avatar_url }}"/>
+            </span>
+
+        </div>
+
+        <div class="bio">
+            <span> {{ profile.bio }} </span>
+            <span id='view'>VIEW PROJECTS</span>
+        </div>
+
+    </section>
+    <section id='sec2'>
+        <header>My Projects</header>
+        <div class="projects">
+            {% for project in repo %}
+                {% if project.language %}
+                    {% set lang = project.language.split(' ')|join('-') %}
+                {% else %}
+                    {% set lang = 'null' %}
+                {% endif %}
+
+                <div class="pod {{ lang.lower() }}" onmouseover="showDis(this)" onmouseout="hideDis(this)">
+                    {% if project.language %}
+                        <span>{{ project.language }} Project</span>
+                    {% else %}
+                        <span>Project</span>
+                    {% endif %}
+
+                    <img src="assets/images/{{ lang.lower() }}.png">
+
+                    <div class='pview'>
+                        <div class="prod-name">{{ project.name }}</div>
+                        <div class="description">
+                            {% set created = project.created_at.split('T') %}
+                            {% set updated = project.updated_at.split('T') %}
+                            <span>Created on {{ created[0] }} </span>
+                            <span>Updated on {{ updated[0] }} </span>
+                        </div>
+                        <div class='span-view'><a href="{{ project.svn_url }}">VIEW PROJECT</a></div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </section>
+    <div class="footer">
+        <div class="socials">
+            <a href="{{ profile.html_url }}"><i class="fa fa-github"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+        </div>
+
+    </div>
+
+    <script src='assets/script.js'></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<!--
+	Overflow by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<section id="header">
+
+				<header>
+					<img id="profile" src="{{ profile.avatar_url }}">
+					<h1>{{ profile.name }}</h1>
+					<p>{{ profile.bio }}</p>
+
+				</header>
+				<footer>
+					<a href="#banner" class="button style2 scrolly-middle">Proceed as anticipated</a>
+				</footer>
+			</section>
+
+		<!-- Banner -->
+			<section id="banner">
+				<header>
+					<h2>ABOUT</h2>
+				</header>
+				<p>{{ profile.bio }} </p>
+				<footer>
+					<a href="#first" class="button style2 scrolly">View Projects</a>
+				</footer>
+			</section>
+
+		<!-- Feature 1 -->
+		<section id='sec2'>
+			<header>My Projects</header>
+			<div class="projects">
+				{% for project in repo %}
+					{% if project.language %}
+						{% set lang = project.language.split(' ')|join('-') %}
+					{% else %}
+						{% set lang = 'null' %}
+					{% endif %}
+						<div class="pod {{ lang.lower() }}" onmouseover="showDis(this)" onmouseout="hideDis(this)">
+							{% if project.language %}
+								<span>{{ project.language }} Project</span>
+							{% else %}
+								<span>Project</span>
+							{% endif %}
+							<img src="assets/images/{{ lang.lower() }}.png">
+
+							<div class='pview'>
+								<div class="prod-name">{{ project.name }}</div>
+								<div class="description">
+									{% set created = project.created_at.split('T') %}
+									{% set updated = project.updated_at.split('T') %}
+									<span>Created on {{ created[0] }} </span>
+									<span>Updated on {{ updated[0] }} </span>
+								</div>
+								<div class='span-view'><a href="{{ project.svn_url }}">VIEW PROJECT</a></div>
+							</div>
+						</div>
+            	{% endfor %}
+			</div>
+		</section>
+
+		<!-- Contact -->
+			<!-- <article class="container box style3" style="position:fixed">
+				<header>
+					<h2>Nisl sed ultricies</h2>
+					<p>Diam dignissim lectus eu ornare volutpat orci.</p>
+				</header>
+				<form method="post" action="#">
+					<div class="row gtr-50">
+						<div class="col-6 col-12-mobile"><input type="text" class="text" name="name" placeholder="Name" /></div>
+						<div class="col-6 col-12-mobile"><input type="text" class="text" name="email" placeholder="Email" /></div>
+						<div class="col-12">
+							<textarea name="message" placeholder="Message"></textarea>
+						</div>
+						<div class="col-12">
+							<ul class="actions">
+								<li><input type="submit" value="Send Message" /></li>
+							</ul>
+						</div>
+					</div>
+				</form>
+			</article> -->
+
+
+		<br>
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+				<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+				<li><a href="#" class="icon brands fa-google-plus-g"><span class="label">Google+</span></a></li>
+				<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+				<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+				<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+
+				</ul>
+				<span>Photo by <a href="https://unsplash.com/@flowixxcom?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Ján Vlačuha</a> on <a href="https://unsplash.com/s/photos/graphic?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
+			</div>
+		</section>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script>
+				function showDis(node){
+				let elem = node.querySelector('.pview');
+				elem.style.display = 'block';
+
+				}
+
+				function hideDis(node){
+				let elem = node.querySelector('.pview');
+				elem.style.display = 'none';
+
+				}
+			</script>
+	</body>
+</html>
