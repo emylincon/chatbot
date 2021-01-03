@@ -10,8 +10,13 @@ url for doc = https://docker-py.readthedocs.io/en/stable/containers.html
 '''
 
 
-def selector(msg):
-    if msg == 'deploy a webserver':
+def selector(msg, portfolio):
+    if portfolio == 1:
+        return docker_master.container_web(username=msg)
+    elif msg[:len('create a web portfolio for')] == 'create a web portfolio for':
+        username = msg[len('create a web portfolio for')+1:].strip()
+        return docker_master.container_web(username=username)
+    elif msg == 'deploy a webserver':
         return docker_master.webserver1()
     elif msg == 'deploy webserver template for editing':
         return docker_master.container_run()
@@ -23,7 +28,8 @@ def selector(msg):
     elif msg == 'prune containers':
         return docker_master.prune_containers()
     else:
-        return 'Unknown Request'
+        reply = 'Unknown Request'
+        return {'display': reply, 'say': reply}
 
 
 class BuildWebsite:
