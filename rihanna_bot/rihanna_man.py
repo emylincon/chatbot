@@ -1121,7 +1121,9 @@ def man_ibn():
             'IBN deploy webserver template for editing': 'deploy webserver template for editing in VScode',
             'IBN show container list': 'show container list',
             'IBN stop container <b>container_name</b>': 'stop container',
-            'IBN prune containers': 'removes all stopped containers'
+            'IBN prune containers': 'removes all stopped containers',
+            'IBN create a web portfolio for <b>github username</b>': 'creates a web portfolio, takes github username',
+            'IBN create a web portfolio': 'creates a web portfolio',
             }
     display = build_table(func=func, display=display)
     say = "Find below How to use the IBN feature"
