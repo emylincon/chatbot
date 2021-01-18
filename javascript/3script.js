@@ -78,7 +78,8 @@ var recognition = new window.SpeechRecognition();
     // If press ENTER, talk to chat and send message to server
     $(function() {
        $('#chat_input').on('keypress', function(event) {
-          if (event.which === 13 && $(this).val() != ""){
+          let reply;
+           if (event.which === 13 && $(this).val() != ""){
              var message = $(this).val();
              $(this).val("");
              chat_add_message(message, true);
@@ -96,14 +97,14 @@ var recognition = new window.SpeechRecognition();
 
 			    }
 			    else{
-			        if (ans.slice(8,).toLowerCase() == message.toLowerCase()){
-			            var reply = 'you are right. '
+			        if (ans.slice(8,).toLowerCase().search(message.toLowerCase()) != -1){
+			            let reply = 'you are right. ';
                         chat_add_message(reply+ans, false);
                         voice(reply+ans);
                         unloading();
                     }
                     else{
-                        var reply = 'you are wrong. '
+                        let reply = 'you are wrong. ';
                         chat_add_message(reply+ans, false);
                         voice(reply+ans);
                         unloading();
