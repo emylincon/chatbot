@@ -6,12 +6,13 @@ from threading import Thread
 import socket
 
 # https://www.youtube.com/watch?v=AsOm56jGNCE&ab_channel=ThePacketThrower
+# openssl req -x509 -sha256 -nodes -newkey rsa:4096 -keyout vmware-key.pem -out vmware-crt.pem -days 365
 
 
 class VmWare:
     def __init__(self):
         self.url = "https://127.0.0.1:8697/api/vms"
-        self.start_path = r'C:\certs'
+        self.start_path = r'C:\Program Files (x86)\VMware\VMware Workstation\certs'
         self.rest_app = r'C:\Program Files (x86)\VMware\VMware Workstation\vmrest.exe'
         self.server = 'vmrest.exe'
         self.payload = {}
