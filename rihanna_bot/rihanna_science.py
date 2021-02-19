@@ -1,5 +1,8 @@
 import wolframalpha
 import config
+import json
+import pandas as pd
+import random
 
 
 # https://www.wolframalpha.com/
@@ -12,7 +15,7 @@ def selector(query):
             msg = msg.replace('show working', '')
             return Science(query=msg).answer_format()
         else:
-            return Science(query=msg).answer_text()
+            return Science(query=msg).answer_format()
     elif 'joke' in query:
         return Science(query).joke()
     else:
@@ -39,52 +42,93 @@ class Science:
         try:
             reply = ''
             result_list = self.result['pod']
+
+            # print(json.dumps(result_list, indent=4))
             for step in result_list:
-                if step['subpod']['plaintext']:
-                    reply += step['subpod']['plaintext'] + '\n'
-            return {'display': reply.replace('\n', '<br>'), 'say': reply.replace('-', 'minus')}
+                if step['@numsubpods'] == '1':
+                    if step['subpod']['plaintext']:
+                        reply += step['subpod']['plaintext'] + '\n'
+                else:
+                    for pod in step['subpod']:
+                        if pod['plaintext']:
+                            reply += pod['plaintext'] + '\n'
+
+                # if step['subpod']['plaintext']:
+                #     reply += step['subpod']['plaintext'] + '\n'
+            if len(reply) > 50:
+                say = 'please find the displayed result'
+            else:
+                say = reply[:]
+            return {'display': reply.replace('\n', '<br>'), 'say': say.replace('-', 'minus')}
         except Exception as e:
-            return {'display': str(e), 'say': str(e)}
+            reply = f'bug (Science.answer_text): {e}'
+            return {'display': reply, 'say': str(e)}
 
     def answer_format(self):
         try:
             say = ''
             display = ''
             result_list = self.result['pod']
+            # print(json.dumps(result_list, indent=4))
             for step in result_list:
-                if step['subpod']['plaintext']:
-                    say += step['subpod']['plaintext'] + '\n'
-                if step['@title'] == 'Solution':
-                    display += '<div>' \
-                               f'<font color="blue">Result: </font>' \
-                               f'<img src="{step["subpod"]["img"]["@src"]}" alt=f"{step["subpod"]["plaintext"]}">' \
-                               '</div>'
+                display += '<div style="color: white; background-color: black;">' \
+                           f'{step["@title"]}' \
+                           '</div>'
+                if step['@numsubpods'] == '1':
+                    if step['subpod']['plaintext']:
+                        say += step['subpod']['plaintext'] + '\n'
+                    if step['@title'] == 'Solution':
+                        display += '<div>' \
+                                   f'<font color="blue">Result: </font>' \
+                                   f'<img src="{step["subpod"]["img"]["@src"]}" alt=f"{step["subpod"]["plaintext"]}">' \
+                                   '</div>'
+                    else:
+                        display += '<div style="padding: 5px; align-items: center;">' \
+                                   f'<img src="{step["subpod"]["img"]["@src"]}" alt=f"{step["subpod"]["plaintext"]}">' \
+                                   '</div>'
                 else:
-                    display += '<div>' \
-                               f'<img src="{step["subpod"]["img"]["@src"]}" alt=f"{step["subpod"]["plaintext"]}">' \
-                               '</div>'
+                    for pod in step['subpod']:
+                        if pod['plaintext']:
+                            say += pod['plaintext'] + '\n'
+                        if pod.get('@title') == 'Solution':
+                            display += '<div>' \
+                                       f'<font color="blue">Result: </font>' \
+                                       f'<img src="{pod["img"]["@src"]}" alt=f"{pod["plaintext"]}">' \
+                                       '</div>'
+                        else:
+                            display += '<div style="padding: 5px; align-items: center; margin: 0 auto;">' \
+                                       f'<img src="{pod["img"]["@src"]}" alt=f"{pod["plaintext"]}">' \
+                                       '</div>'
+            if len(say) > 50:
+                say = 'please find the displayed result'
             return {'display': display, 'say': say.replace('-', 'minus')}
         except Exception as e:
-            return {'display': str(e), 'say': str(e)}
+            reply = f'bug (Science.answer_format): {e}'
+            return {'display': reply, 'say': str(e)}
 
     def joke(self):
-
+        def default():
+            rand = ['my jokes are not that funny', 'what do you think i am? some kinda comedian?',
+                    'i dont understand human humor']
+            reply = random.choice(rand)
+            return {'display': reply, 'say': reply}
         result_list = self.result['pod']
-        ans = ''
-        _ans = ''
-        for step in result_list:
-            _ans += step['subpod']['plaintext']
-            if step['@title'] == 'Result':
-                ans += step['subpod']['plaintext']
-        if ans != '':
-            ans = ans.split('A: ')
-            answer = 'Answer: ' + ans[1]
-            question = ans[0].replace('Q', 'Question')
-            if '(' in answer:
-                answer = answer[:answer.index('(')]
-            return {'display': question, 'say': question, 'answer': answer}
-        else:
-            return {'display': _ans.replace('\n', '<br>'), 'say': _ans}
+        # pd.set_option('max_columns', None)
+        df = pd.DataFrame(result_list)
+        try:
+            tx = df[df['@title'].str.match('Result')].to_dict('records')
+            result = tx[0]['subpod']['plaintext']
+            if 'A: ' in result:
+                ans = result.split('A: ')
+                answer = 'Answer: ' + ans[1]
+                question = ans[0].replace('Q', 'Question')
+                if '(' in answer:
+                    answer = answer[:answer.index('(')]
+                return {'display': question, 'say': question, 'answer': answer}
+            else:
+                return {'display': result.replace('\n', '<br>'), 'say': result}
+        except IndexError:
+            return default()
 
     def universal(self):
         try:
@@ -114,7 +158,7 @@ class Science:
 
             return {'display': reply, 'say': f'Find displayed the requested result for {self.query}: '}
         except Exception:
-            reply = 'bug has been detected in universal'
+            reply = 'bug has been detected in Science.universal'
             return {'display': reply, 'say': reply}
     # f'{self.default()["say"]}'
 
@@ -126,3 +170,10 @@ class Science:
 
 # a = Science('movies').universal()
 # print(a)
+
+# a = Science('joke').joke()
+# print(a)
+
+# print(selector('solve x^4 - 4x^3 + 8x + 1'))
+
+# print(selector('solve x^4 - 4x^3 + 8x + 1 show working'))
