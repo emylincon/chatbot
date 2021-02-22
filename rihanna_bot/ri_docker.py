@@ -297,6 +297,9 @@ class Docker:
                 'docker container utilization': self.container_utils,
                 'docker prune': self.prune_containers}
 
+# docker_dict = {'docker image list': docker_image, 'docker container list': docker_container_list,
+#                'docker container network': container_network, 'docker container utilization': container_utils,
+#                'docker prune': prune_containers}
 
 # a = selector('docker container list')
 # print(a)
