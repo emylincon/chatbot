@@ -9,7 +9,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, ri_docker, rihanna_nhs, hot100, \
     rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx, rihanna_games, rihanna_covid, \
-    rihanna_movieRecommender, ri_sensor
+    rihanna_movieRecommender, ri_sensor, ri_windowsDocker
 import config
 import random as r
 import time
@@ -26,13 +26,14 @@ bot = ChatBot('Bot', storage_adapter='chatterbot.storage.SQLStorageAdapter',
               trainer='chatterbot.trainers.ListTrainer')
 bot.set_trainer(ListTrainer)
 
-break_words = ["yes", "no", "okay", "yeah", "ok", "nah", "alright", "i see"]
+break_words = ["yes", "no", "okay", "yeah", "ok", "nah", "alright", "i see", "really"]
 _date = ("what is the date", "what is todays date", "todays date", "current date", "date")
 _time = ("what is the time", "time", "what is the current time", "current time")
 email = {'msg': '', 'address': '', 'subject': '', 'run': 0}
 run_email = {1: 'which email address do you want to send to?', 2: 'what is the subject?',
              3: 'what do you wish to send to '}
 laugh = ["haha", "lol", "hahaha", "ha", "lool"]
+IBN = 0
 
 
 def email_thread(message):
@@ -285,12 +286,24 @@ def sing_song():
 
 
 def rihanna(message):
-    if (message[:len("dictionary translate")] != "dictionary translate") and (
-            rihanna_dict.detect_lang(message) != 'en') and ('spotify' not in message)and ('covid' not in message):
-        config.lang_code = rihanna_dict.detect_lang(message)
-        message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
+    global IBN
+    if message.lower()[:len('man')] == 'man':
+        return rihanna_man.selector(format_string(message).lower().strip())
+    # if (message[:len("dictionary translate")] != "dictionary translate") and (
+    #         rihanna_dict.detect_lang(message) != 'en') and ('spotify' not in message) and ('covid' not in message) and \
+    #         ('rihanna' not in message) and ('solve' not in message):
+    #     config.lang_code = rihanna_dict.detect_lang(message)
+    #     print('lang=>', config.lang_code)
+    #     message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
         # print(f'trans: {message} \n l_code: {lang_code}')
+    if message.lower() == 'ibn create a web portfolio':
+        IBN = 1
+        reply = 'I will need your github username'
+        return {'display': reply, 'say': reply}
+    elif IBN == 1:
+        IBN = 0
+        return ri_windowsDocker.selector(message, 1)
 
     # print(message)
     if email['run'] == 0:
@@ -316,8 +329,8 @@ def rihanna(message):
             return hot100.selector(message)
         elif message.lower()[:len('iot')] == 'iot':
             return rihanna_iot.selector(format_string(message).lower().strip())
-        elif message.lower()[:len('man')] == 'man':
-            return rihanna_man.selector(format_string(message).lower().strip())
+        elif message.lower()[:len('ibn')] == 'ibn':
+            return ri_windowsDocker.selector(format_string(message[3:]).lower().strip(), IBN)
         elif message.lower()[:len('recommend movies')] == 'recommend movies':
             return rihanna_movieRecommender.selector(format_string(message).lower().strip()[len('recommend movies'):])
         elif message[-len('movies'):] == 'movies':
