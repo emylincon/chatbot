@@ -7,7 +7,7 @@ install these first:
 sudo apt-get install apache2 -y
 sudo apt-get install php libapache2-mod-php -y
 """
-x = open('packages.txt','r')
+x = open('requirements.txt', 'r')
 y = x.readlines()
 pip = 'pip3'
 if platform.system() == 'Windows':
