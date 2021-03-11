@@ -137,7 +137,7 @@ pyfiglet==0.8.post1
 pyfootball==1.0.1
 PyGetWindow==0.0.8
 Pygments==2.6.1
-PyInstaller==3.5
+PyInstaller==3.6
 pyIOSXR==0.53
 pyjsparser==2.7.1
 PyJWT==1.7.1
