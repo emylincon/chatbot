@@ -1,9 +1,7 @@
 import datetime
 from bs4 import BeautifulSoup
-from selenium import webdriver
+import requests
 import sys, traceback
-import os
-from rihanna_bot.download_chrome_driver import get_driver
 
 
 def selector(query):
@@ -23,17 +21,8 @@ class Report:
 
     def get_data(self):
         try:
-            options = webdriver.ChromeOptions()
-            options.add_argument('headless')
-            try:
-                chrome_p = os.listdir('chrome_driver/')[0]
-                chrome_path = f'chrome_driver/{chrome_p}'
-            except:
-                chrome_p = os.listdir('../chrome_driver/')[0]
-                chrome_path = f'../chrome_driver/{chrome_p}'
-            driver = webdriver.Chrome(chrome_path, options=options)
-            driver.get(self.url)
-            soup = BeautifulSoup(driver.page_source, 'lxml')
+            page = requests.get(self.url)
+            soup = BeautifulSoup(page.content, 'lxml')
             self.raw_table = table = soup.find("table", {"id": "main_table_countries_today"})
             heads = table.find('thead').find_all('th')
             heading = []
@@ -56,14 +45,10 @@ class Report:
 
             return data
         except Exception as e:
-            if {'ChromeDriver', 'version'} - set(str(e).split()) == set():
-                get_driver()
-                return self.get_data()
-            else:
-                traceback.print_exc()
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                print(exc_value)
-                return 'Bug detected'
+            traceback.print_exc()
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            print(exc_value)
+            return 'Bug detected'
 
     def display_all(self):
         display = "<table id='t01'><tr>"
@@ -151,5 +136,6 @@ class Report:
         return {'display': reply, 'say': reply}
 
 
-# a = Report().display_place('nigeria')
-# print(a)
+if __name__ == '__main__':
+    a = Report().display_place('nigeria')
+    print(a)
