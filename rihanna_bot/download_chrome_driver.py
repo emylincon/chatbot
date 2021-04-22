@@ -32,8 +32,9 @@ def download_new_version(version):
 def match_version(ver):
     page = requests.get('https://chromedriver.chromium.org/downloads')
     soup = BeautifulSoup(page.content, 'lxml')
-    h2_tag = soup.find_all('h2')
-    for tag in h2_tag:
+    site = soup.find("div", {"id": "sites-canvas-main"})
+    links = site.find_all('a')
+    for tag in links:
         text = tag.get_text()
         if (len(re.findall('[A-Za-z]+ [0-9]', text)) != 0) and (text.split()[1].strip().split('.')[0] == ver):
             return text.split()[1].strip()
@@ -47,3 +48,7 @@ def get_driver():
     print(f'Downloading version chrome driver {mv_ver}')
     download_new_version(mv_ver)
     print('file downloaded')
+
+
+if __name__ == '__main__':
+    get_driver()
