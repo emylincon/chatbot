@@ -1,3 +1,5 @@
+import traceback
+
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 import requests
@@ -78,7 +80,7 @@ def rihanna_voice(word_speech):
 
 def google_search(query):
     try:
-        driver = webdriver.Chrome(executable_path=r"C:\Program Files\chrome driver\chromedriver.exe")
+        driver = webdriver.Chrome(executable_path=r"chrome_driver\chromedriver.exe")
         google = "https://www.google.com/search?q="
         search = google + query
         driver.get(search)
@@ -88,11 +90,17 @@ def google_search(query):
 
 
 def play_song(song):
-    driver = webdriver.Chrome(executable_path=r"C:\Program Files\chrome driver\chromedriver.exe")
-    query = "https://www.youtube.com/results?search_query="
-    search = query + song
-    driver.get(search)
-    driver.find_element_by_xpath(xpath='//*[@id="dismissable"]').click()
+    try:
+        driver = webdriver.Chrome(executable_path=r"chrome_driver/chromedriver.exe")
+        query = "https://www.youtube.com/results?search_query="
+        search = query + song
+        driver.get(search)
+        driver.find_element_by_xpath(xpath='//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[1]/div[4]/form/div[1]/div/button').click()
+        driver.find_element_by_xpath(xpath='//*[@id="dismissible"]').click()
+    except:
+        print('Rihanna Detected a Bug')
+        traceback.print_exc()
+
 
 heart_effect = 0
 
