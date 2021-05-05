@@ -13,7 +13,7 @@ from rihanna_bot import hot100_data
 from rihanna_bot.rihanna_itunes import Albums
 import sys, traceback
 import os
-
+import re
 
 def selector(message):
     if message[:len('youtube loop')] == "youtube loop":
@@ -79,23 +79,23 @@ class Youtube:
         driver = self.get_driver()
         req = self.url + query
         driver.get(req)
+        driver.find_element_by_xpath(
+            xpath='//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[1]/div[4]/form/div[1]/div/button').click()
         soup = BeautifulSoup(driver.page_source, 'lxml')
+        # print(soup)
         load = soup.find_all("script")
         script = None
         for i in load:
             scr = i.string
+            # print(scr)
             if scr:
                 # if 'window["ytInitialData"]' in scr:
                 if 'ytInitialData' in scr:
                     script = i
                     break
         if script:
-            #print(script.string)
-            # lscript = script.string.split('ytInitialData')
-            # variable = lscript[1].strip().split(' = ')[1][:-1]
-            vari = script.string.split(' = ')[1]
-            variable = vari[:-23]
-            #print(variable)
+            # print(script.string)
+            variable = re.findall("{.+?(?=;)", script.string)[0]
             try:
                 obj = json.loads(variable)
             except json.decoder.JSONDecodeError:
@@ -505,3 +505,8 @@ class Youtube:
 # # a = Youtube().youtube_playlist()
 # a = Youtube().youtube_views('toosie slide drake')
 # print(a)
+
+
+if __name__ == "__main__":
+    a = Youtube().search_youtube('love yours')
+    print('Reply ->', a)
