@@ -133,7 +133,7 @@ var recognition = new window.SpeechRecognition();
                     unloading();
                 }
 			 else{
-			     console.log(`ans = ${message.toLowerCase().slice(0, simonSays.length) == simonSays}`)
+			     // console.log(`ans = ${message.toLowerCase().slice(0, simonSays.length) == simonSays}`)
 			    ws.send(message);
 
 			 }
@@ -180,19 +180,20 @@ var recognition = new window.SpeechRecognition();
 
     function voice(text){
         const msg = new SpeechSynthesisUtterance();
-        msg.volume = 1; // 0 to 1
-        msg.rate = 1; // 0.1 to 10
-        msg.pitch = 1.5; // 0 to 2
-        msg.text  = text;
-
-
-        const voice = {
-        "name":  "Microsoft Hazel Desktop - English (Great Britain)",
-        "lang": "en-GB"
-      }; //47
-        console.log(`Voice: ${voice.name} and Lang: ${voice.lang}`);
-        msg.voiceURI = voice.name;
-        msg.lang = voice.lang;
+        let voices = speechSynthesis.getVoices();
+        msg.text = text;
+        msg.voice = voices[2];
+      //   msg.volume = 1; // 0 to 1
+      //   msg.rate = 1; // 0.1 to 10
+      //   msg.pitch = 1.5; // 0 to 2
+      //
+      //
+      //   const voice = {
+      //   "name":  "Microsoft Hazel Desktop - English (Great Britain)",
+      //   "lang": "en-GB"
+      // };
+      //   msg.voiceURI = voice.name;
+      //   msg.lang = voice.lang;
 
 
         speechSynthesis.speak(msg);
