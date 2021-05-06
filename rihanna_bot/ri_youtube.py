@@ -75,8 +75,8 @@ class Youtube:
 
         return driver
 
-    def get_data(self, query):
-        driver = self.get_driver()
+    def __get_data(self, query):
+        driver = self.get_driver()  # driver is used instead of requests because driver gets more output than requests
         req = self.url + query
         driver.get(req)
         driver.find_element_by_xpath(
@@ -93,14 +93,24 @@ class Youtube:
                 if 'ytInitialData' in scr:
                     script = i
                     break
+        obj = None
         if script:
-            # print(script.string)
             variable = re.findall("{.+?(?=;)", script.string)[0]
             try:
                 obj = json.loads(variable)
             except json.decoder.JSONDecodeError:
                 print('cant decode this')
-                return None
+
+        else:
+            print('no script')
+        return obj
+
+    def test_me(self, query):
+        print(self.__get_data(query))
+
+    def get_data(self, query):
+        obj = self.__get_data(query)
+        if obj:
             set_id = 0  # 0 or 1 controls if video has been found
             changed = 0  # 0 or 1 controls if youtube data content has changed
             result = ''
@@ -146,52 +156,33 @@ class Youtube:
                 print('result not in data')
                 return None
         else:
-            print('is not script')
             return None
 
     def get_artist_data(self, query):
-        driver = self.get_driver()
-        req = self.url + query
-        driver.get(req)
-        soup = BeautifulSoup(driver.page_source, 'lxml')
-
-        load = soup.find_all("script")
-        script = None
-        for i in load:
-            scr = i.string
-            if scr:
-                # if 'window["ytInitialData"]' in scr:
-                if 'ytInitialData' in scr:
-                    script = i
-                    break
-
-        if script:
-            # print(script.string)
-            # lscript = script.string.split(';')
-            # variable = lscript[0].strip().split(' = ')[1]
-            vari = script.string.split(' = ')[1]
-            variable = vari[:-23]
-
-            obj = json.loads(variable)
+        obj = self.__get_data(query)
+        # print(json.dumps(obj))
+        if obj:
             changed = 0  # 0 or 1 controls if youtube data content has changed
             data_ = ''
-            contents = \
-                obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][
-                    0][
-                    'itemSectionRenderer']['contents']
-            for data in contents:
-                if 'videoRenderer' in data:
-                    vid_data = data['videoRenderer']
-                    result = vid_data['title']['runs'][0]['text'].replace('- ', '').lower()
-                    vid = vid_data['videoId']
-                    vid_name = vid_data['title']['runs'][0]['text'].replace('- ', '').lower()
-                    vid_length = vid_data['lengthText']['accessibility']['accessibilityData']['label']
-                    vid_views = vid_data['viewCountText']['simpleText']
-                    if vid_name not in self.u_data:
-                        self.u_data[vid_name] = {'videoID': vid, 'videoTitle': vid_name.title(),
-                                                 'videoLength': vid_length, 'videoViews': vid_views}
-                        changed = 1
-                    data_ += f'{vid},'
+            cont = obj['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents']
+            length = len(cont)
+            for i in range(length):
+                contents = cont[i]['itemSectionRenderer']['contents']
+                for data in contents:
+                    if 'videoRenderer' in data:
+                        vid_data = data['videoRenderer']
+                        result = vid_data['title']['runs'][0]['text'].replace('- ', '').lower()
+                        vid = vid_data['videoId']
+                        vid_name = vid_data['title']['runs'][0]['text'].replace('- ', '').lower()
+                        vid_length = vid_data['lengthText']['accessibility']['accessibilityData']['label']
+                        vid_views = vid_data['viewCountText']['simpleText']
+                        if vid_name not in self.u_data:
+                            self.u_data[vid_name] = {'videoID': vid, 'videoTitle': vid_name.title(),
+                                                     'videoLength': vid_length, 'videoViews': vid_views}
+                            changed = 1
+                        data_ += f'{vid},'
+                if data_ != '':
+                    break
             if changed == 1:
                 file = open('youtube_data.py', 'w', encoding='utf-8')
                 file.write(f'yt_data = {self.u_data}\n')
@@ -427,7 +418,7 @@ class Youtube:
             return reply
 
     def youtube_views(self, query):
-        driver = self.get_driver()
+        driver = self.get_driver()      # driver is used instead of requests because driver gets more output than requests
         req = self.url + query
         driver.get(req)
         soup = BeautifulSoup(driver.page_source, 'lxml')
@@ -508,5 +499,7 @@ class Youtube:
 
 
 if __name__ == "__main__":
-    a = Youtube().search_youtube('love yours')
+    # a = Youtube().search_youtube('love yours')
+    a = Youtube().artist_playlist('post malone')
     print('Reply ->', a)
+    # Youtube().test_me('post malone')
