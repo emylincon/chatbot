@@ -15,6 +15,7 @@ import sys, traceback
 import os
 import re
 
+
 def selector(message):
     if message[:len('youtube loop')] == "youtube loop":
         message_ = message[len("youtube loop") + 1:]
