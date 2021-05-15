@@ -4,27 +4,24 @@ import config
 import trans_
 
 url = "https://www.amazon.co.uk/s?k="
-out = 0
 
 
 def find_nearest(l, h, _array, x):
-    global out
 
     if abs(l - h) == 1:
         if abs(_array[l] - x) > abs(_array[h] - x):
-            out = h
+            return h
         else:
-            out = l
-        return 0
+            return l
+
     else:
         m = int((l + h) / 2)
         if _array[m] == x:
-            out = m
-            return 0
+            return m
         elif _array[m] < x:
-            find_nearest(m, h, _array, x)
+            return find_nearest(m, h, _array, x)
         elif _array[m] > x:
-            find_nearest(l, m, _array, x)
+            return find_nearest(l, m, _array, x)
 
 
 def get_number(word):
@@ -215,8 +212,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                 start = len(sorted_price)//2
                 reply = "Could Not Find the requested price"
             '''
-            find_nearest(0, h=len(sorted_price) - 1, _array=list(sorted_price.values()), x=_sort[0])
-            start = out
+            start = find_nearest(0, h=len(sorted_price) - 1, _array=list(sorted_price.values()), x=_sort[0])
 
             reply += "<table id='t01'>\
                       <tr>\
@@ -260,8 +256,7 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
                     start = len(sorted_rate)//2
                     reply = "No product with such rating at the moment"
             '''
-            find_nearest(0, h=len(sorted_rate) - 1, _array=list(sorted_rate.values()), x=_sort[1])
-            start = out
+            start = find_nearest(0, h=len(sorted_rate) - 1, _array=list(sorted_rate.values()), x=_sort[1])
 
             reply += "<table id='t01'>\
                       <tr>\
@@ -294,8 +289,9 @@ def sort_products(query, _sort=(), no=5):  # _sort = [1,1]    [price, rate]
         reply = f'Error in product_min_price: {e}'
         return {'display': reply, 'say': reply}
 
-# print(BinarySearch([10,20,30,40,50], 20))
-# s = search_amazon("external hard drive 2tb")
-# print(s)
-# print(selector("amazon least price for external hard drive 2tb"))
+
+if __name__ == '__main__':
+    s = search_amazon("external hard drive 2tb")
+    print(s)
+    print(selector("amazon least price for external hard drive 2tb"))
 
