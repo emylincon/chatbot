@@ -53,6 +53,7 @@ class HealthData:
         self.search = search
         self.branch = branch
         self.baseUrl = f"https://api.nhs.uk/{branch}/"
+        self.link = f"https://www.nhs.uk/{branch}/"
         self.name = name
 
     def display_all(self):
@@ -103,7 +104,7 @@ class HealthData:
         if data != 0:
             reply = f"<h2><font color='blue'>{self.name.capitalize().replace('_', ' ')} of {self.search.upper()}</font></h2>"
             reply += f"{data.replace(';', '')}"
-            reply += f'<a href="{self.baseUrl}/{self.search}/#{self.name}" target="_blank">Read More</a>'
+            reply += f'<a href="{self.link}/{self.search}/#{self.name}" target="_blank">Read More</a>'
             reply_ = {'display': reply,
                       'say': f'Find displayed {self.name.capitalize().replace("_", " ")} of {self.search}. '
                              f'this information is provided by NHS'}
@@ -181,8 +182,7 @@ class HealthData:
         return reply
 
 
-
-
-# print(HealthData(branch='news', search='', ).display_news_all())
-#print(HealthData(branch='medicines', search='codeine', ).nhs_medicine())
-#HealthData(branch='search', search='flu').nhs_search()
+if __name__ == '__main__':
+    print(HealthData(branch='news', search='coronavirus', ).display_news_all())
+    print(HealthData(branch='medicines', search='codeine', ).nhs_medicine())
+    HealthData(branch='search', search='flu').nhs_search()
