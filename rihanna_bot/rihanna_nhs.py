@@ -170,14 +170,14 @@ class HealthData:
         pageURL = f"{self.baseUrl}/?query={self.search}"
         request = urllib.request.Request(pageURL, headers=self.request_headers)
         contents = json.loads(urllib.request.urlopen(request).read())
-        #print(contents)
+        # print(contents)
         title = f"NHS Search Results For {self.search.capitalize()}"
         display = f"<h2><font color='blue'>{title}</font></h2>"
         for result in contents['results']:
             if (result['id'] != '1') and (self.search in f"{result['title']} {result['summary']}"):
                 display += f"<h4><a href={result['url']} target='_blank'>{result['title']}</a></h4>"
                 display += f"{result['summary'].replace(';', '')}"
-                #print(result['id'])
+                # print(result['id'])
         reply = {'display': display, 'say': title}
         return reply
 
