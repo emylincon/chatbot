@@ -95,7 +95,8 @@ def play_song(song):
         query = "https://www.youtube.com/results?search_query="
         search = query + song
         driver.get(search)
-        driver.find_element_by_xpath(xpath='//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[1]/div[4]/form/div[1]/div/button').click()
+        driver.find_element_by_xpath(
+            xpath='//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[1]/div[4]/form/div[1]/div/button').click()
         driver.find_element_by_xpath(xpath='//*[@id="dismissible"]').click()
     except:
         print('Rihanna Detected a Bug')
@@ -167,15 +168,15 @@ def weather_f(json_data):
     #          'sun': 'sun_clouds.jpg', 'storm': 'thunderstorm.jpg', 'clouds': 'clouds.jpg', 'other': 'other.jpg'}
     image = {'rain': 'rain.gif', 'clear sky': 'clear_sky.gif', 'snow': 'snow.gif', 'thunder': 'thunder.gif',
              'sun': 'sun.gif', 'storm': 'thunder.gif', 'broken clouds': 'clouds.gif',
-             'scattered clouds':'scattered_clouds.gif', 'other': 'other.jpg'}
+             'scattered clouds': 'scattered_clouds.gif', 'other': 'other.jpg'}
     night = ['night1.gif', 'night.gif']
     img = ''
     sr = time.localtime(json_data['sys']['sunrise'])
     ss = time.localtime(json_data['sys']['sunset'])
-    tt = time.localtime(json_data['dt']+json_data['timezone']-3600)
-    d_sr = timedelta(minutes=sr.tm_hour*60+sr.tm_min)
-    d_ss = timedelta(minutes=ss.tm_hour*60+ss.tm_min)
-    d_tt = timedelta(minutes=tt.tm_hour*60+tt.tm_min)
+    tt = time.localtime(json_data['dt'] + json_data['timezone'] - 3600)
+    d_sr = timedelta(minutes=sr.tm_hour * 60 + sr.tm_min)
+    d_ss = timedelta(minutes=ss.tm_hour * 60 + ss.tm_min)
+    d_tt = timedelta(minutes=tt.tm_hour * 60 + tt.tm_min)
     # print(f'd_sr = {d_sr} \nd_ss = {d_ss} \nd_tt = {d_tt}')
     if d_sr > d_ss:
         # print('swapped')
@@ -304,7 +305,7 @@ def rihanna(message):
     #     print('lang=>', config.lang_code)
     #     message = rihanna_dict.translate_sentence_code(query=message, lang='en')['display']
 
-        # print(f'trans: {message} \n l_code: {lang_code}')
+    # print(f'trans: {message} \n l_code: {lang_code}')
     if message.lower() == 'ibn create a web portfolio':
         IBN = 1
         reply = 'I will need your github username'
@@ -580,12 +581,11 @@ def get_response(usrText):
         elif usrText.strip() != 'Bye':
             result = rihanna(usrText)
             reply = str(result)
-            #print(result)
+            # print(result)
             return reply  # reply should be string else it wont work
         elif usrText.strip() == 'Bye':
             reply = 'Bye'
             return str({'display': reply, 'say': reply})
-
 
 # d = google_search("when is the wilder fight date")
 # print('hello')
