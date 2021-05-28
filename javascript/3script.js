@@ -1,12 +1,15 @@
 var ws = new WebSocket("ws://localhost:8000");
 window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 var recognition = new window.SpeechRecognition();
-	var store = [''];
-	var s_g = -2;
-	var answer = '';
-	const simonSays = "simon says";
-	var wordfile_dic = {'filename': ''};
-	document.getElementById("chat_input").onkeydown = check;
+var store = [''];
+var s_g = -2;
+var answer = '';
+const simonSays = "simon says";
+var wordfile_dic = {'filename': ''};
+document.getElementById("chat_input").onkeydown = check;
+const VOICE_OBJ = new SpeechSynthesisUtterance();
+VOICE_OBJ.voice = speechSynthesis.getVoices()[2];
+VOICE_OBJ.rate = 0.7
     // Close socket when window closes
     $(window).on('beforeunload', function(){
        ws.close();
@@ -179,22 +182,18 @@ var recognition = new window.SpeechRecognition();
     }
 
     function voice(text){
-        const msg = new SpeechSynthesisUtterance();
-        let voices = speechSynthesis.getVoices();
-        msg.text = text;
-        msg.voice = voices[2];
-      //   msg.volume = 1; // 0 to 1
-      //   msg.rate = 1; // 0.1 to 10
-      //   msg.pitch = 1.5; // 0 to 2
+        VOICE_OBJ.text = text;
+        speechSynthesis.speak(VOICE_OBJ);
+        //   VOICE_OBJ.volume = 1; // 0 to 1
+      //   VOICE_OBJ.rate = 1; // 0.1 to 1
+      //   VOICE_OBJ.pitch = 1.5; // 0 to 2
       //   const voice = {
       //   "name":  "Microsoft Hazel Desktop - English (Great Britain)",
       //   "lang": "en-GB"
       // };
-      //   msg.voiceURI = voice.name;
-      //   msg.lang = voice.lang;
+      //   VOICE_OBJ.voiceURI = voice.name;
+      //   VOICE_OBJ.lang = voice.lang;
 
-
-        speechSynthesis.speak(msg);
     }
 
     function man_mySelect(word) {
