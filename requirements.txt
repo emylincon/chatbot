@@ -72,7 +72,7 @@ itsdangerous==1.1.0
 itunespy==1.5.5
 jaraco.itertools==5.0.0
 jedi==0.16.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 jmespath==0.9.5
 joblib==0.14.1
 Js2Py==0.66
