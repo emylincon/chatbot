@@ -32,12 +32,8 @@ def download_new_version(version):
 def match_version(ver):
     page = requests.get('https://chromedriver.chromium.org/downloads')
     soup = BeautifulSoup(page.content, 'lxml')
-    site = soup.find("div", {"id": "sites-canvas-main"})
-    links = site.find_all('a')
-    for tag in links:
-        text = tag.get_text()
-        if (len(re.findall('[A-Za-z]+ [0-9]', text)) != 0) and (text.split()[1].strip().split('.')[0] == ver):
-            return text.split()[1].strip()
+    pattern = f"{ver}\.[0-9]+\.[0-9]+\.[0-9]+"
+    return re.findall(pattern, str(soup))[0]
 
 
 def get_driver():
