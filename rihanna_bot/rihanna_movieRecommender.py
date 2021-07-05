@@ -18,7 +18,7 @@ class Recommend:
         self.genres_dict = {'action': Genre.action, 'comedy': Genre.comedy, 'romance': Genre.romance}
         self.ia = imdb.IMDb()
 
-    def get_request(self):
+    def get_request(self, no_of_req=5):
         try:
             genres = [self.genres_dict[cat] for cat in self.genres]
         except KeyError:
@@ -28,7 +28,7 @@ class Recommend:
                                    certified_fresh=False, genres=genres,
                                    sort_by=SortBy.popularity,
                                    category=MovieBrowsingCategory.all_dvd_and_streaming)
-        result = RottenTomatoesClient.browse_movies(query=query)['results'][:15]
+        result = RottenTomatoesClient.browse_movies(query=query)['results'][:no_of_req]
         display = self.display_request(result)
         say = 'Please find displayed result'
         return {'display': display, 'say': say}
