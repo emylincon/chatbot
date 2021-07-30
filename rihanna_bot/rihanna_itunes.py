@@ -18,6 +18,7 @@ def selector(query):
 class Albums:
     def __init__(self, query):
         self.query = query
+        self.style = '<div style="float:left; height:100px; width:500px; border: 1px solid black;">'
 
     def track_list(self):
         tracks_ = ''
@@ -37,7 +38,7 @@ class Albums:
         tracks = album[0].get_tracks()  # Get tracks from the first result
         display = f'<div>' \
                   f'<img src="{img}" alt="image" style="float:left; height:100px"> ' \
-                  f'<div style="float:left; height:100px; width:500px; background-color:black; color:white;">' \
+                  f'{self.style}' \
                   f'<span style="font-size:30px;">{album_name} by {artist} </span>' \
                   f'<p style="font-size:15px;">Released on {r_date}</p>' \
                   f'<p style="font-size:15px;">Runtime of {length} minutes</p></div></div>'
@@ -85,4 +86,6 @@ class Albums:
         return tag
 
 
-# Albums('drake').artist_albums()
+if __name__ == "__main__":
+    response = Albums('drake').artist_albums()
+    print(response)
