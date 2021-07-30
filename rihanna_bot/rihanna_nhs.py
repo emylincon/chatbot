@@ -44,7 +44,7 @@ def selector(message):
 
 
 class HealthData:
-    def __init__(self, branch, search=None, name=None):
+    def __init__(self, branch: str, search: str = None, name: str = None):
         self.request_headers = {
             "subscription-key": config.nhs_Key,
             "Accept": "application/json",
@@ -79,7 +79,7 @@ class HealthData:
             reply = f"cannot find result for {self.search}"
             return {'display': reply, 'say': reply}
 
-    def _get_parts(self, name):
+    def _get_parts(self, name: str):
         try:
             if self.search == 'coronavirus':
                 self.search = 'coronavirus-covid-19'
@@ -99,7 +99,7 @@ class HealthData:
         except Exception:
             return 0
 
-    def content_attrs(self):
+    def content_attrs(self) -> dict:
         data = self._get_parts(self.name)
         if data != 0:
             reply = f"<h2><font color='blue'>{self.name.capitalize().replace('_', ' ')} of {self.search.upper()}</font></h2>"
@@ -113,7 +113,7 @@ class HealthData:
             reply = f"cannot find result for {self.search}"
             return {'display': reply, 'say': reply}
 
-    def display_news_all(self):
+    def display_news_all(self) -> dict:
         pageURL = f"{self.baseUrl}/?page=65"  # /?endDate=2020-01-09"
         request = urllib.request.Request(pageURL, headers=self.request_headers)
         contents = json.loads(urllib.request.urlopen(request).read())
@@ -131,7 +131,7 @@ class HealthData:
         # print(reply)
         return reply
 
-    def nhs_medicine(self):
+    def nhs_medicine(self) -> dict:
         pageURL = f"{self.baseUrl}/{self.search}"
         request = urllib.request.Request(pageURL, headers=self.request_headers)
         contents = json.loads(urllib.request.urlopen(request).read())
@@ -166,7 +166,7 @@ class HealthData:
         # print(reply)
         return reply
 
-    def nhs_search(self):
+    def nhs_search(self) -> dict:
         pageURL = f"{self.baseUrl}/?query={self.search}"
         request = urllib.request.Request(pageURL, headers=self.request_headers)
         contents = json.loads(urllib.request.urlopen(request).read())
