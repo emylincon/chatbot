@@ -5,7 +5,7 @@ import config
 import json
 
 
-def selector(message):
+def selector(message: str):
     if message[:len('nhs review on')] == 'nhs review on':
         msg = message[len('nhs review on') + 1:].strip()
         return HealthData(search=msg, branch="conditions").display_all()
