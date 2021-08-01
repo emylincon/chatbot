@@ -15,9 +15,6 @@ import random as r
 
 url2 = "https://www.google.com/search?q="
 
-# get path to script's directory
-currdir = path.dirname(__file__)
-
 
 def scrap(query):
     req = url2 + query
@@ -59,9 +56,12 @@ def get_wiki(query):
 
 
 def create_wordcloud(text):
-    # create numpy araay for wordcloud mask image
-    #img_list = ['cloud', 'pic', 'heart', 'house', 'dv']
+    # create numpy array for word cloud mask image
+    # img_list = ['cloud', 'pic', 'heart', 'house', 'dv']
     img_list = ['cloud', 'house', 'heart']
+
+    # get path to script's directory
+    currdir = path.dirname(__file__)
     an = r.randrange(len(img_list))
     img = img_list[an]
     mask = np.array(Image.open(path.join(currdir, f"{img}.png")))
@@ -83,9 +83,9 @@ def create_wordcloud(text):
 
 
 def word_cloud_syn_ant(query):
-    path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\wc.png'
+    wc_path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\wc.png'
     try:
-        os.remove(path)
+        os.remove(wc_path)
     except Exception as e:
         pass
     text = rihanna_dict.ant_syn(query)
@@ -99,9 +99,9 @@ def word_cloud_syn_ant(query):
 
 
 def word_cloud(query):
-    path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\wc.png'
+    wc_path = rf'C:\Users\emyli\PycharmProjects\Chatbot_Project\wc.png'
     try:
-        os.remove(path)
+        os.remove(wc_path)
     except Exception as e:
         pass
     # get text for given query
