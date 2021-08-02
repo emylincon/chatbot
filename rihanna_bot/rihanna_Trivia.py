@@ -11,7 +11,7 @@ def selector(message: str):
 class Question:
     def __init__(self):
         self.url = "https://opentdb.com/api.php?amount=1&encode=url3986"
-        self.question_id = random.randrange(100,999)
+        self.question_id = random.randrange(100,9999)
 
     def get_question(self):
         response = requests.get(self.url)
@@ -24,12 +24,27 @@ class Question:
         self.question_id += 1
         return question
 
+    def format_say(self, text):
+        sentences = []
+        if len(text) > 180:
+            if text[180] == " " or text[179] == " ":
+                sentences.append(text[:180])
+                sentences.append(text[180:])
+            else:
+                for i in range(180, 1, -1):
+                    if text[i] == " ":
+                        sentences.append(text[:i])
+                        sentences.append(text[i:])
+        else:
+            sentences.append(text)
+        return sentences
+
     @staticmethod
     def format_question(question):
         question = question['results'][0]
 
         def gen_id():
-            return f"td{random.randrange(1, 100)}"
+            return f"td{random.randrange(1, 9999)}"
 
         response = f"""
         <table class="t02">
@@ -45,7 +60,7 @@ class Question:
             </tbody>
         </table>
         <div class="question">{unquote(question['question'])}</div>
-        <table class="t02 t03">
+        <table class="t02 t03" cellspacing="0">
             <tbody>
             """
         for option in question['options']:
@@ -64,9 +79,10 @@ class Question:
         html = self.format_question(question)
         say = ""
         if question['results'][0]['difficulty'] == 'hard':
-            say += "This is a difficult question. uhm. erh.. "
+            say += "This is a difficult question. uhm. uhm.. "
         say += f"question says: {unquote(question['results'][0]['question'])}? "
-        say += f"The options are: {unquote(','.join(question['results'][0]['options']))} "
+        say += f"The options are: {unquote(', '.join(question['results'][0]['options']))} "
+        print(len(say), say)
         return {'display': html, 'say': say,
                 'answers': {question['results'][0]['id']: unquote(question['results'][0]['correct_answer'])}}
 
