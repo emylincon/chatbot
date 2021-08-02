@@ -20,7 +20,7 @@ class MMA:
         current_dir = path.dirname(__file__)
         fighters = path.join(current_dir, 'Fighters.json')
         with open(fighters) as json_file:
-            data = json.load(json_file)
+            data = json.load(json_file, encodings="uft-8")
             df = pd.DataFrame(data)
             df = df.fillna('missing')
             return df
