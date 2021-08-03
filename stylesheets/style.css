@@ -432,3 +432,51 @@
         .tg{
             text-transform: uppercase;
         }
+
+table.t02 td, table.t02 th{
+    border: 1px solid black;
+}
+
+table.t02 tr{
+
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-collapse:separate;
+    border-spacing:0 5px;
+}
+
+table.t03 td:hover{
+    background-color: rgb(196, 196, 190);
+    cursor: pointer;
+}
+
+table.t02 td{
+    width: 400px;
+}
+.green{
+    background-color: green;
+    transition: background-color 1.5s ease-out;
+    color: white;
+}
+table.t03 td.green:hover{
+    background-color: green;
+}
+.red{
+    background-color: red;
+    transition: background-color 1.5s ease-out;
+    color: white;
+}
+table.t03 td.red:hover{
+    background-color: red;
+}
+.question{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: black;
+    color: white;
+}
