@@ -1098,6 +1098,22 @@ def man_sensor():
     return reply
 
 
+def man_trivia():
+    display = "<table id='t01'>\
+                                    <tr>\
+                                        <th>Trivia</th>\
+                                        <th>Description</th>\
+                                    </tr>\
+                                    "
+
+    func = {'Trivia question': 'Asks a trivia question from a random category and random difficulty level',
+            }
+    display = build_table(func=func, display=display)
+    say = "Find below How to use the Trivia feature"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 def build_table(func, display):
     for i in func:
         j = i.replace('<b>', '[').replace('</b>', ']')
@@ -1142,4 +1158,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify, 'man itunes': man_itunes,
             'man word file': man_wordfile, 'man game': man_games, 'man games': man_games, 'man covid': man_covid,
             'man recommend': man_recommend, 'man simon says': man_simon_says, 'man song': man_song,
-            'man sensor': man_sensor, 'man ibn': man_ibn}
+            'man sensor': man_sensor, 'man ibn': man_ibn, 'man trivia': man_trivia}
