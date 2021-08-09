@@ -162,7 +162,7 @@ python-twitter==3.4
 pyttsx3==2.71
 PyTweening==1.0.3
 pytz==2019.3
-pywin32==300
+pywin32==301
 pywin32-ctypes==0.2.0
 pywinpty==0.5.7
 PyYAML==3.13
