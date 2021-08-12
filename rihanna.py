@@ -11,7 +11,7 @@ from rihanna_bot import rihanna_football, rihanna_speak, rihanna_tweet, rihanna_
     rihanna_dict, rihanna_iot, rihanna_wc, rihanna_sound_cloud, ri_news, rihanna_science, rihanna_maps, \
     rihanna_man, rihanna_job, ri_youtube, ri_image, rihanna_windows, ri_docker, rihanna_nhs, hot100, \
     rihanna_movies, rihanna_lyrics, rihanna_spotify, rihanna_itunes, rihanna_docx, rihanna_games, rihanna_covid, \
-    rihanna_movieRecommender, ri_sensor, ri_windowsDocker
+    rihanna_movieRecommender, ri_sensor, ri_windowsDocker, rihanna_Trivia
 import config
 import random as r
 import time
@@ -314,13 +314,14 @@ def rihanna(message):
         IBN = 0
         return ri_windowsDocker.selector(message, 1)
 
-    # print(message)
     if email['run'] == 0:
         if message.lower()[:3] == 'tfl':
             message = format_string(message).lower().strip()
 
         elif message[:len('word file')] == 'word file':
             return rihanna_docx.selector(message)
+        elif message.lower()[:len('trivia')] == 'trivia':
+            return rihanna_Trivia.selector(message.lower().strip())
         elif message.lower()[:5] == 'skype':
             return rihanna_skype.selector(format_string(message[6:]).lower().strip())
         elif message.lower()[:len('solve')] == 'solve':
@@ -587,8 +588,10 @@ def get_response(usrText):
             reply = 'Bye'
             return str({'display': reply, 'say': reply})
 
-# d = google_search("when is the wilder fight date")
-# print('hello')
-# print(rihanna('journey duration from se18 3px to se1 5hp'))
-# print(rihanna("amazon least price for external hard drive 2tb"))
-# print(get_response("jugar drake va mal"))
+
+if __name__ == '__main__':
+    # Testing some functionalities
+    print(google_search("when is the wilder fight date"))
+    print(rihanna('journey duration from se18 3px to se1 5hp'))
+    print(rihanna("amazon least price for external hard drive 2tb"))
+    print(get_response("jugar drake va mal"))
