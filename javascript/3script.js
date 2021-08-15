@@ -125,7 +125,7 @@ $(function () {
                     }
                 }
 
-            } else if (message == "clear") {
+            } else if (message === "clear") {
                 location.reload();
             } else if (message.toLowerCase().slice(0, simonSays.length) == simonSays) {
                 let reply = message.slice(simonSays.length + 1, message.length);
@@ -158,7 +158,7 @@ function myFunction() {
 function check(e) {
     var x = e.keyCode;
 
-    if (x == 40) {      // handling up arrow key
+    if (x === 40) {      // handling up arrow key
         if (s_g == -2) {
             s_g = store.length - 1;
         }
@@ -167,7 +167,7 @@ function check(e) {
             s_g = s_g + 1;
         }
 
-    } else if (x == 38) {     // handling down arrow key
+    } else if (x === 38) {     // handling down arrow key
         if (s_g == -2) {
             s_g = store.length - 1;
         }
