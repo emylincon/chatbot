@@ -159,7 +159,7 @@ function check(e) {
     var x = e.keyCode;
 
     if (x === 40) {      // handling up arrow key
-        if (s_g == -2) {
+        if (s_g === -2) {
             s_g = store.length - 1;
         }
         document.getElementById("chat_input").value = store[s_g];
