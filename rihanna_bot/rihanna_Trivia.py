@@ -81,8 +81,9 @@ class Question:
         if question['results'][0]['difficulty'] == 'hard':
             say += "This is a difficult question. uhm. uhm.. "
         say += f"question says: {unquote(question['results'][0]['question'])}? "
-        say += f"The options are: {unquote(', '.join(question['results'][0]['options']))} "
-        print(len(say), say)
+        say += f"The options are: {unquote(', '.join(question['results'][0]['options'][:-1]))} "
+        say += f", or {unquote(question['results'][0]['options'][-1])}"
+        # print(len(say), say)
         return {'display': html, 'say': say,
                 'answers': {question['results'][0]['id']: unquote(question['results'][0]['correct_answer'])}}
 
