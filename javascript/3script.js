@@ -17,12 +17,12 @@ const VOICE_OBJ = new SpeechSynthesisUtterance();
 //     //   VOICE_OBJ.lang = voice.lang;
 // let xvoice = speechSynthesis.getVoices()[2];
 let mm = window.speechSynthesis.getVoices();
-console.log("voices: ->", mm);
+// console.log("voices: ->", mm);
 let xvoice = {voiceURI: "Microsoft Susan - English (United Kingdom)", name: "Microsoft Susan - English (United Kingdom)", lang: "en-GB", localService: true, default: false};
 VOICE_OBJ.voiceURI = xvoice.name;
 VOICE_OBJ.lang = xvoice.lang;
 // VOICE_OBJ.voice = xvoice;
-VOICE_OBJ.rate = 0.7
+VOICE_OBJ.rate = 0.3
 // Close socket when window closes
 $(window).on('beforeunload', function () {
     ws.close();
@@ -216,7 +216,7 @@ speechUtteranceChunker(utterance, {
     chunkLength: 180
 }, function () {
     //some code to execute when done
-    console.log('done');
+    // console.log('done');
 });
 }
 
