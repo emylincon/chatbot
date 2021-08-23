@@ -1,12 +1,46 @@
+import os
+from download_chrome_driver import get_driver
 import requests
 import pandas as pd
 from os import path
 import json
+from selenium import webdriver
+from bs4 import BeautifulSoup
 
 
 def selector(message: str):
     if message[:len('mma')] == 'mma':
         pass
+
+
+class FighterPicture:
+    def __init__(self):
+        self.driver = self.get_driver()
+        self.base_url = "https://www.espn.co.uk/search/_/q/"
+
+    @staticmethod
+    def get_driver():
+        options = webdriver.ChromeOptions()
+        options.add_argument("headless")
+        if os.getcwd().split("\\")[-1] == "rihanna_bot":
+            driver_path = '../chrome_driver/chromedriver.exe'
+        else:
+            driver_path = 'chrome_driver/chromedriver.exe'
+        try:
+            driver = webdriver.Chrome(executable_path=driver_path, options=options)
+        except Exception as e:
+            print(e)
+            get_driver()
+            driver = webdriver.Chrome(executable_path=driver_path, options=options)
+        return driver
+
+    def get_picture(self, query):
+        self.driver.get(self.base_url + query)
+        self.driver.find_element_by_xpath('//*[@id="onetrust-close-btn-container"]/button').click()
+        soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+        load = soup.find("section", {"class": "Card"})
+        img = load.find("img").get('src')
+        return img
 
 
 class MMA:
@@ -20,7 +54,7 @@ class MMA:
         current_dir = path.dirname(__file__)
         fighters = path.join(current_dir, 'Fighters.json')
         with open(fighters) as json_file:
-            data = json.load(json_file, encodings="uft-8")
+            data = json.load(json_file, encoding="utf-8")
             df = pd.DataFrame(data)
             df = df.fillna('missing')
             return df
@@ -45,4 +79,6 @@ class MMA:
 
 
 if __name__ == '__main__':
+    a = FighterPicture().get_picture('max holloway')
+    print(a)
     print(MMA.load_fighters())
