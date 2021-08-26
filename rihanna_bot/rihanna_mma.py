@@ -71,6 +71,7 @@ class MMA:
 
     def find_fighter(self, firstname=None, lastname=None, nickname=None):
         if lastname:
+
             return self.data[self.data['LastName'].str.match(lastname, case=False)].to_dict('records')[:5]
         elif firstname:
             return self.data[self.data['FirstName'].str.match(firstname, case=False)].to_dict('records')[:5]
