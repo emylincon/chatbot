@@ -80,7 +80,7 @@ def twitter(message):
         try:
             tweet = message.strip()[6:]
             reply = post_tweet(tweet)
-            #display_twitter()
+            # display_twitter()
             return reply
         except Exception as e:
             reply = "Error occurred in twitter"
@@ -88,13 +88,13 @@ def twitter(message):
 
     elif message[:14] == 'search twitter':
         search = message[15:].strip()
-        #reply = twitter_search_(search)
+        # reply = twitter_search_(search)
         reply = search_twitter(query=search)
         return reply
 
     elif message[:len('show twitter hash tags associated with')] == 'show twitter hash tags associated with':
         x = len('show twitter hash tags associated with')
-        query = message[x+1:]
+        query = message[x + 1:]
         return twitter_hash_tags(query)
 
     else:
@@ -167,11 +167,11 @@ def twitter_trend():
     for _location in results[:5]:
         reply += f"<a href='{_location.url}' target='_blank'><font color='blue'>{_location.name}</font></a><br>"
         say += f"{_location.name}\n"
-    #print(results)
+    # print(results)
     return {'display': reply, 'say': say.replace('#', 'hash tag ')}
 
 
-def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
+def plot_tweet(tweet_data):  # tweet_data = {tweets: tweet_volume}
     try:
         tweets = tweet_data.keys()
         y_pos = np.arange(len(tweets))
@@ -186,7 +186,7 @@ def plot_tweet(tweet_data):     #tweet_data = {tweets: tweet_volume}
         ax.set_xlabel('Tweet Volume')
         ax.set_title('Global Twitter Trends Plot')
         plt.subplots_adjust(left=0.3)
-        #plt.show()
+        # plt.show()
         plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet.png')
     except Exception as e:
         print(f'error in plot_tweet: {e}')
@@ -232,7 +232,7 @@ def twitter_global_trends():
         say = "Top Global Trends in Twitter: \n"
         for trend in result:
             _trend = ast.literal_eval(str(trend))
-            #print(_trend)
+            # print(_trend)
             name = _trend['name']
             try:
                 volume = _trend['tweet_volume']
@@ -246,12 +246,12 @@ def twitter_global_trends():
         return {'display': reply, 'say': say.replace('#', 'hash tag ')}
     except Exception as e:
         reply = 'Twitter is currently withholding this information ' \
-               '<a href="https://trends24.in/" target="_blank">view</a>'
+                '<a href="https://trends24.in/" target="_blank">view</a>'
         return {'display': reply, 'say': 'Twitter is currently withholding this information'}
 
 
 def twitter_search_(query):
-    #result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
+    # result = str(api.GetSearch(term=query, count=5)).replace('Status', '').replace("'", "")[:-2].split('), (')
     result = api.GetSearch(term=query, count=5)
     say = f"Top 5 Search Results for {query}"
     display = f"<table id='t01'>\
@@ -263,18 +263,18 @@ def twitter_search_(query):
                                     "
 
     for status in result:
-        user = status.user.screen_name  #use
+        user = status.user.screen_name  # use
         name = status.user.name
         pic = status.user.profile_image_url
         retweet_count = status.retweet_count
         tweet = status.text
         links = re.findall(r'(https?://\S+)', tweet)
-        #print(status.media[0].display_url)
-        #print('l:', links)
+        # print(status.media[0].display_url)
+        # print('l:', links)
         if links:
             for i in links:
                 link = f'<a href={i} target="_blank">link</a>'
-                #print(i, link)
+                # print(i, link)
                 tweet = tweet.replace(i, link)
 
         display += f"<tr>\
@@ -291,7 +291,7 @@ def search_twitter(query):
     say = f"Find displayed the Top 5 Search Results for {query}"
     display = ''
     for status in result:
-        user = status.user.screen_name  #use
+        user = status.user.screen_name  # use
         _id_ = status.id
         url = f"https://twitter.com/{user}/status/{_id_}"
         display += embed_tweet(query=url)
@@ -308,7 +308,6 @@ def twitter_search_cloud(query):
         links = re.findall(r'(https?://\S+)', tweet)
         if links:
             for i in links:
-
                 tweet = tweet.replace(i, '')
         answer += f'{tweet} '
     return answer.lower().replace(query, '')
@@ -363,9 +362,9 @@ def sentiment_report(query):
         tweet = " ".join(re.findall("[a-zA-Z]+", tweet)).replace('RT', '')
         score = TextBlob(tweet).polarity
         if score > 0:
-            percent, senti_ = f'{round(score*100, 1)}%', 'Happy'
+            percent, senti_ = f'{round(score * 100, 1)}%', 'Happy'
         elif score < 0:
-            percent, senti_ = f'{round(score*-100, 1)}%', 'Sad'
+            percent, senti_ = f'{round(score * -100, 1)}%', 'Sad'
         else:
             percent, senti_ = '0%', 'Neutral'
         plot_data[senti_] += 1
@@ -383,7 +382,7 @@ def sentiment_display(report):
                         <td>{tweet["display"]}</td>\
                         <td><div style="color:white; font-size:30px; border-style: solid; border-color:white; ' \
                    f'text-align:center; float:center; background-color:#15202b; border-radius: 20%;">' \
-                   f'{tweet["percentage"]}</div>'\
+                   f'{tweet["percentage"]}</div>' \
                    f'<br><div style="float:center;">' \
                    f'<img src="tweet_image/{tweet["sentiment"].lower()}.png" width="80px">' \
                    f'</div>' \
@@ -395,21 +394,21 @@ def sentiment_display(report):
 
 def plot_sentiment(data, query):
     fig, ax = plt.subplots()
-    ax.bar([1,2,3], data.values(), align='center', color=['g','b','r'], alpha=0.3)
-    ax.set_xticks([1,2,3])
+    ax.bar([1, 2, 3], data.values(), align='center', color=['g', 'b', 'r'], alpha=0.3)
+    ax.set_xticks([1, 2, 3])
     ax.set_xticklabels(data.keys())
     ax.set_title(f'Sentiment Analysis for {query.capitalize()}')
     plt.savefig(r'C:\Users\emyli\PycharmProjects\Chatbot_Project\tweet_image\sentiment.png')
 
-#print(twitter_global_trends())
-#print(twitter_search_("drake"))
-#twitter("tweet test in 2")
-#print(twitter_global_trends_graph())
-#plot_tweet({'this is not you and me okay but yes': 20, 'no':50})
-#print(twitter_search_cloud('microsoft'))
-#twitter_search_cloud_user('microsoft')
-#print(twitter_hash_tags('microsoft'))
-#print(twitter_trend())
+# print(twitter_global_trends())
+# print(twitter_search_("drake"))
+# twitter("tweet test in 2")
+# print(twitter_global_trends_graph())
+# plot_tweet({'this is not you and me okay but yes': 20, 'no':50})
+# print(twitter_search_cloud('microsoft'))
+# twitter_search_cloud_user('microsoft')
+# print(twitter_hash_tags('microsoft'))
+# print(twitter_trend())
 # a = "https://twitter.com/BleacherReport/status/1236526501073281029"
 # print(embed_tweet(a))
 # print(search_twitter(query='drake'))
