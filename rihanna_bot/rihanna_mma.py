@@ -81,4 +81,4 @@ class MMA:
 
 if __name__ == '__main__':
     print(FighterPicture().get_picture('max holloway'))
-    print(MMA.load_fighters())
+    # print(MMA.load_fighters())
