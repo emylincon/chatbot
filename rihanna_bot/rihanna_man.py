@@ -1147,6 +1147,25 @@ def man_ibn():
     return reply
 
 
+def man_mma():
+    display = "<table id='t01'>\
+                                    <tr>\
+                                        <th>MMA feature</th>\
+                                        <th>Description</th>\
+                                    </tr>\
+                                    "
+
+    func = {'MMA fighter <b>fighter lastname</b> <b>fighter firstname</b> <b>fighter nickname</b>': 'fetches fighter stat',
+            'MMA fighter <b>_</b> <b>_</b> <b>fighter nickname</b>': 'specify only nickname',
+            'MMA fighter <b>fighter lastname</b>': 'specify only lastname',
+            'MMA fighter <b>_</b> <b>fighter firstname</b>': 'specify only firstname',
+            }
+    display = build_table(func=func, display=display)
+    say = "Find below How to use the MMA feature"
+    reply = {'display': display, 'say': say}
+    return reply
+
+
 man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twitter, 'man tfl': man_tfl,
             'man news': man_news, 'man email': man_email, 'man skype': man_skype, 'man facebook': man_facebook,
             'man football': man_football, 'man time': man_time, 'man date': man_date, 'man weather': man_weather,
@@ -1158,4 +1177,4 @@ man_dict = {'man help': man_help, 'man maths': man_maths, 'man twitter': man_twi
             'man movies': man_movies, 'man lyrics': man_lyrics, 'man spotify': man_spotify, 'man itunes': man_itunes,
             'man word file': man_wordfile, 'man game': man_games, 'man games': man_games, 'man covid': man_covid,
             'man recommend': man_recommend, 'man simon says': man_simon_says, 'man song': man_song,
-            'man sensor': man_sensor, 'man ibn': man_ibn, 'man trivia': man_trivia}
+            'man sensor': man_sensor, 'man ibn': man_ibn, 'man trivia': man_trivia, 'man mma': man_mma}
