@@ -35,7 +35,16 @@ def selector(query):
 class Movies:
     def __init__(self):
         self.movie = IMDb()
-        self.watch = 'https://openloadmovies.ac/movies/'
+        self.movie_link = 'https://openloadmovies.ac'
+
+    def get_link(self, data):
+        link = '#'
+        if data['kind'] == 'movie':
+            # link = self.movie_link + self.format_string(data['title'].lower().replace(' ', '-')) + f"-{data['year']}"
+            link = f"{self.movie_link}/movies/{self.format_string(data['title'].lower().replace(' ', '-'))}-{data['year']}"
+        elif data['kind'] == 'tv series':
+            link = f"{self.movie_link}/tvseries/{self.format_string(data['title'].lower().replace(' ', '-'))}"
+        return link
 
     def search(self, query):
         movie_list = self.movie.search_movie(query)
@@ -43,10 +52,10 @@ class Movies:
         for movie in movie_list:
             data = movie.data
             try:
-                link = self.watch + self.format_string(data['title'].lower().replace(' ', '-')) + f"-{data['year']}"
+                link = self.get_link(data=data)
                 year = data['year']
             except KeyError:
-                link = f"https://openloadmovies.ac/?s={self.format_string(data['title'].lower())}"
+                link = f"{self.movie_link}/?s={self.format_string(data['title'].lower())}"
                 year = '-'
             display += f"<tr onclick='open_link(" + f'"{link}"' + f")'>\
                         <td><img src='{data['cover url']}' alt='{data['title']}'></td>\
@@ -87,7 +96,7 @@ class Movies:
                         "
             for movie in movie_list:
                 data = movie.data
-                link = self.watch + self.format_string(data['title'].lower().replace(' ', '-')) + f"-{data['year']}"
+                link = self.get_link(data=data)
                 display += f"<tr onclick='open_link(" + f'"{link}"' + f")'>\
                                 <td><p style='font-size:12px; color:#5985E9; font-family:verdana;'>{data['top 250 rank']}</p></td>\
                                 <td><p style='font-size:12px; color:#5985E9; font-family:verdana;'>{data['title']}</p></td>\
