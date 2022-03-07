@@ -184,11 +184,11 @@ function check_ans(myId, ques_id){
         let node = document.querySelector(`#${myId}`);
         if(node.innerText === answers[ques_id]){
             node.classList.add('green');
-            voice("Correct!");
+            myVoice("Correct!");
         }
         else{
             node.classList.add('red');
-            voice("Wrong Option");
+            myVoice("Wrong Option");
         }
     }
 
@@ -201,23 +201,24 @@ function open_link(link) {
 
 }
 
-function myVoice(myLongText){
+function myVoice(myLongText) {
 
-var utterance = new SpeechSynthesisUtterance(myLongText);
+    var utterance = new SpeechSynthesisUtterance(myLongText);
 
-//modify it as you normally would
-var voiceArr = speechSynthesis.getVoices();
-utterance.voice = voiceArr[2];
+    //modify it as you normally would
+    var voiceArr = speechSynthesis.getVoices();
+    utterance.voice = voiceArr[2];
+    utterance.rate = 0.2
 
-//pass it into the chunking function to have it played out.
-//you can set the max number of characters by changing the chunkLength property below.
-//a callback function can also be added that will fire once the entire text has been spoken.
-speechUtteranceChunker(utterance, {
-    chunkLength: 180
-}, function () {
-    //some code to execute when done
-    // console.log('done');
-});
+    //pass it into the chunking function to have it played out.
+    //you can set the max number of characters by changing the chunkLength property below.
+    //a callback function can also be added that will fire once the entire text has been spoken.
+    speechUtteranceChunker(utterance, {
+        chunkLength: 180
+    }, function () {
+        //some code to execute when done
+        // console.log('done');
+    });
 }
 
 function voice(text) {
