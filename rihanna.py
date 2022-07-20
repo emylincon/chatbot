@@ -144,7 +144,6 @@ def format_string(string):
 def weather_format(msg):
     image = {'rain': 'rain.webp', 'clear sky': 'sun.png', 'snow': 'snow.gif', 'thunder': 'thunder_storm.png',
              'sun': 'sun_cloud.png', 'storm': 'thunder_storm.png', 'clouds': 'cloud.png'}
-    # 3333E5 grey = E2E3E5
     for key in image:
         if key in msg:
             img = image[key]
@@ -198,7 +197,6 @@ def weather_f(json_data):
     # time_now = time.strftime("%H:%M", time.localtime(json_data['dt']))
     # time_n = datetime.now(timezone(tzwhere.tzwhere().tzNameAt(json_data['coord']['lat'], json_data['coord']['lon'])))
     time_t = time.strftime("%H:%M", tt)
-    # print(f'time_n: {time_n} \ntimet: {time_t}')
     sunrise = time.strftime("%H:%M", sr)
     sunset = time.strftime("%H:%M", ss)
 
@@ -260,8 +258,6 @@ def weather(place):
     except:
         reply = 'Sorry could not find location {}'.format(place)
         return {'display': reply, 'say': reply}
-
-    # return forecast
 
 
 def stop_words():
