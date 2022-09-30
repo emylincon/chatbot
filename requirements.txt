@@ -74,7 +74,7 @@ jaraco.itertools==5.0.0
 jedi==0.16.0
 Jinja2==2.10.1
 jmespath==0.9.5
-joblib==0.14.1
+joblib==1.2.0
 Js2Py==0.66
 jsonschema==3.2.0
 junos-eznc==2.2.1
